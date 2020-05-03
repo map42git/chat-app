@@ -59,6 +59,7 @@ export class AppComponent {
     console.log('notes change"', event);
   }
   //
+  
   //messages
   getRoomMesages(event) {
     this.activeChatId = event;
