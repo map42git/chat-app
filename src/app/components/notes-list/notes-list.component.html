@@ -1,0 +1,7 @@
+<div class="notes-list">
+  <app-notes-list-item
+    *ngFor="let note of notes"
+    [note]="note"
+    (noteChanged)="notesChanged($event)"
+  ></app-notes-list-item>
+</div>

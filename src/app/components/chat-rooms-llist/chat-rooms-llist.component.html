@@ -1,0 +1,7 @@
+<div class="rooms-list">
+  <app-chat-room-item
+    *ngFor="let room of rooms"
+    [room]="room"
+    (roomChanged)="chatRoomChanged($event)"
+  ></app-chat-room-item>
+</div>
