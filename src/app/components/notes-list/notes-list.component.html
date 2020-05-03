@@ -1,7 +1,16 @@
 <div class="notes-list">
+  <div class="new-note">
+    <textarea
+      nbInput
+      fullWidth
+      placeholder="Write a note.."
+      [(ngModel)]="noteText"
+    ></textarea>
+  </div>
   <app-notes-list-item
     *ngFor="let note of notes"
+    [chatId]="chatId"
     [note]="note"
-    (noteChanged)="notesChanged($event)"
+    (removeNote)="removeNote($event)"
   ></app-notes-list-item>
 </div>

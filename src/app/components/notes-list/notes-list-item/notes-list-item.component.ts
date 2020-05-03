@@ -8,11 +8,12 @@ import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
 })
 export class NotesListItemComponent implements OnInit {
   @Input() note: Note;
-  @Output() noteChanged = new EventEmitter<any>();
+  @Input() chatId: string;
+  @Output() removeNote = new EventEmitter<any>();
   constructor() {}
 
   ngOnInit() {}
-  noteChange(id) {
-    this.noteChanged.emit(id);
+  deleteNote(id) {
+    this.removeNote.emit(id);
   }
 }

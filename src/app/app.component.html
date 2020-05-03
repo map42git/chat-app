@@ -4,14 +4,16 @@
   </nb-layout-header>
   <nb-sidebar tag="left" state="collapsed">
     <app-chat-rooms-llist
-      [rooms]="chats | async"
+      [rooms]="chats.value"
       (roomChanged)="getRoomMesages($event)"
     ></app-chat-rooms-llist>
   </nb-sidebar>
   <nb-sidebar right tag="right" state="collapsed">
     <app-notes-list
-      [notes]="notes | async"
-      (noteChanged)="notesChange($event)"
+      [notes]="notes.value"
+      [chatId]="activeChatId"
+      (addNote)="newNote($event)"
+      (deleteNote)="removeNote($event)"
     ></app-notes-list>
   </nb-sidebar>
   <nb-layout-column>
@@ -28,13 +30,7 @@
       <button nbButton status="success" size="tiny" (click)="newChat()">
         Create New Chat
       </button>
-      <button
-        nbButton
-        status="warning"
-        size="tiny"
-        (click)="toggleNotes()"
-        *ngIf="notes"
-      >
+      <button nbButton status="warning" size="tiny" (click)="toggleNotes()">
         Notes
       </button>
     </div>
@@ -42,9 +38,14 @@
       [title]="activeChatId ? 'Chat: ' + activeChatId : 'Choose a chat'"
       size="large"
     >
+
+    <!-- {{messages.value.length > 0 ? getUserById((messages.value)[0].userId) == null : ''}} -->
+
       <nb-chat-message
-        *ngFor="let message of messages | async"
+        *ngFor="let message of messages.value"
         [message]="message.details"
+        [sender]="getUserById(message.userId).name"
+        [reply]="message.userId == actualUserId ? true : false"
       >
       </nb-chat-message>
       <nb-chat-form (send)="newMessage($event)"></nb-chat-form>

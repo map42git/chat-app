@@ -7,6 +7,7 @@ import {
   NbSidebarModule,
   NbButtonModule,
   NbSidebarService,
+  NbInputModule,
 } from "@nebular/theme";
 import { BrowserModule } from "@angular/platform-browser";
 import { NgModule } from "@angular/core";
@@ -20,6 +21,7 @@ import { AngularFirestoreModule } from "angularfire2/firestore";
 import { envFire } from "../environments/environment";
 import { NotesListComponent } from "./components/notes-list/notes-list.component";
 import { NotesListItemComponent } from "./components/notes-list/notes-list-item/notes-list-item.component";
+import { FormsModule } from "@angular/forms";
 
 @NgModule({
   declarations: [
@@ -40,6 +42,8 @@ import { NotesListItemComponent } from "./components/notes-list/notes-list-item/
     AppRoutingModule,
     AngularFireModule.initializeApp(envFire.firebase),
     AngularFirestoreModule,
+    NbInputModule,
+    FormsModule,
   ],
   providers: [NbSidebarService],
   bootstrap: [AppComponent],
