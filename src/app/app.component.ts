@@ -32,6 +32,7 @@ export class AppComponent {
   activeChatId: any;
   actualUserId: string;
   actualUser: User;
+  videoChatMode: Boolean = false;
   constructor(
     private sidebarService: NbSidebarService,
     private afs: AngularFirestore
@@ -58,7 +59,10 @@ export class AppComponent {
       .subscribe((_users) => {
         this.users.next(_users);
       });
-    this.actualUserId = "0AM5UiukN4IBk0cYRTjN";
+    //mock
+    // oFIqqOb9dY9B6x595BgS Spider Man
+    // 0AM5UiukN4IBk0cYRTjN Batman
+    this.actualUserId = "oFIqqOb9dY9B6x595BgS";
   }
   getUserById(id) {
     return this.users.value.find((_user) => _user.id === id);
@@ -125,6 +129,15 @@ export class AppComponent {
       });
   }
   newMessage(message) {
+    const files = !message.files
+      ? []
+      : message.files.map((file) => {
+          return {
+            url: file.src,
+            type: file.type,
+            icon: "file-text-outline",
+          };
+        });
     if (this.activeChatId) {
       const messsageModel = new ChatRecord();
       messsageModel.details = message.message;
@@ -132,8 +145,10 @@ export class AppComponent {
       messsageModel.userId = this.actualUserId;
       messsageModel.chatRecordId = "";
       messsageModel.chatId = this.activeChatId;
-      //mock
-      messsageModel.isHomeRecord = true;
+      messsageModel.files = files.length ? files : null;
+      (messsageModel.type = files.length ? "file" : "text"),
+        //mock
+        (messsageModel.isHomeRecord = true);
       this.messagesCollection.add({ ...messsageModel });
     } else {
       alert("choose or create chat fisrt!");
@@ -145,10 +160,9 @@ export class AppComponent {
   newChat() {
     const chatModel = new Chat();
     chatModel.chatChannelId = "";
-    chatModel.chatId = "";
     chatModel.chatStatusId = "";
     chatModel.createdOn = new Date().getTime().toString();
-    chatModel.userId = "";
+    chatModel.userId = this.actualUserId;
     this.chatsCollection.add({ ...chatModel });
   }
   getChats() {
@@ -164,11 +178,15 @@ export class AppComponent {
   //
 
   // helpers
+
   toggle() {
     this.sidebarService.toggle(false, "left");
   }
   toggleNotes() {
     this.sidebarService.toggle(false, "right");
+  }
+  toVideoChat() {
+    this.videoChatMode = !this.videoChatMode;
   }
   compare(a, b) {
     if (a.createdOn > b.createdOn) return 1;

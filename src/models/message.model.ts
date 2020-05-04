@@ -5,4 +5,6 @@ export class ChatRecord {
   userId: string;
   createdOn: string;
   isHomeRecord: boolean;
+  files: any;
+  type: string;
 }

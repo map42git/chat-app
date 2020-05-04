@@ -1,0 +1,30 @@
+<div class="video-chat">
+  <div class="vc-header">Video Chat</div>
+  <div class="vc-body">
+    <iframe
+      [src]="videChatFrameUrl"
+      allow="camera;microphone"
+      frameborder="0"
+      tyle="overflow:hidden;height:100%;width:100%"
+      height="100%"
+      width="100%"
+    >
+      video chat frame
+    </iframe>
+  </div>
+  <div class="vc-actions">
+    <nb-actions size="small" fullWidth>
+      <nb-action icon="expand-outline"></nb-action>
+      <nb-action
+        icon="mic-off-outline"
+        *ngIf="!isMicrophoneActive"
+        (click)="microphoneAction()"
+      ></nb-action>
+      <nb-action
+        icon="mic-outline"
+        *ngIf="isMicrophoneActive"
+        (click)="microphoneAction()"
+      ></nb-action>
+    </nb-actions>
+  </div>
+</div>

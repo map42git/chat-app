@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
+import { UserHookService } from "src/app/services/userHook.service";
 
 @Component({
   selector: "app-chat-room-item",
@@ -8,7 +9,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
 export class ChatRoomItemComponent implements OnInit {
   @Input() room: any;
   @Output() roomChanged = new EventEmitter<any>();
-  constructor() {}
+  constructor(public hook: UserHookService) {}
 
   ngOnInit() {}
   getMessages(id) {

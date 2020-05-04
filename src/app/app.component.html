@@ -1,6 +1,6 @@
 <nb-layout>
   <nb-layout-header subheader>
-    UpStart chat app
+    UpStart Support Chat App
   </nb-layout-header>
   <nb-sidebar tag="left" state="collapsed">
     <app-chat-rooms-llist
@@ -33,22 +33,33 @@
       <button nbButton status="warning" size="tiny" (click)="toggleNotes()">
         Notes
       </button>
+      <button nbButton status="danger" size="tiny" (click)="toVideoChat()">
+        Video Chat
+      </button>
     </div>
-    <nb-chat
-      [title]="activeChatId ? 'Chat: ' + activeChatId : 'Choose a chat'"
-      size="large"
-    >
-
-    <!-- {{messages.value.length > 0 ? getUserById((messages.value)[0].userId) == null : ''}} -->
-
-      <nb-chat-message
-        *ngFor="let message of messages.value"
-        [message]="message.details"
-        [sender]="getUserById(message.userId).name"
-        [reply]="message.userId == actualUserId ? true : false"
+    <div class="chat-area">
+      <nb-chat
+        [ngClass]="videoChatMode ? 'half-size' : 'full-size'"
+        [title]="activeChatId ? 'Chat title' : 'Choose a chat'"
+        size="large"
       >
-      </nb-chat-message>
-      <nb-chat-form (send)="newMessage($event)"></nb-chat-form>
-    </nb-chat>
+        <!-- {{messages.value.length > 0 ? getUserById((messages.value)[0].userId) == null : ''}} -->
+
+        <nb-chat-message
+          *ngFor="let message of messages.value"
+          [message]="message.details"
+          [type]="message.type"
+          [sender]="getUserById(message.userId).name"
+          [files]="message.files"
+          [reply]="message.userId == actualUserId ? true : false"
+        >
+        </nb-chat-message>
+        <nb-chat-form
+          (send)="newMessage($event)"
+          [dropFiles]="true"
+        ></nb-chat-form>
+      </nb-chat>
+      <app-video-chat class="half-size" *ngIf="videoChatMode"></app-video-chat>
+    </div>
   </nb-layout-column>
 </nb-layout>

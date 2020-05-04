@@ -1,4 +1,4 @@
-import { environment } from "./../environments/environment.prod";
+import { NbEvaIconsModule } from "@nebular/eva-icons";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import {
   NbThemeModule,
@@ -8,6 +8,8 @@ import {
   NbButtonModule,
   NbSidebarService,
   NbInputModule,
+  NbActionsModule,
+  NbIconModule,
 } from "@nebular/theme";
 import { BrowserModule } from "@angular/platform-browser";
 import { NgModule } from "@angular/core";
@@ -22,6 +24,8 @@ import { envFire } from "../environments/environment";
 import { NotesListComponent } from "./components/notes-list/notes-list.component";
 import { NotesListItemComponent } from "./components/notes-list/notes-list-item/notes-list-item.component";
 import { FormsModule } from "@angular/forms";
+import { UserHookService } from "./services/userHook.service";
+import { VideoChatComponent } from "./components/video-chat/video-chat.component";
 
 @NgModule({
   declarations: [
@@ -30,6 +34,7 @@ import { FormsModule } from "@angular/forms";
     ChatRoomItemComponent,
     NotesListComponent,
     NotesListItemComponent,
+    VideoChatComponent,
   ],
   imports: [
     BrowserModule,
@@ -44,8 +49,11 @@ import { FormsModule } from "@angular/forms";
     AngularFirestoreModule,
     NbInputModule,
     FormsModule,
+    NbActionsModule,
+    NbIconModule,
+    NbEvaIconsModule,
   ],
-  providers: [NbSidebarService],
+  providers: [NbSidebarService, UserHookService],
   bootstrap: [AppComponent],
   entryComponents: [ChatRoomItemComponent],
 })

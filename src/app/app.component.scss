@@ -1,7 +1,18 @@
 .triggers {
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    margin-bottom: 10px;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+.half-size {
+  width: 49%;
+}
+.full-size {
+  width: 100%;
+}
+.chat-area {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }

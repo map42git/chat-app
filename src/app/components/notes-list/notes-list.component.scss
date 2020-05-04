@@ -1,12 +1,12 @@
 .notes-list {
-  padding: 10px 10px 85px;
+  padding: 10px 5px 85px;
   .new-note {
     flex-direction: column;
     display: flex;
     margin-bottom: 8px;
     textarea {
-      max-width: 236px;
-      min-width: 236px;
+      max-width: 246px;
+      min-width: 246px;
       height: 115px;
       font-size: 15px;
       font-weight: 500;

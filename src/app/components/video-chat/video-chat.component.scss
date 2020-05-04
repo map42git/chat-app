@@ -1,0 +1,35 @@
+.video-chat {
+  background-color: #fff;
+  border: none;
+  border-radius: 0.25rem;
+  box-shadow: 0 0.5rem 1rem 0 rgba(44, 51, 73, 0.1);
+  color: #222b45;
+  font-family: Open Sans, sans-serif;
+  font-size: 0.9375rem;
+  font-weight: 400;
+  line-height: 1.25rem;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  .vc-header {
+    border-bottom: 1px solid #edf1f7;
+    border-top-left-radius: 0.25rem;
+    border-top-right-radius: 0.25rem;
+    padding: 1rem 1.25rem;
+    font-family: Open Sans, sans-serif;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    line-height: 1.5rem;
+  }
+  .vc-body {
+    height: 100%;
+  }
+  .vc-actions {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem 1.25rem;
+    border-top: 1px solid #edf1f7;
+  }
+}
