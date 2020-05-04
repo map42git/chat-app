@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, Output, EventEmitter } from "@angular/core";
 import { DomSanitizer } from "@angular/platform-browser";
 
 @Component({
@@ -7,13 +7,19 @@ import { DomSanitizer } from "@angular/platform-browser";
   styleUrls: ["./video-chat.component.scss"],
 })
 export class VideoChatComponent implements OnInit {
+  @Output() expandFrame = new EventEmitter<boolean>();
   videChatFrameUrl: any;
-  isMicrophoneActive: Boolean = true;
+  isMicrophoneActive: boolean = true;
+  isFrameExpanded: boolean = false;
   constructor(private sanitizer: DomSanitizer) {
     this.videChatFrameUrl = "https://sc.crm42.com/";
     this.videChatFrameUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
       this.videChatFrameUrl
     );
+  }
+  expandAction() {
+    this.isFrameExpanded = !this.isFrameExpanded;
+    this.expandFrame.emit(this.isFrameExpanded);
   }
   microphoneAction() {
     this.isMicrophoneActive = !this.isMicrophoneActive;

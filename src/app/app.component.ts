@@ -33,6 +33,8 @@ export class AppComponent {
   actualUserId: string;
   actualUser: User;
   videoChatMode: Boolean = false;
+  chatSize: any;
+  isFrameExpanded: any;
   constructor(
     private sidebarService: NbSidebarService,
     private afs: AngularFirestore
@@ -62,7 +64,7 @@ export class AppComponent {
     //mock
     // oFIqqOb9dY9B6x595BgS Spider Man
     // 0AM5UiukN4IBk0cYRTjN Batman
-    this.actualUserId = "oFIqqOb9dY9B6x595BgS";
+    this.actualUserId = "0AM5UiukN4IBk0cYRTjN";
   }
   getUserById(id) {
     return this.users.value.find((_user) => _user.id === id);
@@ -178,7 +180,9 @@ export class AppComponent {
   //
 
   // helpers
-
+  expandFrame(event) {
+    this.isFrameExpanded = event;
+  }
   toggle() {
     this.sidebarService.toggle(false, "left");
   }

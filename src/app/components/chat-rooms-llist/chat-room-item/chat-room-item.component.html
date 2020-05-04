@@ -1,5 +1,8 @@
 <div class="room-body" (click)="getMessages(room.chatId)">
   <div class="room-name">
-    Chat created by: {{ hook.getUserById(room.userId).name }}
+    Chat created by:
+    {{
+      hook.getUserById(room.userId) ? hook.getUserById(room.userId).name : ""
+    }}
   </div>
 </div>

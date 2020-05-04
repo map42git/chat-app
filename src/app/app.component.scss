@@ -16,3 +16,30 @@
   flex-direction: row;
   justify-content: space-between;
 }
+.full-height {
+  height: 95%;
+}
+// nb-chat {
+//   animation-name: myAnimation;
+//   animation-duration: 0.5s;
+//   animation-fill-mode: forwards;
+//   transition: width 300ms ease-in-out, height 300ms ease-in-out;
+// }
+app-video-chat,
+nb-sidebar,
+nb-chat {
+  animation-name: myAnimation;
+  animation-duration: 0.5s;
+  animation-fill-mode: forwards;
+  transition: width 300ms ease-in-out, height 300ms ease-in-out;
+}
+@keyframes myAnimation {
+  0% {
+    opacity: 0;
+    transform: rotateX(90deg);
+  }
+  100% {
+    opacity: 1;
+    transform: rotateX(0deg);
+  }
+}

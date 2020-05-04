@@ -1,4 +1,5 @@
 .notes-list {
+  animation: myAnimation 1s;
   padding: 10px 5px 85px;
   .new-note {
     flex-direction: column;
@@ -12,5 +13,15 @@
       font-weight: 500;
       background-color: #ffcf77;
     }
+  }
+}
+@keyframes myAnimation {
+  0% {
+    opacity: 0;
+    transform: rotateX(90deg);
+  }
+  100% {
+    opacity: 1;
+    transform: rotateX(0deg);
   }
 }

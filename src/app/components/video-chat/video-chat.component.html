@@ -14,7 +14,16 @@
   </div>
   <div class="vc-actions">
     <nb-actions size="small" fullWidth>
-      <nb-action icon="expand-outline"></nb-action>
+      <nb-action
+        icon="collapse-outline"
+        *ngIf="isFrameExpanded"
+        (click)="expandAction()"
+      ></nb-action>
+      <nb-action
+        icon="expand-outline"
+        *ngIf="!isFrameExpanded"
+        (click)="expandAction()"
+      ></nb-action>
       <nb-action
         icon="mic-off-outline"
         *ngIf="!isMicrophoneActive"

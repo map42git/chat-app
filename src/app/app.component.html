@@ -37,8 +37,9 @@
         Video Chat
       </button>
     </div>
-    <div class="chat-area">
+    <div class="chat-area" [ngClass]="{ 'full-height': isFrameExpanded }">
       <nb-chat
+        *ngIf="!isFrameExpanded || !videoChatMode"
         [ngClass]="videoChatMode ? 'half-size' : 'full-size'"
         [title]="activeChatId ? 'Chat title' : 'Choose a chat'"
         size="large"
@@ -59,7 +60,11 @@
           [dropFiles]="true"
         ></nb-chat-form>
       </nb-chat>
-      <app-video-chat class="half-size" *ngIf="videoChatMode"></app-video-chat>
+      <app-video-chat
+        [ngClass]="isFrameExpanded ? 'full-size' : 'half-size'"
+        *ngIf="videoChatMode"
+        (expandFrame)="expandFrame($event)"
+      ></app-video-chat>
     </div>
   </nb-layout-column>
 </nb-layout>
