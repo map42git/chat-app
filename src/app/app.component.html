@@ -6,6 +6,7 @@
     <app-chat-rooms-llist
       [rooms]="chats.value"
       (roomChanged)="getRoomMesages($event)"
+      (removeChat)="removeChat($event)"
     ></app-chat-rooms-llist>
   </nb-sidebar>
   <nb-sidebar right tag="right" state="collapsed">

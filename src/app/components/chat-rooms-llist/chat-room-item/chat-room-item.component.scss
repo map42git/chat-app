@@ -4,9 +4,15 @@
   line-height: 80px;
   padding: 0 0 0 20px;
   border-bottom: 1px solid #dddddd;
+  position: relative;
   .room-name {
     font-size: 17px;
     font-weight: 700;
+  }
+  nb-icon {
+    position: absolute;
+    top: 6px;
+    right: 6px;
   }
 }
 .room-body:hover {

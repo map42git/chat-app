@@ -3,5 +3,6 @@
     *ngFor="let room of rooms"
     [room]="room"
     (roomChanged)="chatRoomChanged($event)"
+    (removeChat)="deleteChat($event)"
   ></app-chat-room-item>
 </div>

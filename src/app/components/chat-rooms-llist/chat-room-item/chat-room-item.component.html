@@ -1,4 +1,18 @@
 <div class="room-body" (click)="getMessages(room.chatId)">
+  <!-- <button
+    shape="round"
+    nbButton
+    size="tiny"
+    status="danger"
+    (click)="deleteChat(room.chatId)"
+  > -->
+  <nb-icon
+    status="danger"
+    (click)="deleteChat(room.chatId)"
+    nbButton
+    icon="trash-outline"
+  ></nb-icon>
+  <!-- </button> -->
   <div class="room-name">
     Chat created by:
     {{

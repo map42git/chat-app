@@ -177,6 +177,9 @@ export class AppComponent {
         this.chats.next(_chats);
       });
   }
+  removeChat(event) {
+    this.afs.collection<Chat>("Chats").doc(event).delete();
+  }
   //
 
   // helpers

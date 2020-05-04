@@ -8,9 +8,13 @@ import { Component, Input, Output, EventEmitter } from "@angular/core";
 export class ChatRoomsLlistComponent {
   @Input() rooms: any;
   @Output() roomChanged = new EventEmitter<any>();
+  @Output() removeChat = new EventEmitter<string>();
   constructor() {}
 
   ngOnInit() {}
+  deleteChat(id) {
+    this.removeChat.emit(id);
+  }
   chatRoomChanged(id) {
     this.roomChanged.emit(id);
   }

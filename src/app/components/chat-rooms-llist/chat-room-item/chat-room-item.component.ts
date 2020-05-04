@@ -9,9 +9,13 @@ import { UserHookService } from "src/app/services/userHook.service";
 export class ChatRoomItemComponent implements OnInit {
   @Input() room: any;
   @Output() roomChanged = new EventEmitter<any>();
+  @Output() removeChat = new EventEmitter<string>();
   constructor(public hook: UserHookService) {}
 
   ngOnInit() {}
+  deleteChat(id) {
+    this.removeChat.emit(id);
+  }
   getMessages(id) {
     this.roomChanged.emit(id);
   }
