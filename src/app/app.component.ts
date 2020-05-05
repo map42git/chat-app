@@ -1,6 +1,10 @@
 import { User } from "./../models/user.model";
 import { Component } from "@angular/core";
-import { NbSidebarService } from "@nebular/theme";
+import {
+  NbSidebarService,
+  NbLayoutDirectionService,
+  NbLayoutDirection,
+} from "@nebular/theme";
 import {
   AngularFirestore,
   AngularFirestoreCollection,
@@ -37,8 +41,10 @@ export class AppComponent {
   isFrameExpanded: any;
   constructor(
     private sidebarService: NbSidebarService,
-    private afs: AngularFirestore
+    private afs: AngularFirestore,
+    private directionService: NbLayoutDirectionService
   ) {
+    this.directionService.setDirection(NbLayoutDirection.RTL);
     this.messagesCollection = this.afs.collection<ChatRecord>("ChatRecords");
     this.usersCollection = this.afs.collection<User>("Users");
     this.messages = new BehaviorSubject([]);
@@ -62,8 +68,8 @@ export class AppComponent {
         this.users.next(_users);
       });
     //mock
-    // oFIqqOb9dY9B6x595BgS Spider Man
-    // 0AM5UiukN4IBk0cYRTjN Batman
+    // oFIqqOb9dY9B6x595BgS שולמית אלוני
+    // 0AM5UiukN4IBk0cYRTjN בן גוריון
     this.actualUserId = "0AM5UiukN4IBk0cYRTjN";
   }
   getUserById(id) {
@@ -187,10 +193,10 @@ export class AppComponent {
     this.isFrameExpanded = event;
   }
   toggle() {
-    this.sidebarService.toggle(false, "left");
+    this.sidebarService.toggle(false, "right");
   }
   toggleNotes() {
-    this.sidebarService.toggle(false, "right");
+    this.sidebarService.toggle(false, "left");
   }
   toVideoChat() {
     this.videoChatMode = !this.videoChatMode;

@@ -1,4 +1,5 @@
 .room-body {
+  direction: rtl;
   width: 100%;
   height: 80px;
   line-height: 80px;
@@ -12,7 +13,7 @@
   nb-icon {
     position: absolute;
     top: 6px;
-    right: 6px;
+    left: 6px;
   }
 }
 .room-body:hover {

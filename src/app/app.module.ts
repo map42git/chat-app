@@ -10,6 +10,8 @@ import {
   NbInputModule,
   NbActionsModule,
   NbIconModule,
+  NbLayoutDirection,
+  NbLayoutDirectionService,
 } from "@nebular/theme";
 import { BrowserModule } from "@angular/platform-browser";
 import { NgModule } from "@angular/core";
@@ -53,7 +55,7 @@ import { VideoChatComponent } from "./components/video-chat/video-chat.component
     NbIconModule,
     NbEvaIconsModule,
   ],
-  providers: [NbSidebarService, UserHookService],
+  providers: [NbSidebarService, UserHookService, NbLayoutDirectionService],
   bootstrap: [AppComponent],
   entryComponents: [ChatRoomItemComponent],
 })
