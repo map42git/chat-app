@@ -31,11 +31,11 @@
       <button nbButton status="success" size="tiny" (click)="newChat()">
         צור צ'אט חדש
       </button>
-      <button nbButton status="warning" size="tiny" (click)="toggleNotes()">
-        הערות
-      </button>
       <button nbButton status="danger" size="tiny" (click)="toVideoChat()">
         וידאו צ'אט
+      </button>
+      <button nbButton status="warning" size="tiny" (click)="toggleNotes()">
+        הערות
       </button>
     </div>
     <div class="chat-area" [ngClass]="{ 'full-height': isFrameExpanded }">
