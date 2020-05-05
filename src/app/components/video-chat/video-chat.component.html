@@ -24,16 +24,6 @@
         *ngIf="!isFrameExpanded"
         (click)="expandAction()"
       ></nb-action>
-      <nb-action
-        icon="mic-off-outline"
-        *ngIf="!isMicrophoneActive"
-        (click)="microphoneAction()"
-      ></nb-action>
-      <nb-action
-        icon="mic-outline"
-        *ngIf="isMicrophoneActive"
-        (click)="microphoneAction()"
-      ></nb-action>
     </nb-actions>
   </div>
 </div>
