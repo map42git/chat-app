@@ -45,7 +45,10 @@ export class AppComponent {
     private directionService: NbLayoutDirectionService
   ) {
     this.directionService.setDirection(NbLayoutDirection.RTL);
-    this.messagesCollection = this.afs.collection<ChatRecord>("ChatRecords");
+    this.messagesCollection = this.afs.collection<ChatRecord>(
+      "ChatRecords",
+      (ref) => ref.orderBy("createdOn", "asc")
+    );
     this.usersCollection = this.afs.collection<User>("Users");
     this.messages = new BehaviorSubject([]);
     this.users = new BehaviorSubject([]);
@@ -127,9 +130,7 @@ export class AppComponent {
       })
       .pipe(
         map((messages) => {
-          return messages
-            .filter((msg) => msg.chatId === event)
-            .sort(this.compare);
+          return messages.filter((msg) => msg.chatId === event);
         })
       )
       .subscribe((_messages) => {
@@ -201,10 +202,10 @@ export class AppComponent {
   toVideoChat() {
     this.videoChatMode = !this.videoChatMode;
   }
-  compare(a, b) {
-    if (a.createdOn > b.createdOn) return 1;
-    if (b.createdOn > a.createdOn) return -1;
-    return 0;
-  }
+  // compare(a, b) {
+  //   if (a.createdOn > b.createdOn) return 1;
+  //   if (b.createdOn > a.createdOn) return -1;
+  //   return 0;
+  // }
   //
 }
