@@ -1,6 +1,20 @@
 <nb-layout rtl>
-  <nb-layout-header subheader>
+  <nb-layout-header>
     אפליקציית צ'ט התמיכה של UpStart
+    <div class="theme-switch">
+      <nb-icon
+        *ngIf="darkMode"
+        (click)="switchTheme()"
+        nbButton
+        icon="moon-outline"
+      ></nb-icon>
+      <nb-icon
+        *ngIf="!darkMode"
+        (click)="switchTheme()"
+        nbButton
+        icon="sun-outline"
+      ></nb-icon>
+    </div>
   </nb-layout-header>
   <nb-sidebar right tag="right" state="collapsed">
     <app-chat-rooms-llist

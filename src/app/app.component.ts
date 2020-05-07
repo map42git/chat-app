@@ -4,6 +4,7 @@ import {
   NbSidebarService,
   NbLayoutDirectionService,
   NbLayoutDirection,
+  NbThemeService,
 } from "@nebular/theme";
 import {
   AngularFirestore,
@@ -39,10 +40,12 @@ export class AppComponent {
   videoChatMode: Boolean = false;
   chatSize: any;
   isFrameExpanded: any;
+  darkMode: Boolean = false;
   constructor(
     private sidebarService: NbSidebarService,
     private afs: AngularFirestore,
-    private directionService: NbLayoutDirectionService
+    private directionService: NbLayoutDirectionService,
+    private themeService: NbThemeService
   ) {
     this.directionService.setDirection(NbLayoutDirection.RTL);
     this.messagesCollection = this.afs.collection<ChatRecord>(
@@ -55,6 +58,7 @@ export class AppComponent {
     this.notes = new BehaviorSubject([]);
     this.chats = new BehaviorSubject([]);
   }
+
   ngOnInit() {
     this.getChats();
     this.getNotes();
@@ -201,6 +205,12 @@ export class AppComponent {
   }
   toVideoChat() {
     this.videoChatMode = !this.videoChatMode;
+  }
+  switchTheme() {
+    var theme: string;
+    this.darkMode = !this.darkMode;
+    this.darkMode ? (theme = "cosmic") : (theme = "default"),
+      this.themeService.changeTheme(theme);
   }
   // compare(a, b) {
   //   if (a.createdOn > b.createdOn) return 1;

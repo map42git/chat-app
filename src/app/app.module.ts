@@ -12,6 +12,10 @@ import {
   NbIconModule,
   NbLayoutDirection,
   NbLayoutDirectionService,
+  NbSelectComponent,
+  NbSelectModule,
+  NbCardModule,
+  NbToggleModule,
 } from "@nebular/theme";
 import { BrowserModule } from "@angular/platform-browser";
 import { NgModule } from "@angular/core";
@@ -28,6 +32,8 @@ import { NotesListItemComponent } from "./components/notes-list/notes-list-item/
 import { FormsModule } from "@angular/forms";
 import { UserHookService } from "./services/userHook.service";
 import { VideoChatComponent } from "./components/video-chat/video-chat.component";
+import { HttpService } from "./services/http.service";
+import { HttpModule } from "@angular/http";
 
 @NgModule({
   declarations: [
@@ -40,7 +46,7 @@ import { VideoChatComponent } from "./components/video-chat/video-chat.component
   ],
   imports: [
     BrowserModule,
-    NbThemeModule.forRoot(),
+    NbThemeModule.forRoot({ name: "default" }),
     NbChatModule,
     NbLayoutModule,
     NbSidebarModule,
@@ -54,8 +60,17 @@ import { VideoChatComponent } from "./components/video-chat/video-chat.component
     NbActionsModule,
     NbIconModule,
     NbEvaIconsModule,
+    NbSelectModule,
+    HttpModule,
+    NbCardModule,
+    NbToggleModule
   ],
-  providers: [NbSidebarService, UserHookService, NbLayoutDirectionService],
+  providers: [
+    NbSidebarService,
+    UserHookService,
+    NbLayoutDirectionService,
+    HttpService,
+  ],
   bootstrap: [AppComponent],
   entryComponents: [ChatRoomItemComponent],
 })

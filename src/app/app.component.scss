@@ -19,6 +19,10 @@
 .full-height {
   height: 95%;
 }
+.theme-switch {
+  position: absolute;
+  left: 25px;
+}
 // nb-chat {
 //   animation-name: myAnimation;
 //   animation-duration: 0.5s;
@@ -27,12 +31,14 @@
 // }
 app-video-chat,
 nb-sidebar,
-nb-chat {
+nb-chat,
+nb-icon {
   animation-name: myAnimation;
   animation-duration: 0.5s;
   animation-fill-mode: forwards;
   transition: width 300ms ease-in-out, height 300ms ease-in-out;
 }
+
 @keyframes myAnimation {
   0% {
     opacity: 0;

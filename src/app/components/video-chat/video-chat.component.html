@@ -1,5 +1,5 @@
-<div class="video-chat">
-  <div class="vc-header">Video Chat</div>
+<nb-card class="video-chat">
+  <nb-card-header>Video Chat</nb-card-header>
   <div class="vc-body">
     <iframe
       [src]="videChatFrameUrl"
@@ -12,7 +12,7 @@
       video chat frame
     </iframe>
   </div>
-  <div class="vc-actions">
+  <nb-card-footer>
     <nb-actions size="small" fullWidth>
       <nb-action
         icon="collapse-outline"
@@ -25,5 +25,5 @@
         (click)="expandAction()"
       ></nb-action>
     </nb-actions>
-  </div>
-</div>
+  </nb-card-footer>
+</nb-card>
