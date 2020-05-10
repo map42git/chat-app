@@ -80,6 +80,7 @@
       <app-video-chat
         [ngClass]="isFrameExpanded ? 'full-size' : 'half-size'"
         *ngIf="videoChatMode"
+        [url]="roomUrl"
         (expandFrame)="expandFrame($event)"
       ></app-video-chat>
     </div>

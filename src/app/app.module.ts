@@ -26,7 +26,7 @@ import { ChatRoomsLlistComponent } from "./components/chat-rooms-llist/chat-room
 import { ChatRoomItemComponent } from "./components/chat-rooms-llist/chat-room-item/chat-room-item.component";
 import { AngularFireModule } from "angularfire2";
 import { AngularFirestoreModule } from "angularfire2/firestore";
-import { envFire } from "../environments/environment";
+import { environment } from "../environments/environment";
 import { NotesListComponent } from "./components/notes-list/notes-list.component";
 import { NotesListItemComponent } from "./components/notes-list/notes-list-item/notes-list-item.component";
 import { FormsModule } from "@angular/forms";
@@ -34,6 +34,11 @@ import { UserHookService } from "./services/userHook.service";
 import { VideoChatComponent } from "./components/video-chat/video-chat.component";
 import { HttpService } from "./services/http.service";
 import { HttpModule } from "@angular/http";
+import {
+  HttpClient,
+  HttpHandler,
+  HttpClientModule,
+} from "@angular/common/http";
 
 @NgModule({
   declarations: [
@@ -53,7 +58,7 @@ import { HttpModule } from "@angular/http";
     NbButtonModule,
     BrowserAnimationsModule,
     AppRoutingModule,
-    AngularFireModule.initializeApp(envFire.firebase),
+    AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
     NbInputModule,
     FormsModule,
@@ -63,13 +68,15 @@ import { HttpModule } from "@angular/http";
     NbSelectModule,
     HttpModule,
     NbCardModule,
-    NbToggleModule
+    NbToggleModule,
+    HttpClientModule,
   ],
   providers: [
     NbSidebarService,
     UserHookService,
     NbLayoutDirectionService,
     HttpService,
+    HttpClient,
   ],
   bootstrap: [AppComponent],
   entryComponents: [ChatRoomItemComponent],

@@ -1,3 +1,5 @@
+import { HttpClient, HttpHandler } from "@angular/common/http";
+import { HttpService } from "./services/http.service";
 import { User } from "./../models/user.model";
 import { Component } from "@angular/core";
 import {
@@ -41,11 +43,13 @@ export class AppComponent {
   chatSize: any;
   isFrameExpanded: any;
   darkMode: Boolean = false;
+  roomUrl: string;
   constructor(
     private sidebarService: NbSidebarService,
     private afs: AngularFirestore,
     private directionService: NbLayoutDirectionService,
-    private themeService: NbThemeService
+    private themeService: NbThemeService,
+    private http: HttpService
   ) {
     this.directionService.setDirection(NbLayoutDirection.RTL);
     this.messagesCollection = this.afs.collection<ChatRecord>(
@@ -63,6 +67,13 @@ export class AppComponent {
     this.getChats();
     this.getNotes();
     this.getUsers();
+    this.http.getAccessToken().then(() => {
+      this.http.get("room", "create").subscribe((res) => {
+        console.log(res);
+
+        this.roomUrl = `${res.roomUrl}?pwd=${this.http.accessToken}`;
+      });
+    });
   }
   //USERS
   getUsers() {

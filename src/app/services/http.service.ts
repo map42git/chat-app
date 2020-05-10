@@ -8,12 +8,14 @@ import { map, shareReplay } from "rxjs/operators";
   providedIn: "root",
 })
 export class HttpService {
+  apiHost: String = "https://sc.crm42.com/api";
   httpOptions = {
     headers: new HttpHeaders({
       "Access-Control-Allow-Origin": "*",
     }),
   };
   antiforgeryToken: string;
+  accessToken: string;
   constructor(private http: Http, private httpClient: HttpClient) {}
   public getAntiforgeryToken<TViewModel>() {
     this.get("token").subscribe(
@@ -23,15 +25,20 @@ export class HttpService {
       (error) => {}
     );
   }
+  encodeQueryData(data) {
+    const ret = [];
+    for (let d in data)
+      ret.push(encodeURIComponent(d) + "=" + encodeURIComponent(data[d]));
+    return ret.join("&");
+  }
   public get<TViewModel>(
     controller: string,
     action: string = "",
-    action2: string = "",
     params?: {},
     host?: string,
     needAntiforgery?: boolean
   ) {
-    const url = `${"api"}/${controller}/${action}/${action2}`;
+    const url = `${this.apiHost}/${controller}/${action}`;
     const watcher = new Observable<any>((observer) => {
       const response = this.http.get(url, this.createOptions(params)).pipe(
         map((res: any) => this.onMap(res)),
@@ -50,7 +57,7 @@ export class HttpService {
     params?: any,
     host?: string
   ) {
-    const url = `${"api"}/${controller}/${action}`;
+    const url = `${this.apiHost}/${controller}/${action}`;
     const watcher = new Observable<any>((observer) => {
       const response = this.http
         .delete(url, this.createOptions(params))
@@ -68,7 +75,7 @@ export class HttpService {
     params?: {},
     host?: string
   ) {
-    const url = `${"api"}/${controller}/${action}`;
+    const url = `${this.apiHost}/${controller}/${action}`;
     const watcher = new Observable<any>((observer) => {
       const response = this.http
         .post(url, form, this.createOptions(params))
@@ -85,7 +92,7 @@ export class HttpService {
     formData?: TForm,
     host?: string
   ) {
-    const url = `${"api"}/${controller}/${action}/${params}`;
+    const url = `${this.apiHost}/${controller}/${action}/${params}`;
     const watcher = new Observable<any>((observer) => {
       const response = this.http
         .put(url, formData, this.createOptions())
@@ -97,17 +104,16 @@ export class HttpService {
   }
   private createOptions = (params?): RequestOptions => {
     const options = new RequestOptions();
-    options.withCredentials = true;
+    options.withCredentials = false;
     options.params = params;
     if (!options.headers) {
       options.headers = new Headers();
     }
     options.headers.append("X-XSRF-TOKEN", this.antiforgeryToken);
 
-    // if (this.access_token == null) {
-    //   this.access_token = this.getBearerToken();
-    //   console.log(this.access_token);
-    // }
+    if (this.accessToken != null) {
+      options.headers.append("Authorization", `Bearer ${this.accessToken}`);
+    }
     // options.headers.append('Authorization', 'Bearer ' + this.access_token);
 
     // options.headers = new Headers({
@@ -115,6 +121,19 @@ export class HttpService {
     // });
     return options;
   };
+  getAccessToken() {
+    return new Promise<string>((resolve) => {
+      const params = {
+        sid: "ubeiEgoNahui",
+        apikey: "ebat'blyad",
+        apisecret: "igorSaysBrulurur",
+      };
+      this.get("auth", "token", params).subscribe((accessToken) => {
+        this.accessToken = accessToken.token;
+        resolve();
+      });
+    });
+  }
   private handleResponse(observer: Subscriber<any>, response: Observable<any>) {
     let hasResponse = false;
     const subscription = response.subscribe(
