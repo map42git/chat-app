@@ -1,4 +1,11 @@
-import { Component, OnInit, Output, EventEmitter, Input, OnChanges } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  Output,
+  EventEmitter,
+  Input,
+  OnChanges,
+} from "@angular/core";
 import { DomSanitizer } from "@angular/platform-browser";
 
 @Component({
@@ -8,19 +15,21 @@ import { DomSanitizer } from "@angular/platform-browser";
 })
 export class VideoChatComponent implements OnInit, OnChanges {
   @Output() expandFrame = new EventEmitter<boolean>();
-  @Input() url:string;
+  @Output() inviteUserToVideoChat = new EventEmitter<any>();
+  @Input() url: string;
   videChatFrameUrl: any;
   isFrameExpanded: boolean = false;
-  constructor(private sanitizer: DomSanitizer) {
-    
-  }
+  constructor(private sanitizer: DomSanitizer) {}
   expandAction() {
     this.isFrameExpanded = !this.isFrameExpanded;
     this.expandFrame.emit(this.isFrameExpanded);
   }
   ngOnInit() {}
-
-  ngOnChanges(){
+  shareLink() {
+    this.inviteUserToVideoChat.emit();
+  }
+  ngOnChanges() {
+    console.log(this.url);
     this.videChatFrameUrl = this.url;
 
     this.videChatFrameUrl = this.sanitizer.bypassSecurityTrustResourceUrl(

@@ -72,6 +72,7 @@
         >
         </nb-chat-message>
         <nb-chat-form
+          [message]="shareUrl"
           messagePlaceholder="הקלד הודעה"
           (send)="newMessage($event)"
           [dropFiles]="true"
@@ -80,7 +81,8 @@
       <app-video-chat
         [ngClass]="isFrameExpanded ? 'full-size' : 'half-size'"
         *ngIf="videoChatMode"
-        [url]="roomUrl"
+        [url]="roomUrlWithToken"
+        (inviteUserToVideoChat)="putShareLink()"
         (expandFrame)="expandFrame($event)"
       ></app-video-chat>
     </div>

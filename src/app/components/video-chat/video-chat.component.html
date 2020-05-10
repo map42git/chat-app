@@ -1,7 +1,14 @@
 <nb-card class="video-chat">
   <nb-card-header>Video Chat</nb-card-header>
   <div class="vc-body">
+    <div
+      *ngIf="!url"
+      style="width: 100%; text-align: center; margin-top: 18px;"
+    >
+      Something went wrong ☹
+    </div>
     <iframe
+      *ngIf="url"
       [src]="videChatFrameUrl"
       allow="camera;microphone"
       frameborder="0"
@@ -14,6 +21,7 @@
   </div>
   <nb-card-footer>
     <nb-actions size="small" fullWidth>
+      <nb-action icon="link-outline" (click)="shareLink()"></nb-action>
       <nb-action
         icon="collapse-outline"
         *ngIf="isFrameExpanded"

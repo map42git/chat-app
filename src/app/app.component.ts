@@ -43,7 +43,9 @@ export class AppComponent {
   chatSize: any;
   isFrameExpanded: any;
   darkMode: Boolean = false;
-  roomUrl: string;
+  roomUrlWithToken: string;
+  shareUrl: any;
+  roomUrl: any;
   constructor(
     private sidebarService: NbSidebarService,
     private afs: AngularFirestore,
@@ -70,8 +72,8 @@ export class AppComponent {
     this.http.getAccessToken().then(() => {
       this.http.get("room", "create").subscribe((res) => {
         console.log(res);
-
-        this.roomUrl = `${res.roomUrl}?pwd=${this.http.accessToken}`;
+        this.roomUrl = res.roomUrl;
+        this.roomUrlWithToken = `${res.roomUrl}?pwd=${this.http.accessToken}`;
       });
     });
   }
@@ -222,6 +224,9 @@ export class AppComponent {
     this.darkMode = !this.darkMode;
     this.darkMode ? (theme = "cosmic") : (theme = "default"),
       this.themeService.changeTheme(theme);
+  }
+  putShareLink() {
+    this.shareUrl = this.roomUrl;
   }
   // compare(a, b) {
   //   if (a.createdOn > b.createdOn) return 1;
