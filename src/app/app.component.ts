@@ -178,9 +178,8 @@ export class AppComponent {
         //mock
         (messsageModel.isHomeRecord = true);
       this.messagesCollection.add({ ...messsageModel });
-      this.shareUrl = null;
     } else {
-      alert("choose or create chat fisrt!");
+      alert("Choose or create chat first!");
     }
   }
   //
@@ -236,7 +235,10 @@ export class AppComponent {
     //   ],
     // };
     // this.newMessage(message);
-    this.shareUrl = this.roomUrl;
+    this.shareUrl = null;
+    setTimeout(() => {
+      this.shareUrl = this.roomUrl;
+    }, 100);
   }
   // compare(a, b) {
   //   if (a.createdOn > b.createdOn) return 1;
