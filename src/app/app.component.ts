@@ -90,7 +90,7 @@ export class AppComponent {
     //mock
     // oFIqqOb9dY9B6x595BgS שולמית אלוני
     // 0AM5UiukN4IBk0cYRTjN בן גוריון
-    this.actualUserId = "0AM5UiukN4IBk0cYRTjN";
+    this.actualUserId = "oFIqqOb9dY9B6x595BgS";
   }
   getUserById(id) {
     return this.users.value.find((_user) => _user.id === id);
@@ -155,6 +155,8 @@ export class AppComponent {
       });
   }
   newMessage(message) {
+    console.log(message);
+
     const files = !message.files
       ? []
       : message.files.map((file) => {
@@ -176,6 +178,7 @@ export class AppComponent {
         //mock
         (messsageModel.isHomeRecord = true);
       this.messagesCollection.add({ ...messsageModel });
+      this.shareUrl = null;
     } else {
       alert("choose or create chat fisrt!");
     }
@@ -226,7 +229,14 @@ export class AppComponent {
       this.themeService.changeTheme(theme);
   }
   putShareLink() {
-    this.shareUrl = this.roomUrl;
+    const message = {
+      message: this.roomUrl,
+      files: [
+        { src: this.roomUrl, type: "file", icon: "external-link-outline" },
+      ],
+    };
+    this.newMessage(message);
+    // this.shareUrl = this.roomUrl;
   }
   // compare(a, b) {
   //   if (a.createdOn > b.createdOn) return 1;

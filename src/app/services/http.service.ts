@@ -8,7 +8,7 @@ import { map, shareReplay } from "rxjs/operators";
   providedIn: "root",
 })
 export class HttpService {
-  apiHost: String = "https://sc.crm42.com/api";
+  apiHost: String = "http://videoui.upstart42.com/api";
   httpOptions = {
     headers: new HttpHeaders({
       "Access-Control-Allow-Origin": "*",
