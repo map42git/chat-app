@@ -200,6 +200,8 @@ export class AppComponent {
         idField: "chatId",
       })
       .subscribe((_chats) => {
+        this.activeChatId = _chats[0].chatId;
+        this.getRoomMesages(this.activeChatId);
         this.chats.next(_chats);
       });
   }
