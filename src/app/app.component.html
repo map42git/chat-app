@@ -16,7 +16,7 @@
       ></nb-icon>
     </div>
   </nb-layout-header>
-  <nb-sidebar right tag="right" state="collapsed">
+  <nb-sidebar right tag="right">
     <app-chat-rooms-llist
       [rooms]="chats.value"
       (roomChanged)="getRoomMesages($event)"
@@ -33,7 +33,7 @@
   </nb-sidebar>
   <nb-layout-column>
     <div class="triggers">
-      <button
+      <!-- <button
         nbButton
         status="primary"
         size="tiny"
@@ -41,10 +41,10 @@
         *ngIf="chats"
       >
         רשימת צ'אט
-      </button>
-      <button nbButton status="success" size="tiny" (click)="newChat()">
+      </button> -->
+      <!-- <button nbButton status="success" size="tiny" (click)="newChat()">
         צור צ'אט חדש
-      </button>
+      </button> -->
       <button nbButton status="danger" size="tiny" (click)="toVideoChat()">
         וידאו צ'אט
       </button>
