@@ -229,14 +229,14 @@ export class AppComponent {
       this.themeService.changeTheme(theme);
   }
   putShareLink() {
-    const message = {
-      message: this.roomUrl,
-      files: [
-        { src: this.roomUrl, type: "file", icon: "external-link-outline" },
-      ],
-    };
-    this.newMessage(message);
-    // this.shareUrl = this.roomUrl;
+    // const message = {
+    //   message: this.roomUrl,
+    //   files: [
+    //     { src: this.roomUrl, type: "file", icon: "external-link-outline" },
+    //   ],
+    // };
+    // this.newMessage(message);
+    this.shareUrl = this.roomUrl;
   }
   // compare(a, b) {
   //   if (a.createdOn > b.createdOn) return 1;

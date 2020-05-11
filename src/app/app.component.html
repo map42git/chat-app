@@ -70,6 +70,7 @@
         >
         </nb-chat-message>
         <nb-chat-form
+          [message]="shareUrl"
           messagePlaceholder="הקלד הודעה"
           (send)="newMessage($event)"
           [dropFiles]="true"
