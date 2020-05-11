@@ -1,4 +1,33 @@
 <div class="rooms-list">
+  <div class="filters">
+    <button nbButton status="success" size="tiny" (click)="showByStatus('new')">
+      New
+    </button>
+    <button
+      nbButton
+      status="primary"
+      size="tiny"
+      (click)="showByStatus('active')"
+    >
+      Active
+    </button>
+    <button
+      nbButton
+      status="warning"
+      size="tiny"
+      (click)="showByStatus('resolved')"
+    >
+      Resolved
+    </button>
+    <button
+      nbButton
+      status="danger"
+      size="tiny"
+      (click)="showByStatus('archived')"
+    >
+      Archived
+    </button>
+  </div>
   <app-chat-room-item
     *ngFor="let room of rooms"
     [room]="room"

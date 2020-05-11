@@ -46,6 +46,7 @@ export class AppComponent {
   roomUrlWithToken: string;
   shareUrl: any;
   roomUrl: any;
+  activeChat: Chat;
   constructor(
     private sidebarService: NbSidebarService,
     private afs: AngularFirestore,
@@ -71,7 +72,6 @@ export class AppComponent {
     this.getUsers();
     this.http.getAccessToken().then(() => {
       this.http.get("room", "create").subscribe((res) => {
-        console.log(res);
         this.roomUrl = res.roomUrl;
         this.roomUrlWithToken = `${res.roomUrl}?pwd=${this.http.accessToken}`;
       });
@@ -141,6 +141,7 @@ export class AppComponent {
   //messages
   getRoomMesages(event) {
     this.activeChatId = event;
+    this.activeChat = this.chats.getValue().filter((x) => x.chatId == event)[0];
     this.messagesCollection
       .valueChanges<string>({
         idField: "chatRecordId",
@@ -155,8 +156,6 @@ export class AppComponent {
       });
   }
   newMessage(message) {
-    console.log(message);
-
     const files = !message.files
       ? []
       : message.files.map((file) => {
@@ -188,10 +187,31 @@ export class AppComponent {
   newChat() {
     const chatModel = new Chat();
     chatModel.chatChannelId = "";
-    chatModel.chatStatusId = "";
+    chatModel.chatStatusId = "new";
     chatModel.createdOn = new Date().getTime().toString();
     chatModel.userId = this.actualUserId;
     this.chatsCollection.add({ ...chatModel });
+  }
+  changeStatus(status) {
+    this.activeChat.chatStatusId = status;
+    this.afs.collection("Chats").doc(this.activeChatId).update({
+      chatStatusId: status,
+    });
+  }
+  filterStatus(status) {
+    this.chatsCollection
+      .valueChanges<string>({
+        idField: "chatId",
+      })
+      .subscribe((_chats) => {
+        this.activeChatId = _chats[0].chatId;
+        this.chats.next(_chats.filter((x) => x.chatStatusId == status));
+        this.chats.getValue()[0]
+          ? this.getRoomMesages(this.chats.getValue()[0].chatId)
+          : (this.messages.next(null),
+            (this.activeChat = null),
+            (this.activeChatId = null));
+      });
   }
   getChats() {
     this.chatsCollection = this.afs.collection<Chat>("Chats");
@@ -204,6 +224,7 @@ export class AppComponent {
         this.getRoomMesages(this.activeChatId);
         this.chats.next(_chats);
       });
+    // new active resolved archived
   }
   removeChat(event) {
     this.afs.collection<Chat>("Chats").doc(event).delete();

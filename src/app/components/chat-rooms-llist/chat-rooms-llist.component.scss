@@ -1,3 +1,10 @@
 .rooms-list {
   padding: 10px 0px 85px;
+  .filters {
+    margin-bottom: 10px;
+    border-bottom: 1px solid #dddddd;
+    padding: 10px 0;
+    display: flex;
+    justify-content: space-around;
+  }
 }

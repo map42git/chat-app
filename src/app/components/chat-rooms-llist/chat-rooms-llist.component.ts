@@ -9,9 +9,13 @@ export class ChatRoomsLlistComponent {
   @Input() rooms: any;
   @Output() roomChanged = new EventEmitter<any>();
   @Output() removeChat = new EventEmitter<string>();
+  @Output() filterStatus = new EventEmitter<string>();
   constructor() {}
 
   ngOnInit() {}
+  showByStatus(status) {
+    this.filterStatus.emit(status);
+  }
   deleteChat(id) {
     this.removeChat.emit(id);
   }

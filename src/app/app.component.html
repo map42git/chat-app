@@ -16,13 +16,30 @@
       ></nb-icon>
     </div>
   </nb-layout-header>
-  <nb-sidebar right tag="right">
+  <!-- <nb-sidebar right tag="right"> -->
+  <nb-card>
     <app-chat-rooms-llist
       [rooms]="chats.value"
       (roomChanged)="getRoomMesages($event)"
       (removeChat)="removeChat($event)"
+      (filterStatus)="filterStatus($event)"
     ></app-chat-rooms-llist>
-  </nb-sidebar>
+    <!-- <nb-card-body>
+        Card
+      </nb-card-body> -->
+  </nb-card>
+  <!-- </nb-sidebar> -->
+  <nb-card>
+    <app-notes-list
+      [notes]="notes.value"
+      [chatId]="activeChatId"
+      (addNote)="newNote($event)"
+      (deleteNote)="removeNote($event)"
+    ></app-notes-list>
+    <!-- <nb-card-body>
+      Card
+    </nb-card-body> -->
+  </nb-card>
   <nb-sidebar tag="left" state="collapsed">
     <app-notes-list
       [notes]="notes.value"
@@ -45,15 +62,30 @@
       <!-- <button nbButton status="success" size="tiny" (click)="newChat()">
         צור צ'אט חדש
       </button> -->
-      <button nbButton status="danger" size="tiny" (click)="toVideoChat()">
-        וידאו צ'אט
-      </button>
+
       <button nbButton status="warning" size="tiny" (click)="toggleNotes()">
         הערות
       </button>
+      <nb-select
+        size="tiny"
+        *ngIf="activeChat"
+        placeholder="Select Status"
+        [(selected)]="activeChat.chatStatusId"
+        (selectedChange)="changeStatus($event)"
+      >
+        <nb-option value="new">New</nb-option>
+        <nb-option value="active">Active</nb-option>
+        <nb-option value="resolved">Resolved</nb-option>
+        <nb-option value="archived">Archived</nb-option>
+      </nb-select>
+      <button nbButton status="danger" size="tiny" (click)="toVideoChat()">
+        וידאו צ'אט
+      </button>
     </div>
+
     <div class="chat-area" [ngClass]="{ 'full-height': isFrameExpanded }">
       <nb-chat
+        style="width: 100%;"
         scrollBottom="true"
         *ngIf="!isFrameExpanded || !videoChatMode"
         [ngClass]="videoChatMode ? 'half-size' : 'full-size'"
@@ -76,13 +108,28 @@
           [dropFiles]="true"
         ></nb-chat-form>
       </nb-chat>
-      <app-video-chat
-        [ngClass]="isFrameExpanded ? 'full-size' : 'half-size'"
-        *ngIf="videoChatMode"
-        [url]="roomUrlWithToken"
-        (inviteUserToVideoChat)="putShareLink()"
-        (expandFrame)="expandFrame($event)"
-      ></app-video-chat>
     </div>
+  </nb-layout-column>
+  <nb-layout-column *ngIf="videoChatMode">
+    <app-video-chat
+      [ngClass]="isFrameExpanded ? 'full-size' : 'half-size'"
+      [url]="roomUrlWithToken"
+      (inviteUserToVideoChat)="putShareLink()"
+      (expandFrame)="expandFrame($event)"
+    ></app-video-chat
+  ></nb-layout-column>
+  <nb-layout-column start="true" style="max-width: 325px;">
+    <nb-card style="width: 300px; height: 100%;">
+      <app-chat-rooms-llist
+        [rooms]="chats.value"
+        (roomChanged)="getRoomMesages($event)"
+        (removeChat)="removeChat($event)"
+        (filterStatus)="filterStatus($event)"
+      ></app-chat-rooms-llist>
+      <!-- <nb-card-body>
+        Card
+      </nb-card-body> -->
+    </nb-card>
+    <!-- </nb-sidebar> -->
   </nb-layout-column>
 </nb-layout>
