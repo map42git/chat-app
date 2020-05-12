@@ -111,7 +111,9 @@ export class AppComponent {
   // notes
 
   getNotes() {
-    this.notesCollection = this.afs.collection<Note>("Notes");
+    this.notesCollection = this.afs.collection<Note>("Notes", (ref) =>
+      ref.orderBy("createdOn", "desc")
+    );
     this.notesCollection
       .valueChanges<string>({
         idField: "chatNoteId",
