@@ -18,17 +18,24 @@ $chatapp-accent: mat-palette($mat-pink, A200, A100, A400);
 $chatapp-warn: mat-palette($mat-red);
 
 // Create the theme object (a Sass map containing all of the palettes).
-$chatapp-theme: mat-light-theme(
-  $chatapp-primary,
-  $chatapp-accent,
-  $chatapp-warn
-);
+$chatapp-theme: mat-light-theme($chatapp-primary, $chatapp-accent, $chatapp-warn);
 
 // Include theme styles for core and each component used in your app.
 // Alternatively, you can import and @include the theme mixins for each component
 // that you are using.
 @include angular-material-theme($chatapp-theme);
-
+nb-layout-header {
+  background-color: #edf1f7 !important;
+  nav {
+    height: 60px;
+    box-shadow: none !important;
+    direction: ltr;
+  }
+}
+nb-layout-column {
+  padding: 0 20px !important;
+  padding-top: 0 !important;
+}
 .scrollable {
   padding: 0px !important;
 }

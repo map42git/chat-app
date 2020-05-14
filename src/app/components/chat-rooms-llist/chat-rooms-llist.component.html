@@ -1,37 +1,39 @@
 <div class="rooms-list">
-  <div class="filters">
-    <button nbButton status="success" size="tiny" (click)="showByStatus('new')">
-      New
-    </button>
-    <button
-      nbButton
-      status="primary"
-      size="tiny"
-      (click)="showByStatus('active')"
-    >
-      Active
-    </button>
-    <button
-      nbButton
-      status="warning"
-      size="tiny"
-      (click)="showByStatus('resolved')"
-    >
-      Resolved
-    </button>
-    <button
-      nbButton
-      status="danger"
-      size="tiny"
-      (click)="showByStatus('archived')"
-    >
-      Archived
-    </button>
-  </div>
-  <app-chat-room-item
-    *ngFor="let room of rooms"
-    [room]="room"
-    (roomChanged)="chatRoomChanged($event)"
-    (removeChat)="deleteChat($event)"
-  ></app-chat-room-item>
+
+  <nb-card>
+    <div class="filters">
+      <div class="filter">
+        <div class="counter">{{counter.getChatsCountByStatus('new')}}</div>
+        <!-- <button nbButton status="success" shape="round" size="small">
+          New
+        </button> -->
+        <div class="filter-switch" (click)="showByStatus('new')">
+          New
+        </div>
+      </div>
+      <div class="filter">
+        <div class="counter">{{counter.getChatsCountByStatus('active')}}</div>
+        <div class="filter-switch" (click)="showByStatus('active')">
+          Active
+        </div>
+      </div>
+      <div class="filter">
+        <div class="counter">{{counter.getChatsCountByStatus('resolved')}}</div>
+        <div class="filter-switch" (click)="showByStatus('resolved')">
+          Resolved
+        </div>
+      </div>
+      <div class="filter">
+        <div class="counter">{{counter.getChatsCountByStatus('archived')}}</div>
+        <div class="filter-switch" (click)="showByStatus('archived')">
+          Archived
+        </div>
+      </div>
+    </div>
+  </nb-card>
+  <nb-card class="chats">
+    <app-chat-room-item *ngFor="let room of rooms" [room]="room" (roomChanged)="chatRoomChanged($event)"
+      (removeChat)="deleteChat($event)"></app-chat-room-item>
+  </nb-card>
+
 </div>

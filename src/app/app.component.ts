@@ -39,7 +39,7 @@ export class AppComponent {
   activeChatId: any;
   actualUserId: string;
   actualUser: User;
-  videoChatMode: Boolean = false;
+  videoChatMode: Boolean = true;
   chatSize: any;
   isFrameExpanded: any;
   darkMode: Boolean = false;
@@ -161,12 +161,12 @@ export class AppComponent {
     const files = !message.files
       ? []
       : message.files.map((file) => {
-          return {
-            url: file.src,
-            type: file.type,
-            icon: "file-text-outline",
-          };
-        });
+        return {
+          url: file.src,
+          type: file.type,
+          icon: "file-text-outline",
+        };
+      });
     if (this.activeChatId) {
       const messsageModel = new ChatRecord();
       messsageModel.details = message.message;
@@ -253,22 +253,9 @@ export class AppComponent {
       this.themeService.changeTheme(theme);
   }
   putShareLink() {
-    // const message = {
-    //   message: this.roomUrl,
-    //   files: [
-    //     { src: this.roomUrl, type: "file", icon: "external-link-outline" },
-    //   ],
-    // };
-    // this.newMessage(message);
     this.shareUrl = null;
     setTimeout(() => {
       this.shareUrl = this.roomUrl;
     }, 100);
   }
-  // compare(a, b) {
-  //   if (a.createdOn > b.createdOn) return 1;
-  //   if (b.createdOn > a.createdOn) return -1;
-  //   return 0;
-  // }
-  //
 }

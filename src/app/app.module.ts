@@ -39,6 +39,7 @@ import {
   HttpHandler,
   HttpClientModule,
 } from "@angular/common/http";
+import { ChatService } from './services/chat.service';
 
 @NgModule({
   declarations: [
@@ -77,6 +78,7 @@ import {
     NbLayoutDirectionService,
     HttpService,
     HttpClient,
+    ChatService
   ],
   bootstrap: [AppComponent],
   entryComponents: [ChatRoomItemComponent],

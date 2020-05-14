@@ -1,10 +1,60 @@
 .rooms-list {
-  padding: 10px 0px 85px;
+  background-color: #ebeff5;
+  .chats {
+    min-height: 66vh;
+    max-height: 66vh;
+    overflow-y: overlay;
+    margin-bottom: 0;
+  }
   .filters {
-    margin-bottom: 10px;
     border-bottom: 1px solid #dddddd;
-    padding: 10px 0;
+    padding: 10px;
     display: flex;
+    flex-direction: column;
     justify-content: space-around;
+
+    .filter {
+      display: flex;
+      flex-direction: row-reverse;
+      justify-content: space-between;
+      position: relative;
+      cursor: pointer;
+      .counter {
+        position: absolute;
+        top: 6px;
+        left: 7px;
+        background-color: #65656533;
+        width: 26px;
+        height: 26px;
+        text-align: center;
+        color: #ffffff;
+        line-height: 26px;
+        font-weight: 700;
+        border-radius: 50%;
+      }
+      .filter-switch {
+        cursor: pointer;
+        height: 40px;
+        border-radius: 20px;
+        margin-bottom: 5px;
+        line-height: 40px;
+        padding-right: 20px;
+        color: #ffffff;
+        font-weight: 700;
+        width: 100%;
+      }
+    }
+    .filter:nth-child(1) .filter-switch {
+      background-color: #43da84;
+    }
+    .filter:nth-child(2) .filter-switch {
+      background-color: #49a8e5;
+    }
+    .filter:nth-child(3) .filter-switch {
+      background-color: #f7b928;
+    }
+    .filter:nth-child(4) .filter-switch {
+      background-color: #ed6b49;
+    }
   }
 }
