@@ -143,7 +143,7 @@ export class AppComponent {
   //messages
   getRoomMesages(event) {
     this.activeChatId = event;
-    this.activeChat = this.chats.getValue().filter((x) => x.chatId == event)[0];
+
     this.messagesCollection
       .valueChanges<string>({
         idField: "chatRecordId",
@@ -155,6 +155,7 @@ export class AppComponent {
       )
       .subscribe((_messages) => {
         this.messages.next(_messages);
+        this.activeChat = this.chats.getValue().filter((x) => x.chatId == event)[0];
       });
   }
   newMessage(message) {
