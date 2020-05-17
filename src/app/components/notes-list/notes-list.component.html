@@ -7,14 +7,12 @@
         (ngModelChange)="doSearch($event)">
     </nb-form-field>
   </div>
-  <!-- <div class="notes-card-header">
-    <span>Notes</span>
-    <nb-search type="rotate-layout"></nb-search>
-  </div> -->
-  <div class="new-note">
-    <textarea nbInput fullWidth placeholder="כתוב פתק..." [(ngModel)]="noteText"></textarea>
+  <div class="notes-block scrollable">
+    <div class="new-note">
+      <textarea nbInput fullWidth placeholder="כתוב פתק..." [(ngModel)]="noteText"></textarea>
+    </div>
+    <app-notes-list-item *ngFor="let note of filteredNotes || notes" [chatId]="chatId" [note]="note"
+      (removeNote)="removeNote($event)">
+    </app-notes-list-item>
   </div>
-  <app-notes-list-item *ngFor="let note of filteredNotes || notes" [chatId]="chatId" [note]="note"
-    (removeNote)="removeNote($event)">
-  </app-notes-list-item>
 </div>
