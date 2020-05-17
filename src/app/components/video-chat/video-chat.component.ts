@@ -18,18 +18,14 @@ export class VideoChatComponent implements OnInit, OnChanges {
   @Output() inviteUserToVideoChat = new EventEmitter<any>();
   @Input() url: string;
   videChatFrameUrl: any;
-  isFrameExpanded: boolean = false;
-  constructor(private sanitizer: DomSanitizer) {}
-  expandAction() {
-    this.isFrameExpanded = !this.isFrameExpanded;
-    this.expandFrame.emit(this.isFrameExpanded);
-  }
-  ngOnInit() {}
+  afterShare: boolean = false;
+  constructor(private sanitizer: DomSanitizer) { }
+  ngOnInit() { }
   shareLink() {
     this.inviteUserToVideoChat.emit();
+    this.afterShare = true
   }
   ngOnChanges() {
-    console.log(this.url);
     this.videChatFrameUrl = this.url;
 
     this.videChatFrameUrl = this.sanitizer.bypassSecurityTrustResourceUrl(

@@ -1,37 +1,13 @@
 <nb-card class="video-chat">
   <nb-card-header>Video Chat</nb-card-header>
-  <div class="vc-body">
-    <div
-      *ngIf="!url"
-      style="width: 100%; text-align: center; margin-top: 18px;"
-    >
-      Something went wrong ☹
+  <div class="vc-body" *ngIf="!afterShare">
+    <div class="initial-state">
+      <button nbButton shape="round" status="info" (click)="shareLink()">Share Link</button>
     </div>
-    <iframe
-      *ngIf="url"
-      [src]="videChatFrameUrl"
-      allow="camera;microphone"
-      frameborder="0"
-      tyle="overflow:hidden;height:100%;width:100%"
-      height="100%"
-      width="100%"
-    >
-      video chat frame
+  </div>
+  <div class="vc-body" *ngIf="afterShare">
+    <iframe [src]="videChatFrameUrl" allow="camera;microphone" frameborder="0" height="100%" width="100%">
+      Video Сhat
     </iframe>
   </div>
-  <nb-card-footer>
-    <nb-actions size="small" fullWidth>
-      <nb-action icon="link-outline" (click)="shareLink()"></nb-action>
-      <!-- <nb-action
-        icon="collapse-outline"
-        *ngIf="isFrameExpanded"
-        (click)="expandAction()"
-      ></nb-action>
-      <nb-action
-        icon="expand-outline"
-        *ngIf="!isFrameExpanded"
-        (click)="expandAction()"
-      ></nb-action> -->
-    </nb-actions>
-  </nb-card-footer>
 </nb-card>

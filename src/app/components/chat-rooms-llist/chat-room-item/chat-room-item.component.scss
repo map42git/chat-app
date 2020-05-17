@@ -1,10 +1,10 @@
 .room-body {
   direction: rtl;
   width: 100%;
-  height: 80px;
-  line-height: 80px;
+  height: 70px;
+  line-height: 70px;
   padding: 0 10px 0 20px;
-  border-bottom: 1px solid #dddddd70;
+  border-radius: 10px;
   position: relative;
   .room-name {
     font-size: 17px;
@@ -18,5 +18,5 @@
 }
 .room-body:hover {
   cursor: pointer;
-  background-color: #eaeaea47;
+  background-color: #eaeaea96;
 }

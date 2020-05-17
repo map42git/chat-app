@@ -1,10 +1,20 @@
 .rooms-list {
   background-color: #ebeff5;
+  .notes-card-header {
+    padding: 0px 10px 10px;
+    span {
+      font-size: 22px;
+      line-height: 58px;
+      font-weight: bold;
+      padding-right: 7px;
+    }
+  }
   .chats {
     min-height: 66vh;
     max-height: 66vh;
     overflow-y: overlay;
     margin-bottom: 0;
+    padding: 8px;
   }
   .filters {
     border-bottom: 1px solid #dddddd;

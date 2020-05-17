@@ -6,6 +6,7 @@ import {
   Output,
   EventEmitter,
   HostListener,
+  AfterViewInit,
 } from "@angular/core";
 
 @Component({
@@ -15,6 +16,8 @@ import {
 })
 export class NotesListComponent implements OnInit {
   noteText: String = "";
+  searchValue: String = '';
+  filteredNotes: Note[];
   @Input() notes: Note[];
   @Input() chatId: string;
   @Output() addNote = new EventEmitter<any>();
@@ -24,9 +27,12 @@ export class NotesListComponent implements OnInit {
       this.newNote();
     }
   }
-  constructor() {}
-
-  ngOnInit() {}
+  constructor() { }
+  doSearch(value) {
+    value ?
+      this.filteredNotes = this.notes.filter(note => note.details.includes(value)) : this.filteredNotes = this.notes
+  }
+  ngOnInit() { }
   newNote() {
     this.addNote.emit(this.noteText);
     this.noteText = "";

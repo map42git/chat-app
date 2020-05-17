@@ -7,16 +7,15 @@
     <nb-icon *ngIf="!darkMode" (click)="switchTheme()" nbButton icon="sun-outline"></nb-icon> -->
   </nb-layout-header>
   <nb-layout-column>
-    <div class="chat-area" [ngClass]="{ 'full-height': isFrameExpanded }">
-      <nb-select class="select-status" size="tiny" *ngIf="activeChat" placeholder="Select Status"
+    <div class="chat-area">
+      <nb-select class="select-status" size="small" *ngIf="activeChat" placeholder="Select Status"
         [(selected)]="activeChat.chatStatusId" (selectedChange)="changeStatus($event)">
         <nb-option value="new">New</nb-option>
         <nb-option value="active">Active</nb-option>
         <nb-option value="resolved">Resolved</nb-option>
         <nb-option value="archived">Archived</nb-option>
       </nb-select>
-      <nb-chat scrollBottom="true" *ngIf="!isFrameExpanded || !videoChatMode"
-        [title]="activeChatId ? 'Chat title' : 'Chose a chat'">
+      <nb-chat scrollBottom="true" [title]="activeChatId ? 'Chat title' : 'Chose a chat'">
         <nb-chat-message *ngFor="let message of messages.value" [message]="message.details" [type]="message.type"
           [sender]="getUserById(message.userId).name" [files]="message.files" [reply]="message.userId == actualUserId">
         </nb-chat-message>
@@ -30,8 +29,7 @@
       <app-notes-list [notes]="notes.value" [chatId]="activeChatId" (addNote)="newNote($event)"
         (deleteNote)="removeNote($event)"></app-notes-list>
     </nb-card>
-    <app-video-chat [url]="roomUrlWithToken" (inviteUserToVideoChat)="putShareLink()"
-      (expandFrame)="expandFrame($event)"></app-video-chat>
+    <app-video-chat [url]="roomUrlWithToken" (inviteUserToVideoChat)="putShareLink()"></app-video-chat>
   </nb-layout-column>
   <nb-layout-column start="true" class="chats-column">
     <div class="chats">

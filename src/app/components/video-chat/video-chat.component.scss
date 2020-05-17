@@ -26,6 +26,20 @@
   }
   .vc-body {
     height: 100%;
+    .initial-state {
+      width: 100%;
+      height: 100%;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    iframe {
+      overflow: hidden;
+      height: 100%;
+      width: 100%;
+    }
   }
   .vc-actions {
     display: flex;

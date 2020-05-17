@@ -1,12 +1,12 @@
 <div class="note-body" *ngIf="chatId == note.chatId">
-  <button
+  <!-- <button
     shape="round"
     nbButton
     size="tiny"
     status="danger"
     (click)="deleteNote(note.chatNoteId)"
-  >
-    <nb-icon icon="close-outline"></nb-icon>
-  </button>
+  > -->
+  <nb-icon (click)="deleteNote(note.chatNoteId)" icon="close-outline"></nb-icon>
+  <!-- </button> -->
   <div class="note-details">{{ note.details }}</div>
 </div>

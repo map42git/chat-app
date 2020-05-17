@@ -16,6 +16,8 @@ import {
   NbSelectModule,
   NbCardModule,
   NbToggleModule,
+  NbSearchModule,
+  NbFormFieldModule,
 } from "@nebular/theme";
 import { BrowserModule } from "@angular/platform-browser";
 import { NgModule } from "@angular/core";
@@ -71,6 +73,8 @@ import { ChatService } from './services/chat.service';
     NbCardModule,
     NbToggleModule,
     HttpClientModule,
+    NbSearchModule,
+    NbFormFieldModule
   ],
   providers: [
     NbSidebarService,
@@ -83,4 +87,4 @@ import { ChatService } from './services/chat.service';
   bootstrap: [AppComponent],
   entryComponents: [ChatRoomItemComponent],
 })
-export class AppModule {}
+export class AppModule { }

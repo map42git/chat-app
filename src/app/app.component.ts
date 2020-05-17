@@ -234,24 +234,24 @@ export class AppComponent {
   //
 
   // helpers
-  expandFrame(event) {
-    this.isFrameExpanded = event;
-  }
-  toggle() {
-    this.sidebarService.toggle(false, "right");
-  }
-  toggleNotes() {
-    this.sidebarService.toggle(false, "left");
-  }
-  toVideoChat() {
-    this.videoChatMode = !this.videoChatMode;
-  }
-  switchTheme() {
-    var theme: string;
-    this.darkMode = !this.darkMode;
-    this.darkMode ? (theme = "cosmic") : (theme = "default"),
-      this.themeService.changeTheme(theme);
-  }
+  // expandFrame(event) {
+  //   this.isFrameExpanded = event;
+  // }
+  // toggle() {
+  //   this.sidebarService.toggle(false, "right");
+  // }
+  // toggleNotes() {
+  //   this.sidebarService.toggle(false, "left");
+  // }
+  // toVideoChat() {
+  //   this.videoChatMode = !this.videoChatMode;
+  // }
+  // switchTheme() {
+  //   var theme: string;
+  //   this.darkMode = !this.darkMode;
+  //   this.darkMode ? (theme = "cosmic") : (theme = "default"),
+  //     this.themeService.changeTheme(theme);
+  // }
   putShareLink() {
     this.shareUrl = null;
     setTimeout(() => {

@@ -1,11 +1,11 @@
 .note-body {
   direction: rtl;
-  button {
-    height: fit-content;
-    position: absolute;
-    top: 5px;
-    left: 3px;
-  }
+  // button {
+  //   height: fit-content;
+  //   position: absolute;
+  //   top: 5px;
+  //   left: 3px;
+  // }
   width: 100%;
   min-height: 80px;
   height: auto;
@@ -17,8 +17,14 @@
   position: relative;
   margin-bottom: 5px;
   border-radius: 7px;
-  background-color: #bbd9ff;
+  background-color: #7fd4fa;
   border-bottom: 1px solid #ededed;
+  nb-icon {
+    cursor: pointer;
+    position: absolute;
+    top: 15px;
+    left: 10px;
+  }
   .note-details {
     width: 100%;
     text-align: right;
