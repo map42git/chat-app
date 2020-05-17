@@ -11,7 +11,12 @@ import { UserHookService } from 'src/app/services/userHook.service';
 export class ChatRoomsLlistComponent {
   searchValue = ''
   filteredRooms: Chat[]
-  @Input() rooms: Chat[];
+  rooms: Chat[]
+  @Input('rooms') set _rooms(value: Chat[]) {
+    this.rooms = value
+    console.log(this.rooms);
+    this.doSearch('')
+  };
   @Output() roomChanged = new EventEmitter<any>();
   @Output() removeChat = new EventEmitter<string>();
   @Output() filterStatus = new EventEmitter<string>();
