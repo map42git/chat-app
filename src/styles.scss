@@ -27,16 +27,55 @@ $chatapp-theme: mat-light-theme($chatapp-primary, $chatapp-accent, $chatapp-warn
 nb-layout-header {
   background-color: #edf1f7 !important;
   nav {
-    height: 60px;
     box-shadow: none !important;
     direction: ltr;
+    height: 3.75rem !important;
   }
 }
+nb-popover {
+  div {
+    width: 130px;
+    position: relative;
+    padding: 0px 15px;
+    span {
+      position: absolute;
+      top: 4px;
+      height: 10px;
+      right: 0px;
+      border-radius: 50%;
+      width: 10px;
+      background-color: tomato;
+    }
+  }
+}
+nb-chat-form {
+  button {
+    background-color: #00aaf6 !important;
+    border-color: #00aaf6 !important;
+  }
+}
+nb-chat-message.reply {
+  p.text {
+    background: #ececec !important;
+  }
+}
+nb-chat-message {
+  p.text {
+    font-family: "Segoe UI" !important;
+    background: #c1c1c1 !important;
+  }
+}
+nb-card {
+  margin-bottom: 16px !important;
+  border-radius: 5px !important;
+}
 .status-basic .header {
-  font-size: 21px !important;
+  font-size: 25px !important;
+  font-weight: bold !important;
+  font-family: "Segoe UI" !important;
 }
 nb-layout-column {
-  padding: 0 20px !important;
+  padding: 0 16px !important;
   padding-top: 0 !important;
 }
 .scrollable {

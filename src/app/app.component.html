@@ -7,14 +7,24 @@
     <nb-icon *ngIf="!darkMode" (click)="switchTheme()" nbButton icon="sun-outline"></nb-icon> -->
   </nb-layout-header>
   <nb-layout-column>
+
     <div class="chat-area">
-      <nb-select class="select-status" size="small" *ngIf="activeChat" placeholder="Select Status"
+      <div class="select-status" *ngIf="activeChat" nbButton [nbPopover]="templateRef" nbPopoverPlacement="bottom">
+        {{activeChat.chatStatusId}}
+      </div>
+      <ng-template #templateRef NbPosition="bottom" class="popover-status">
+        <div (click)="changeStatus('new')"><span></span>New</div>
+        <div (click)="changeStatus('active')"><span></span>Active</div>
+        <div (click)="changeStatus('resolved')"><span></span>Resolved</div>
+        <div (click)="changeStatus('archived')"><span></span>Archived</div>
+      </ng-template>
+      <!-- <nb-select class="select-status" size="small" *ngIf="activeChat" placeholder="Select Status"
         [(selected)]="activeChat.chatStatusId" (selectedChange)="changeStatus($event)">
         <nb-option value="new">New</nb-option>
         <nb-option value="active">Active</nb-option>
         <nb-option value="resolved">Resolved</nb-option>
         <nb-option value="archived">Archived</nb-option>
-      </nb-select>
+      </nb-select> -->
       <nb-chat scrollBottom="true" [title]="activeChatId ? 'Chat title' : 'Chose a chat'">
         <nb-chat-message *ngFor="let message of messages.value" [message]="message.details" [type]="message.type"
           [sender]="getUserById(message.userId).name" [files]="message.files" [reply]="message.userId == actualUserId">

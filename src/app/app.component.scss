@@ -31,9 +31,13 @@
   //   overflow-y: auto;
   // }
 }
+nb-chat-message-text {
+  font-family: "Segoe UI";
+}
 nb-chat {
   width: 100%;
-  height: 90vh;
+  height: 89vh;
+  border-radius: 5px !important;
   // min-width: 580px;
 }
 .full-height {

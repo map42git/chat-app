@@ -18,6 +18,7 @@ import {
   NbToggleModule,
   NbSearchModule,
   NbFormFieldModule,
+  NbPopoverModule,
 } from "@nebular/theme";
 import { BrowserModule } from "@angular/platform-browser";
 import { NgModule } from "@angular/core";
@@ -74,7 +75,8 @@ import { ChatService } from './services/chat.service';
     NbToggleModule,
     HttpClientModule,
     NbSearchModule,
-    NbFormFieldModule
+    NbFormFieldModule,
+    NbPopoverModule
   ],
   providers: [
     NbSidebarService,

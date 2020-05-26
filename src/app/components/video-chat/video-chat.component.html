@@ -2,12 +2,13 @@
   <nb-card-header>Video Chat</nb-card-header>
   <div class="vc-body" *ngIf="!afterShare">
     <div class="initial-state">
+      <span>Click here to start your video call</span>
       <button nbButton shape="round" status="info" (click)="shareLink()">Share Link</button>
     </div>
   </div>
   <div class="vc-body" *ngIf="afterShare">
     <iframe [src]="videChatFrameUrl" allow="camera;microphone" frameborder="0" height="100%" width="100%">
-      Video Сhat
+      Start video call
     </iframe>
   </div>
 </nb-card>
