@@ -43,6 +43,9 @@ import {
   HttpClientModule,
 } from "@angular/common/http";
 import { ChatService } from './services/chat.service';
+import { ChatComponent } from './components/chat/chat.component';
+import { LoginGuard } from './guards/login.guard';
+import { LoginComponent } from './components/login/login.component';
 
 @NgModule({
   declarations: [
@@ -52,6 +55,8 @@ import { ChatService } from './services/chat.service';
     NotesListComponent,
     NotesListItemComponent,
     VideoChatComponent,
+    ChatComponent,
+    LoginComponent,
   ],
   imports: [
     BrowserModule,
@@ -84,7 +89,8 @@ import { ChatService } from './services/chat.service';
     NbLayoutDirectionService,
     HttpService,
     HttpClient,
-    ChatService
+    ChatService,
+    LoginGuard
   ],
   bootstrap: [AppComponent],
   entryComponents: [ChatRoomItemComponent],

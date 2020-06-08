@@ -1,0 +1,14 @@
+<nb-layout>
+    <nb-layout-column class="login-form">
+        <nb-card>
+            <nb-card-header>להיכנס</nb-card-header>
+            <nb-card-body class="column">
+                <input type="text" nbInput placeholder="אימייל" [(ngModel)]="email"
+                    [status]="email ? 'primary' : 'danger'">
+                <input type="password" nbInput placeholder="סיסמה" [(ngModel)]="password"
+                    [status]="password ? 'primary' : 'danger'">
+                <button nbButton status="primary" [disabled]='!password || !email ' (click)="login()">ללכת</button>
+            </nb-card-body>
+        </nb-card>
+    </nb-layout-column>
+</nb-layout>
