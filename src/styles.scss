@@ -36,16 +36,21 @@ nb-popover {
   div {
     width: 130px;
     position: relative;
-    padding: 0px 15px;
+    padding: 0px 27px;
+    height: 32px;
+    line-height: 32px;
     span {
       position: absolute;
-      top: 4px;
+      top: 33%;
       height: 10px;
-      right: 0px;
+      right: 10px;
       border-radius: 50%;
       width: 10px;
-      background-color: tomato;
     }
+  }
+  div:hover {
+    background-color: whitesmoke;
+    cursor: pointer;
   }
 }
 nb-chat-form {
@@ -88,4 +93,16 @@ body {
 body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+span.new {
+  background-color: #43da84;
+}
+span.active {
+  background-color: #00aaf6;
+}
+span.resolved {
+  background-color: #f7b928;
+}
+span.archived {
+  background-color: #ed6b49;
 }

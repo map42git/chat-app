@@ -11,9 +11,23 @@
   .select-status {
     position: absolute;
     z-index: 1;
-    left: 3%;
-    top: 13px;
+    right: 150px;
+    top: 22px;
+    font-weight: 100;
+    padding-right: 14px;
+    span {
+      position: absolute;
+      top: 5px;
+      height: 10px;
+      right: 0px;
+      border-radius: 50%;
+      width: 10px;
+    }
   }
+  // .select-status:hover {
+  //   transition: ease-in-out .5s;
+  //   text-shadow: 0 0 1px #000000;
+  // }
 }
 .chats-column {
   max-width: 410px;

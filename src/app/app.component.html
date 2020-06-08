@@ -9,14 +9,15 @@
   <nb-layout-column>
 
     <div class="chat-area">
-      <div class="select-status" *ngIf="activeChat" nbButton [nbPopover]="templateRef" nbPopoverPlacement="bottom">
+      <div class="select-status" *ngIf="activeChat" nbButton [nbPopover]="popoverStatus" nbPopoverPlacement="bottom">
         {{activeChat.chatStatusId}}
+        <span [ngClass]="activeChat.chatStatusId"></span>
       </div>
-      <ng-template #templateRef NbPosition="bottom" class="popover-status">
-        <div (click)="changeStatus('new')"><span></span>New</div>
-        <div (click)="changeStatus('active')"><span></span>Active</div>
-        <div (click)="changeStatus('resolved')"><span></span>Resolved</div>
-        <div (click)="changeStatus('archived')"><span></span>Archived</div>
+      <ng-template #popoverStatus NbPosition="bottom" class="popover-status">
+        <div (click)="changeStatus('new')"><span class="new"></span>New</div>
+        <div (click)="changeStatus('active')"><span class="active"></span>Active</div>
+        <div (click)="changeStatus('resolved')"><span class="resolved"></span>Resolved</div>
+        <div (click)="changeStatus('archived')"><span class="archived"></span>Archived</div>
       </ng-template>
       <!-- <nb-select class="select-status" size="small" *ngIf="activeChat" placeholder="Select Status"
         [(selected)]="activeChat.chatStatusId" (selectedChange)="changeStatus($event)">
