@@ -46,7 +46,12 @@ import { ChatService } from './services/chat.service';
 import { ChatComponent } from './components/chat/chat.component';
 import { LoginGuard } from './guards/login.guard';
 import { LoginComponent } from './components/login/login.component';
+import { RegisterComponent } from './components/register/register.component';
+import { AngularFireAuthModule } from '@angular/fire/auth';
 
+import * as firebase from 'firebase';
+
+firebase.initializeApp(environment.firebase);
 @NgModule({
   declarations: [
     AppComponent,
@@ -57,8 +62,10 @@ import { LoginComponent } from './components/login/login.component';
     VideoChatComponent,
     ChatComponent,
     LoginComponent,
+    RegisterComponent,
   ],
   imports: [
+    AngularFireAuthModule,
     BrowserModule,
     NbThemeModule.forRoot({ name: "default" }),
     NbChatModule,

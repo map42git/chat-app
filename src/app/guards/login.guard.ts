@@ -1,6 +1,7 @@
 import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import * as firebase from 'firebase';
 
 @Injectable()
 export class LoginGuard {
@@ -9,10 +10,8 @@ export class LoginGuard {
     ) { }
     canActivate(
     ): Observable<boolean> | boolean {
-        if (
-            // logged in
-            localStorage.getItem('loggedIn') == '1'
-        ) {
+        var user = firebase.auth().currentUser;
+        if (user) {
             return true;
         } else {
             this.router.navigate(['login'])

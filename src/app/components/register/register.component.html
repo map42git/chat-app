@@ -1,19 +1,22 @@
 <nb-layout>
     <nb-layout-column class="login-form">
         <nb-card>
-            <nb-card-header>להיכנס</nb-card-header>
+            <nb-card-header>להירשם</nb-card-header>
             <nb-card-body class="column">
                 <input type="text" nbInput placeholder="אימייל" [(ngModel)]="email"
                     [status]="email ? 'primary' : 'danger'">
                 <input type="password" nbInput placeholder="סיסמה" [(ngModel)]="password"
                     [status]="password ? 'primary' : 'danger'">
-                <button nbButton status="primary" [disabled]='!password || !email ' (click)="login()">ללכת</button>
+                <input type="password" nbInput placeholder="חזור על הסיסמה" [(ngModel)]="passwordRepeat"
+                    [status]="passwordRepeat && password == passwordRepeat ? 'primary' : 'danger'">
+                <button nbButton status="primary" [disabled]='!password || !email || password !== passwordRepeat'
+                    (click)="register()">ללכת</button>
                 <span *ngIf="errorMessage">{{errorMessage}}</span>
             </nb-card-body>
         </nb-card>
         <div class="navigator">
-            <div>להיכנס</div>
-            <div [ngClass]="{'inactive' : loginPage}" [routerLink]="['/register']">להירשם</div>
+            <div [ngClass]="{'inactive' : registerPage}" [routerLink]="['/login']">להיכנס</div>
+            <div>להירשם</div>
         </div>
     </nb-layout-column>
 </nb-layout>

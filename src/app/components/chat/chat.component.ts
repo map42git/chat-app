@@ -9,6 +9,7 @@ import { NbSidebarService, NbLayoutDirectionService, NbThemeService, NbLayoutDir
 import { HttpService } from 'src/app/services/http.service';
 import { map } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import * as firebase from 'firebase';
 
 @Component({
   selector: 'app-chat',
@@ -227,8 +228,10 @@ export class ChatComponent implements OnInit {
 
   //helpers
   logout() {
-    localStorage.setItem('loggedIn', '0');
-    this.router.navigate(['login'])
+    firebase.auth().signOut().then(() => {
+      this.router.navigate(['login'])
+    }).catch(error => alert(error))
+
   }
   // expandFrame(event) {
   //   this.isFrameExpanded = event;
