@@ -14,6 +14,7 @@
                 nbPopoverPlacement="bottom">
                 {{activeChat.chatStatusId}}
                 <span [ngClass]="activeChat.chatStatusId"></span>
+                <nb-icon icon="arrow-ios-downward-outline"></nb-icon>
             </div>
             <ng-template #popoverStatus NbPosition="bottom" class="popover-status">
                 <div (click)="changeStatus('new')"><span class="new"></span>New</div>
