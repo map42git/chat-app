@@ -1,4 +1,5 @@
 <div class="room-body" (click)="getMessages(room.chatId)">
+
   <!-- <button
     shape="round"
     nbButton
@@ -14,6 +15,10 @@
   ></nb-icon> -->
   <!-- </button> -->
   <div class="room-name">
+    <div class="channel-ico">
+      <img *ngIf="room.chatChannelId == 'whatsapp'" src="../../../../assets/whatsapp-ico.png" alt="">
+      <img *ngIf="room.chatChannelId == 'sms'" src="../../../../assets/sms-ico.png" alt="">
+    </div>
     {{
       hook.getUserById(room.userId) ? hook.getUserById(room.userId).name : ""
     }}

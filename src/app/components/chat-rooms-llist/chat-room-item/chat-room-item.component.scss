@@ -9,6 +9,15 @@
   .room-name {
     font-size: 17px;
     font-weight: 700;
+    position: relative;
+    .channel-ico {
+      position: absolute;
+      top: 5px;
+      left: 0px;
+      img {
+        height: 28px;
+      }
+    }
   }
   nb-icon {
     position: absolute;
