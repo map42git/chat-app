@@ -11,9 +11,5 @@
                 <span *ngIf="errorMessage">{{errorMessage}}</span>
             </nb-card-body>
         </nb-card>
-        <div class="navigator">
-            <div>להיכנס</div>
-            <div [ngClass]="{'inactive' : loginPage}" [routerLink]="['/register']">להירשם</div>
-        </div>
     </nb-layout-column>
 </nb-layout>

@@ -19,6 +19,8 @@ import {
   NbSearchModule,
   NbFormFieldModule,
   NbPopoverModule,
+  NbTabsetModule,
+  NbRouteTabsetModule,
 } from "@nebular/theme";
 import { BrowserModule } from "@angular/platform-browser";
 import { NgModule } from "@angular/core";
@@ -50,6 +52,7 @@ import { RegisterComponent } from './components/register/register.component';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 
 import * as firebase from 'firebase';
+import { AdminPanelComponent } from './components/admin-panel/admin-panel.component';
 
 firebase.initializeApp(environment.firebase);
 @NgModule({
@@ -63,6 +66,7 @@ firebase.initializeApp(environment.firebase);
     ChatComponent,
     LoginComponent,
     RegisterComponent,
+    AdminPanelComponent,
   ],
   imports: [
     AngularFireAuthModule,
@@ -88,7 +92,8 @@ firebase.initializeApp(environment.firebase);
     HttpClientModule,
     NbSearchModule,
     NbFormFieldModule,
-    NbPopoverModule
+    NbPopoverModule,
+    NbTabsetModule
   ],
   providers: [
     NbSidebarService,

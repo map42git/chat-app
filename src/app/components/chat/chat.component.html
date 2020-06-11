@@ -4,8 +4,7 @@
             <img src="../assets/logo.png" alt="">
         </div>
         <nb-icon icon="lock-outline" class="logout-icon" (click)="logout()"></nb-icon>
-        <!-- <nb-icon *ngIf="darkMode" (click)="switchTheme()" nbButton icon="moon-outline"></nb-icon>
-      <nb-icon *ngIf="!darkMode" (click)="switchTheme()" nbButton icon="sun-outline"></nb-icon> -->
+        <nb-icon icon="people-outline" class="people-icon" (click)="toConsole()"></nb-icon>
     </nb-layout-header>
     <nb-layout-column>
 
@@ -22,13 +21,6 @@
                 <div (click)="changeStatus('resolved')"><span class="resolved"></span>Resolved</div>
                 <div (click)="changeStatus('archived')"><span class="archived"></span>Archived</div>
             </ng-template>
-            <!-- <nb-select class="select-status" size="small" *ngIf="activeChat" placeholder="Select Status"
-          [(selected)]="activeChat.chatStatusId" (selectedChange)="changeStatus($event)">
-          <nb-option value="new">New</nb-option>
-          <nb-option value="active">Active</nb-option>
-          <nb-option value="resolved">Resolved</nb-option>
-          <nb-option value="archived">Archived</nb-option>
-        </nb-select> -->
             <nb-chat scrollBottom="true" [title]="activeChatId ? 'Chat title' : 'Chose a chat'">
                 <nb-chat-message *ngFor="let message of messages.value" [message]="message.details"
                     [type]="message.type" [sender]="getUserById(message.userId).name" [files]="message.files"

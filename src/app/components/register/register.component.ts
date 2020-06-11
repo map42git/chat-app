@@ -18,7 +18,7 @@ export class RegisterComponent implements OnInit {
   }
   register() {
     firebase.auth().createUserWithEmailAndPassword(this.email, this.password).then(() => {
-      this.router.navigate(['dashboard'])
+      alert('Enjoy your freshly baked user!')
     }).catch(error => {
       this.errorMessage = error.message;
     })

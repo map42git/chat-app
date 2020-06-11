@@ -5,6 +5,7 @@ import { ChatComponent } from './components/chat/chat.component';
 import { LoginGuard } from './guards/login.guard';
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
+import { AdminPanelComponent } from './components/admin-panel/admin-panel.component';
 
 const routes: Routes = [
   {
@@ -17,8 +18,9 @@ const routes: Routes = [
     component: LoginComponent
   },
   {
-    path: 'register',
-    component: RegisterComponent
+    path: 'console',
+    component: AdminPanelComponent,
+    canActivate: [LoginGuard]
   },
   {
     path: '**',

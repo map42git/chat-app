@@ -10,6 +10,7 @@ import { HttpService } from 'src/app/services/http.service';
 import { map } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import * as firebase from 'firebase';
+import { Http } from '@angular/http';
 
 @Component({
   selector: 'app-chat',
@@ -44,7 +45,8 @@ export class ChatComponent implements OnInit {
     private directionService: NbLayoutDirectionService,
     private themeService: NbThemeService,
     private http: HttpService,
-    private router: Router
+    private router: Router,
+    private httpClient: Http
   ) {
     this.directionService.setDirection(NbLayoutDirection.RTL);
     this.messagesCollection = this.afs.collection<ChatRecord>(
@@ -161,6 +163,7 @@ export class ChatComponent implements OnInit {
         };
       });
     if (this.activeChatId) {
+
       const messsageModel = new ChatRecord();
       messsageModel.details = message.message;
       messsageModel.createdOn = new Date().getTime().toString();
@@ -171,6 +174,9 @@ export class ChatComponent implements OnInit {
       (messsageModel.type = files.length ? "file" : "text"),
         //mock
         (messsageModel.isHomeRecord = true);
+      this.httpClient.post('https://us-central1-upstartchat.cloudfunctions.net/addMessageToUser', messsageModel).subscribe(() => {
+        console.log('URA');
+      })
       this.messagesCollection.add({ ...messsageModel });
     } else {
       alert("Choose or create chat first!");
@@ -227,11 +233,13 @@ export class ChatComponent implements OnInit {
   //
 
   //helpers
+  toConsole() {
+    this.router.navigate(['console'])
+  }
   logout() {
     firebase.auth().signOut().then(() => {
       this.router.navigate(['login'])
     }).catch(error => alert(error))
-
   }
   // expandFrame(event) {
   //   this.isFrameExpanded = event;
