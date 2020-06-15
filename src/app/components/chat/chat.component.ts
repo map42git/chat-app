@@ -175,9 +175,11 @@ export class ChatComponent implements OnInit {
         //mock
         (messsageModel.isHomeRecord = true);
       this.httpClient.post('https://us-central1-upstartchat.cloudfunctions.net/addMessageToUser', messsageModel).subscribe(() => {
-        console.log('URA');
       })
       this.messagesCollection.add({ ...messsageModel });
+      this.afs.collection("Chats").doc(this.activeChatId).update({
+        lastActivity: new Date().getTime().toString(),
+      });
     } else {
       alert("Choose or create chat first!");
     }
@@ -215,7 +217,8 @@ export class ChatComponent implements OnInit {
       });
   }
   getChats() {
-    this.chatsCollection = this.afs.collection<Chat>("Chats");
+    this.chatsCollection = this.afs.collection<Chat>("Chats", (ref) =>
+      ref.orderBy("lastActivity", "desc"));
     this.chatsCollection
       .valueChanges<string>({
         idField: "chatId",
