@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import * as firebase from 'firebase';
+import { UserHookService } from 'src/app/services/userHook.service';
+import { User } from 'src/models/user.model';
+import { AuthService } from 'src/app/services/auth.service';
 // require('firebase/auth');
 
 @Component({
@@ -13,8 +16,11 @@ export class LoginComponent implements OnInit {
   password: string;
   loginPage: boolean;
   errorMessage: any;
+  loggedInUser: User;
   constructor(
-    private router: Router
+    private router: Router,
+    private hook: UserHookService,
+    private auth: AuthService
   ) {
     this.loginPage = true
   }
@@ -24,7 +30,8 @@ export class LoginComponent implements OnInit {
   login() {
     firebase.auth().signInWithEmailAndPassword(this.email, this.password).catch(error => {
       this.errorMessage = error.message;
-    }).then(result => {
+    }).then(() => {
+      this.auth.setUserInfo(this.hook.getUserByEmail(this.email));
       this.router.navigate(['dashboard'])
     })
   }

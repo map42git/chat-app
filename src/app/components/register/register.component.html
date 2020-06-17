@@ -1,10 +1,18 @@
-<div class="register-form-container">
-    <input type="text" nbInput placeholder="אימייל" [(ngModel)]="email" [status]="email ? 'primary' : 'danger'">
-    <input type="password" nbInput placeholder="סיסמה" [(ngModel)]="password"
-        [status]="password ? 'primary' : 'danger'">
-    <input type="password" nbInput placeholder="חזור על הסיסמה" [(ngModel)]="passwordRepeat"
-        [status]="passwordRepeat && password == passwordRepeat ? 'primary' : 'danger'">
-    <span *ngIf="errorMessage">{{errorMessage}}</span>
-    <button nbButton status="primary" [disabled]='!password || !email || password !== passwordRepeat'
-        (click)="register()">אישור</button>
+<div style="display: flex; width: 100%; justify-content: center;">
+    <div class="register-form-container">
+        <input type="text" nbInput placeholder="אימייל" [(ngModel)]="email" [status]="email ? 'primary' : 'danger'">
+        <input type="password" nbInput placeholder="סיסמה" [(ngModel)]="password"
+            [status]="password ? 'primary' : 'danger'">
+        <input type="password" nbInput placeholder="חזור על הסיסמה" [(ngModel)]="passwordRepeat"
+            [status]="passwordRepeat && password == passwordRepeat ? 'primary' : 'danger'">
+        <input type="text" nbInput placeholder="שם" [(ngModel)]="name" [status]="name ? 'primary' : 'danger'">
+        <nb-select placeholder="Select Showcase" [(selected)]="selectedItem" fullWidth='true'>
+            <nb-option value="employee">Employee</nb-option>
+            <nb-option value="manager">Manager</nb-option>
+            <nb-option value="admin">Admin</nb-option>
+        </nb-select>
+        <span *ngIf="errorMessage">{{errorMessage}}</span>
+        <button nbButton fullWidth='true' status="primary"
+            [disabled]='!password || !email || password !== passwordRepeat || !name' (click)="register()">אישור</button>
+    </div>
 </div>

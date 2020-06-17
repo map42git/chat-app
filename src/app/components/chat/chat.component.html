@@ -4,7 +4,7 @@
             <img src="../assets/logo-new.png" alt="">
         </div>
         <nb-icon icon="lock-outline" class="logout-icon" (click)="logout()"></nb-icon>
-        <nb-icon icon="people-outline" class="people-icon" (click)="toConsole()"></nb-icon>
+        <nb-icon icon="people-outline" class="people-icon" (click)="toConsole()" *ngIf="adminAccess"></nb-icon>
     </nb-layout-header>
     <nb-layout-column>
 
@@ -24,7 +24,7 @@
             <nb-chat scrollBottom="true" [title]="activeChatId ? 'Chat title' : 'Chose a chat'">
                 <nb-chat-message *ngFor="let message of messages.value" [message]="message.details"
                     [type]="message.type" [sender]="getUserById(message.userId).name" [files]="message.files"
-                    [reply]="message.userId == actualUserId">
+                    [reply]="message.userId == actualUserId" [date]="message.createdOn">
                 </nb-chat-message>
                 <nb-chat-form [message]="shareUrl" messagePlaceholder="הקלד הודעה" (send)="newMessage($event)"
                     [dropFiles]="true"></nb-chat-form>

@@ -53,6 +53,8 @@ import { AngularFireAuthModule } from '@angular/fire/auth';
 
 import * as firebase from 'firebase';
 import { AdminPanelComponent } from './components/admin-panel/admin-panel.component';
+import { TimeService } from './services/time.service';
+import { AuthService } from './services/auth.service';
 
 firebase.initializeApp(environment.firebase);
 @NgModule({
@@ -96,6 +98,8 @@ firebase.initializeApp(environment.firebase);
     NbTabsetModule
   ],
   providers: [
+    AuthService,
+    TimeService,
     NbSidebarService,
     UserHookService,
     NbLayoutDirectionService,

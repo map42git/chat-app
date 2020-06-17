@@ -17,7 +17,7 @@ export class UserHookService {
     this.users = new BehaviorSubject([]);
     this.getUsers();
   }
-  getUsers() {
+  private getUsers() {
     this.usersCollection = this.afs.collection<User>("Users");
     this.usersCollection
       .valueChanges<string>({
@@ -29,5 +29,8 @@ export class UserHookService {
   }
   getUserById(id) {
     return this.users.value.find((_user) => _user.id === id);
+  }
+  getUserByEmail(email) {
+    return this.users.value.find((_user) => _user.email === email);
   }
 }

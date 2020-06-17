@@ -1,8 +1,9 @@
 export class User {
-  id: string;
-  name: string;
-  mobileNumber: string;
-  facebookEmail: string;
   createdOn: string;
-  isHomeUser: boolean;
+  email: string;
+  facebookEmail: string;;
+  id: string;
+  role: string;
+  mobileNumber: string;;
+  name: string;
 }

@@ -11,6 +11,8 @@ import { map } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import * as firebase from 'firebase';
 import { Http } from '@angular/http';
+import { TimeService } from 'src/app/services/time.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-chat',
@@ -39,6 +41,7 @@ export class ChatComponent implements OnInit {
   shareUrl: any;
   roomUrl: any;
   activeChat: Chat;
+  adminAccess: boolean;
   constructor(
     private sidebarService: NbSidebarService,
     private afs: AngularFirestore,
@@ -46,8 +49,11 @@ export class ChatComponent implements OnInit {
     private themeService: NbThemeService,
     private http: HttpService,
     private router: Router,
-    private httpClient: Http
+    private httpClient: Http,
+    public time: TimeService,
+    private auth: AuthService
   ) {
+    this.auth.getUserInfo().role == 'manager' || this.auth.getUserInfo().role == 'admin' ? this.adminAccess = true : this.adminAccess = false
     this.directionService.setDirection(NbLayoutDirection.RTL);
     this.messagesCollection = this.afs.collection<ChatRecord>(
       "ChatRecords",
@@ -84,7 +90,7 @@ export class ChatComponent implements OnInit {
     //mock
     // oFIqqOb9dY9B6x595BgS שולמית אלוני
     // 0AM5UiukN4IBk0cYRTjN בן גוריון
-    this.actualUserId = "oFIqqOb9dY9B6x595BgS";
+    this.actualUserId = this.auth.getUserInfo().id;
   }
   getUserById(id) {
     return this.users.value.find((_user) => _user.id === id);

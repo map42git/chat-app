@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import * as firebase from 'firebase';
+import { UserHookService } from 'src/app/services/userHook.service';
 
 @Component({
   selector: 'app-admin-panel',
@@ -8,13 +9,14 @@ import * as firebase from 'firebase';
   styleUrls: ['./admin-panel.component.scss']
 })
 export class AdminPanelComponent implements OnInit {
-
-  constructor(private router: Router) { }
+  users: any;
+  constructor(private router: Router, public hook: UserHookService) { }
 
   ngOnInit(): void {
+    this.users = this.hook.users.value.filter((x) => x.role == 'admin' || x.role == 'manager' || x.role == 'employee');
   }
-  toConsole() {
-    this.router.navigate(['console'])
+  toDashboard() {
+    this.router.navigate(['dashboard'])
   }
   logout() {
     firebase.auth().signOut().then(() => {

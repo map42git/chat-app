@@ -4,13 +4,13 @@
             <img src="../assets/logo-new.png" alt="">
         </div>
         <nb-icon icon="lock-outline" class="logout-icon" (click)="logout()"></nb-icon>
-        <nb-icon icon="people-outline" class="people-icon" (click)="toConsole()"></nb-icon>
+        <nb-icon icon="home-outline" class="people-icon" (click)="toDashboard()"></nb-icon>
     </nb-layout-header>
     <nb-layout-column>
         <nb-card>
             <nb-card-body>
                 <h1>שלום, מנהל!</h1>
-                <h2>זהו פאנל ניהול שמאפשר לך כמה יכולות שאינן זמינות למשתמשים רגילים.
+                <h2>זהו לוח בקרה המספק לך כמה תכונות מיוחדות.
                     <br>
                     אז אתה יכול:
                 </h2>
@@ -32,9 +32,8 @@
                 <nb-tabset>
                     <nb-tab tabTitle="חברי צוות">
                         <ul>
-                            <li>Vasya Pupkin</li>
-                            <li>Ivan Sidorov</li>
-                            <li>Peter Parker</li>
+                            <li *ngFor="let user of users">
+                                {{user.name}} / {{user.role}} </li>
                         </ul>
                     </nb-tab>
                     <nb-tab tabTitle="תוסיף חבר">
