@@ -7,7 +7,7 @@
                     [status]="email ? 'primary' : 'danger'">
                 <input type="password" nbInput placeholder="סיסמה" [(ngModel)]="password"
                     [status]="password ? 'primary' : 'danger'">
-                <button nbButton status="primary" [disabled]='!password || !email ' (click)="login()">ללכת</button>
+                <button nbButton status="primary" [disabled]='!password || !email ' (click)="login()">אישור</button>
                 <span *ngIf="errorMessage">{{errorMessage}}</span>
             </nb-card-body>
         </nb-card>

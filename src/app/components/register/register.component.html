@@ -6,5 +6,5 @@
         [status]="passwordRepeat && password == passwordRepeat ? 'primary' : 'danger'">
     <span *ngIf="errorMessage">{{errorMessage}}</span>
     <button nbButton status="primary" [disabled]='!password || !email || password !== passwordRepeat'
-        (click)="register()">ללכת</button>
+        (click)="register()">אישור</button>
 </div>
