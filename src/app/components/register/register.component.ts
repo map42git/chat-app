@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import * as firebase from 'firebase/app';
 import { AngularFirestoreCollection, AngularFirestore } from 'angularfire2/firestore';
@@ -17,6 +17,7 @@ export class RegisterComponent implements OnInit {
   selectedItem: string = 'employee'
   usersCollection: AngularFirestoreCollection<User>;
   name: string
+  @Output() registered = new EventEmitter<boolean>();
   constructor(private router: Router, private afs: AngularFirestore) { this.registerPage = true }
 
   ngOnInit(): void {
@@ -42,5 +43,6 @@ export class RegisterComponent implements OnInit {
     userModel.name = this.name;
     userModel.email = this.email
     this.usersCollection.add({ ...userModel });
+    this.registered.emit(true)
   }
 }

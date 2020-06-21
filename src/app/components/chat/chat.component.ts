@@ -143,7 +143,6 @@ export class ChatComponent implements OnInit {
   //messages
   getRoomMesages(event) {
     this.activeChatId = event;
-
     this.messagesCollection
       .valueChanges<string>({
         idField: "chatRecordId",
@@ -155,6 +154,7 @@ export class ChatComponent implements OnInit {
       )
       .subscribe((_messages) => {
         this.messages.next(_messages);
+        this.scrollChatAreaToTheBottom();
         this.activeChat = this.chats.getValue().filter((x) => x.chatId == event)[0];
       });
   }
@@ -242,6 +242,12 @@ export class ChatComponent implements OnInit {
   //
 
   //helpers
+  scrollChatAreaToTheBottom() {
+    setTimeout(() => {
+      document.getElementsByClassName('scrollable')[0] ? document.getElementsByClassName('scrollable')[0].scroll(0, 5000) : ''
+      console.log('scrolled')
+    }, 100);
+  }
   toConsole() {
     this.router.navigate(['console'])
   }

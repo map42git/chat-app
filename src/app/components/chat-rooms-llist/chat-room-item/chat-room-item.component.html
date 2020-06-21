@@ -19,8 +19,17 @@
       <img *ngIf="room.chatChannelId == 'whatsapp'" src="../../../../assets/whatsapp-ico.png" alt="">
       <img *ngIf="room.chatChannelId == 'sms'" src="../../../../assets/sms-ico.png" alt="">
     </div>
-    {{
-      hook.getUserById(room.userId) ? hook.getUserById(room.userId).name : ""
-    }}
+    <div class="name-change" *ngIf="!editMode" (click)="editName(true)">
+      {{room.name}}
+      <!-- {{
+        hook.getUserById(room.userId) ? hook.getUserById(room.userId).name : ""
+      }} -->
+      <nb-icon class="edit" icon="edit-outline"></nb-icon>
+    </div>
+    <div class="name-change" *ngIf="editMode">
+      <nb-icon class="arrow" icon="arrow-forward-outline" (click)="updateName()"></nb-icon>
+      <input type="text" fieldSize="tiny" nbInput [placeholder]="room.name" [(ngModel)]="name"
+        [status]="name ? 'primary' : 'danger'">
+    </div>
   </div>
 </div>

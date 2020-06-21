@@ -1,0 +1,14 @@
+.conatainer-edit-user {
+    width: 240px;
+    height: 350px;
+    .form-edit-user {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        .row {
+            display: flex;
+            flex-direction: row-reverse;
+        }
+    }
+}

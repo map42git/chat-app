@@ -11,20 +11,24 @@
         <div class="chat-area">
             <div class="select-status" *ngIf="activeChat" nbButton [nbPopover]="popoverStatus"
                 nbPopoverPlacement="bottom">
-                {{activeChat.chatStatusId}}
+                {{activeChat.chatStatusId == 'new' ? 'חָדָשׁ' : ''}}
+                {{activeChat.chatStatusId == 'active' ? 'פָּעִיל' : ''}}
+                {{activeChat.chatStatusId == 'resolved' ? 'נפתרה' : ''}}
+                {{activeChat.chatStatusId == 'archived' ? 'נשמר בארכיון' : ''}}
                 <span [ngClass]="activeChat.chatStatusId"></span>
                 <nb-icon icon="arrow-ios-downward-outline"></nb-icon>
             </div>
             <ng-template #popoverStatus NbPosition="bottom" class="popover-status">
-                <div (click)="changeStatus('new')"><span class="new"></span>New</div>
-                <div (click)="changeStatus('active')"><span class="active"></span>Active</div>
-                <div (click)="changeStatus('resolved')"><span class="resolved"></span>Resolved</div>
-                <div (click)="changeStatus('archived')"><span class="archived"></span>Archived</div>
+                <div (click)="changeStatus('new')"><span class="new"></span>חָדָשׁ</div>
+                <div (click)="changeStatus('active')"><span class="active"></span>פָּעִיל</div>
+                <div (click)="changeStatus('resolved')"><span class="resolved"></span>נפתרה</div>
+                <div (click)="changeStatus('archived')"><span class="archived"></span>נשמר בארכיון</div>
             </ng-template>
-            <nb-chat scrollBottom="true" [title]="activeChatId ? 'Chat title' : 'Chose a chat'">
+            <nb-chat scrollBottom="true" [title]="activeChat ? activeChat.name : ''">
                 <nb-chat-message *ngFor="let message of messages.value" [message]="message.details"
-                    [type]="message.type" [sender]="getUserById(message.userId).name" [files]="message.files"
-                    [reply]="message.userId == actualUserId" [date]="message.createdOn">
+                    [type]="message.type" [sender]="getUserById(message.userId) ? getUserById(message.userId).name : ''"
+                    [files]="message.files" [reply]="message.userId == actualUserId" [date]="message.createdOn"
+                    [dateFormat]="'medium'">
                 </nb-chat-message>
                 <nb-chat-form [message]="shareUrl" messagePlaceholder="הקלד הודעה" (send)="newMessage($event)"
                     [dropFiles]="true"></nb-chat-form>

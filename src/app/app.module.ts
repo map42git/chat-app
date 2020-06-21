@@ -55,6 +55,8 @@ import * as firebase from 'firebase';
 import { AdminPanelComponent } from './components/admin-panel/admin-panel.component';
 import { TimeService } from './services/time.service';
 import { AuthService } from './services/auth.service';
+import { MatDialogModule } from '@angular/material/dialog';
+import { EditUserPopupComponent } from './components/admin-panel/edit-user-popup/edit-user-popup.component';
 
 firebase.initializeApp(environment.firebase);
 @NgModule({
@@ -69,8 +71,10 @@ firebase.initializeApp(environment.firebase);
     LoginComponent,
     RegisterComponent,
     AdminPanelComponent,
+    EditUserPopupComponent,
   ],
   imports: [
+    MatDialogModule,
     AngularFireAuthModule,
     BrowserModule,
     NbThemeModule.forRoot({ name: "default" }),
@@ -109,6 +113,6 @@ firebase.initializeApp(environment.firebase);
     LoginGuard
   ],
   bootstrap: [AppComponent],
-  entryComponents: [ChatRoomItemComponent],
+  entryComponents: [ChatRoomItemComponent, EditUserPopupComponent],
 })
 export class AppModule { }

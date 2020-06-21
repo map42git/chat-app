@@ -4,4 +4,5 @@ export class Chat {
   userId: string;
   chatStatusId: string;
   createdOn: string;
+  name: string
 }

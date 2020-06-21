@@ -1,14 +1,15 @@
 <nb-card class="video-chat">
-  <nb-card-header>Video Chat</nb-card-header>
+  <nb-card-header>וידאו צ'אט</nb-card-header>
   <div class="vc-body" *ngIf="!afterShare">
     <div class="initial-state">
-      <span>Click here to start your video call</span>
-      <button nbButton shape="round" status="info" (click)="shareLink()">Share Link</button>
+      <span>לחץ כאן כדי להתחיל את שיחת הווידאו שלך
+      </span>
+      <button nbButton shape="round" status="info" (click)="shareLink()">שתף קישור</button>
     </div>
   </div>
   <div class="vc-body" *ngIf="afterShare">
     <iframe [src]="videChatFrameUrl" allow="camera;microphone" frameborder="0" height="100%" width="100%">
-      Start video call
+      התחל שיחת וידאו
     </iframe>
   </div>
 </nb-card>

@@ -32,12 +32,16 @@
                 <nb-tabset>
                     <nb-tab tabTitle="חברי צוות">
                         <ul>
-                            <li *ngFor="let user of users">
-                                {{user.name}} / {{user.role}} </li>
+                            <li *ngFor="let user of userListFull, let i = index" (click)="editUser(user)">
+                                {{i + 1}}. ({{user.role}}) <b> {{user.name}}</b>
+                                <span>
+                                    <nb-icon icon="options-2-outline"></nb-icon>
+                                </span>
+                            </li>
                         </ul>
                     </nb-tab>
                     <nb-tab tabTitle="תוסיף חבר">
-                        <app-register></app-register>
+                        <app-register (registered)="ngOnInit()"></app-register>
                     </nb-tab>
                 </nb-tabset>
             </nb-card-body>

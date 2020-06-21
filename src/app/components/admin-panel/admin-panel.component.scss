@@ -13,3 +13,24 @@
     right: 60px;
     cursor: pointer;
 }
+li {
+    display: flex;
+    width: fit-content;
+    transition: ease 0.3s;
+    cursor: pointer;
+    span {
+        margin-right: 35px;
+        opacity: 0;
+        left: -5px;
+        transition: 0.4s ease;
+    }
+}
+li:hover {
+    // text-shadow: 0px 0px 1px #000000;
+    background-color: aliceblue;
+    // padding: 6px;
+    span {
+        margin-right: 15px;
+        opacity: 100;
+    }
+}

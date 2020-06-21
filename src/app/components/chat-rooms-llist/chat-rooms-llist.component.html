@@ -8,32 +8,32 @@
           New
         </button> -->
         <div class="filter-switch" (click)="showByStatus('new')">
-          New
+          חָדָשׁ
         </div>
       </div>
       <div class="filter">
         <div class="counter">{{counter.getChatsCountByStatus('active')}}</div>
         <div class="filter-switch" (click)="showByStatus('active')">
-          Active
+          פָּעִיל
         </div>
       </div>
       <div class="filter">
         <div class="counter">{{counter.getChatsCountByStatus('resolved')}}</div>
         <div class="filter-switch" (click)="showByStatus('resolved')">
-          Resolved
+          נפתרה
         </div>
       </div>
       <div class="filter">
         <div class="counter">{{counter.getChatsCountByStatus('archived')}}</div>
         <div class="filter-switch" (click)="showByStatus('archived')">
-          Archived
+          נשמר בארכיון
         </div>
       </div>
     </div>
   </nb-card>
   <nb-card class="chats">
     <div class="notes-card-header">
-      <span>Chats</span>
+      <span>צ'אטים</span>
       <nb-form-field>
         <nb-icon nbPrefix icon="search-outline" pack="eva"></nb-icon>
         <input type="text" nbInput fullWidth shape="round" placeholder="search" [(ngModel)]="searchValue"

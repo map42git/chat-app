@@ -1,0 +1,19 @@
+<div class="conatainer-edit-user">
+    <div class="form-edit-user">
+        <h2>ערוך משתמש</h2>
+        <input type="text" nbInput placeholder="אימל" [(ngModel)]="email" [status]="email ? 'primary' : 'danger'">
+        <input type="text" nbInput placeholder="שם" [(ngModel)]="name" [status]="name ? 'primary' : 'danger'">
+        <nb-select placeholder="Select Showcase" [(selected)]="selectedRole" fullWidth='true'>
+            <nb-option value="employee">Employee</nb-option>
+            <nb-option value="manager">Manager</nb-option>
+            <nb-option value="admin">Admin</nb-option>
+        </nb-select>
+        <br>
+        <input type="text" nbInput placeholder="סיסמה" [(ngModel)]="password" status="primary">
+        <div class="row">
+            <button nbButton fullWidth='true' size="small" status="danger" (click)="deleteUser()">לִמְחוֹק</button>
+            <button nbButton fullWidth='true' size="small" status="primary" [disabled]='!name'
+                (click)="update()">אישור</button>
+        </div>
+    </div>
+</div>
