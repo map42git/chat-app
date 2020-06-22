@@ -1,7 +1,6 @@
-import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
+import { Component, OnInit, Input, Output, EventEmitter, Directive } from "@angular/core";
 import { UserHookService } from "src/app/services/userHook.service";
 import { AngularFirestore } from 'angularfire2/firestore';
-
 @Component({
   selector: "app-chat-room-item",
   templateUrl: "./chat-room-item.component.html",
@@ -13,7 +12,7 @@ export class ChatRoomItemComponent implements OnInit {
   @Output() removeChat = new EventEmitter<string>();
   editMode: boolean;
   name: string;
-  constructor(public hook: UserHookService, private afs: AngularFirestore,) { }
+  constructor(public hook: UserHookService, private afs: AngularFirestore) { }
 
   ngOnInit() { }
   deleteChat(id) {
@@ -22,8 +21,11 @@ export class ChatRoomItemComponent implements OnInit {
   getMessages(id) {
     this.roomChanged.emit(id);
   }
-  editName(value) {
-    this.editMode = value
+  editName(value, id) {
+    this.editMode = value,
+      setTimeout(() => {
+        document.getElementById(id).focus()
+      });
   }
   updateName() {
     this.afs.collection("Chats").doc(this.room.chatId).update({

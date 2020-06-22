@@ -11,7 +11,7 @@
     font-weight: 700;
     position: relative;
     .name-change {
-      width: fit-content;
+      // width: fit-content;
       padding: 0 20px;
       .arrow {
         top: 25px;
@@ -19,14 +19,14 @@
       }
       .edit {
         opacity: 0;
-        right: -20px;
+        // right: -20px;
         top: 25px;
         transition: 0.3s ease;
       }
     }
     .name-change:hover {
       .edit {
-        right: 0;
+        left: 40px;
         top: 25px;
         opacity: 100;
       }
@@ -44,6 +44,11 @@
     position: absolute;
     top: 6px;
     left: 6px;
+    color: #656565;
+  }
+  nb-icon:hover {
+    font-size: 22px;
+    // color: #656565;
   }
 }
 .room-body:hover {
