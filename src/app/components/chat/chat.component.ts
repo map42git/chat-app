@@ -56,7 +56,6 @@ export class ChatComponent implements OnInit {
     private auth: AuthService,
     public hook: UserHookService
   ) {
-    this.auth.getUserInfo()?.role == 'manager' || this.auth.getUserInfo()?.role == 'admin' ? this.adminAccess = true : this.adminAccess = false
     this.directionService.setDirection(NbLayoutDirection.RTL);
     this.messagesCollection = this.afs.collection<ChatRecord>(
       "ChatRecords",
@@ -88,7 +87,10 @@ export class ChatComponent implements OnInit {
       .subscribe((_users) => {
         this.users.next(_users);
         this.usersWithRoles = this.users.value.filter(x => x.role == 'admin' || x.role == 'manager' || x.role == 'employee')
-        this.actualUserId = this.auth.getUserInfo()?.id;
+        this.actualUserId = localStorage.getItem('user');
+        this.hook.getUserById(this.actualUserId).role == 'manager'
+          || this.hook.getUserById(this.actualUserId).role == 'admin'
+          ? this.adminAccess = true : this.adminAccess = false
         this.getChats();
         this.getNotes();
       });
@@ -265,7 +267,7 @@ export class ChatComponent implements OnInit {
   logout() {
     firebase.auth().signOut().then(() => {
       this.router.navigate(['login'])
-      localStorage.setItem('loggedIn', '0')
+      localStorage.setItem('loggedIn', '')
     }).catch(error => alert(error))
   }
   // expandFrame(event) {
