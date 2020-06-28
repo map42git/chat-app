@@ -24,6 +24,9 @@ $chatapp-theme: mat-light-theme($chatapp-primary, $chatapp-accent, $chatapp-warn
 // Alternatively, you can import and @include the theme mixins for each component
 // that you are using.
 @include angular-material-theme($chatapp-theme);
+nb-chat .header {
+  padding-right: 80px !important;
+}
 nb-layout-header {
   background-color: #edf1f7 !important;
   nav {

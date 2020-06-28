@@ -1,17 +1,18 @@
 <div class="conatainer-edit-user">
     <div class="form-edit-user">
+        <nb-icon icon="close-outline" [mat-dialog-close]></nb-icon>
         <h2>ערוך משתמש</h2>
         <input type="text" nbInput placeholder="אימל" [(ngModel)]="email" [status]="email ? 'primary' : 'danger'">
         <input type="text" nbInput placeholder="שם" [(ngModel)]="name" [status]="name ? 'primary' : 'danger'">
         <nb-select placeholder="Select Showcase" [(selected)]="selectedRole" fullWidth='true'>
-            <nb-option value="employee">Employee</nb-option>
-            <nb-option value="manager">Manager</nb-option>
-            <nb-option value="admin">Admin</nb-option>
+            <nb-option value="employee">עובד/ת</nb-option>
+            <nb-option value="manager">מנהל/ת</nb-option>
+            <nb-option value="admin">מנהל/ת מערכת</nb-option>
         </nb-select>
         <br>
         <input type="text" nbInput placeholder="סיסמה" [(ngModel)]="password" status="primary">
         <div class="row">
-            <button nbButton fullWidth='true' size="small" status="danger" (click)="deleteUser()">לִמְחוֹק</button>
+            <button nbButton fullWidth='true' size="small" status="danger" (click)="deleteUser()">מחק משתמש</button>
             <button nbButton fullWidth='true' size="small" status="primary" [disabled]='!name'
                 (click)="update()">אישור</button>
         </div>

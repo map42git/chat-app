@@ -3,45 +3,46 @@
   <nb-card>
     <div class="filters">
       <div class="filter">
-        <div class="counter">{{counter.getChatsCountByStatus('new')}}</div>
+        <div class="counter">{{counter.getChatsCountByStatus('new', actualUserId)}}</div>
         <!-- <button nbButton status="success" shape="round" size="small">
           New
         </button> -->
         <div class="filter-switch" (click)="showByStatus('new')">
-          חָדָשׁ
+          חדשות
         </div>
       </div>
       <div class="filter">
-        <div class="counter">{{counter.getChatsCountByStatus('active')}}</div>
+        <div class="counter">{{counter.getChatsCountByStatus('active', actualUserId)}}</div>
         <div class="filter-switch" (click)="showByStatus('active')">
-          פָּעִיל
+          פעילות
         </div>
       </div>
       <div class="filter">
-        <div class="counter">{{counter.getChatsCountByStatus('resolved')}}</div>
+        <div class="counter">{{counter.getChatsCountByStatus('resolved', actualUserId)}}</div>
         <div class="filter-switch" (click)="showByStatus('resolved')">
-          נפתרה
+          נפתרו
         </div>
       </div>
       <div class="filter">
-        <div class="counter">{{counter.getChatsCountByStatus('archived')}}</div>
+        <div class="counter">{{counter.getChatsCountByStatus('archived', actualUserId)}}</div>
         <div class="filter-switch" (click)="showByStatus('archived')">
-          נשמר בארכיון
+          ארכיון
         </div>
       </div>
     </div>
   </nb-card>
   <nb-card class="chats">
     <div class="notes-card-header">
-      <span>צ'אטים</span>
+      <span>שיחות</span>
       <nb-form-field>
         <nb-icon nbPrefix icon="search-outline" pack="eva"></nb-icon>
-        <input type="text" nbInput fullWidth shape="round" placeholder="search" [(ngModel)]="searchValue"
+        <input type="text" nbInput fullWidth shape="round" placeholder="חיפוש" [(ngModel)]="searchValue"
           (ngModelChange)="doSearch($event)">
       </nb-form-field>
     </div>
-    <app-chat-room-item *ngFor="let room of filteredRooms || rooms" [room]="room"
-      (roomChanged)="chatRoomChanged($event)" (removeChat)="deleteChat($event)"></app-chat-room-item>
+    <app-chat-room-item *ngFor="let room of availableChats(filteredRooms || rooms)" [room]="room"
+      [activeChatId]="activeChatId" (roomChanged)="chatRoomChanged($event)" (removeChat)="deleteChat($event)">
+    </app-chat-room-item>
   </nb-card>
 
 </div>

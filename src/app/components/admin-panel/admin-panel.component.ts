@@ -35,7 +35,6 @@ export class AdminPanelComponent implements OnInit {
       hash.set(obj.email, Object.assign(hash.get(obj.email) || {}, obj))
     });
     this.userListFull = Array.from(hash.values());
-    console.log(this.userListFull);
   }
   getUsersWithRoles() {
     this.usersWithRoles = this.hook.users.value.filter((x) => x.role == 'admin' || x.role == 'manager' || x.role == 'employee');

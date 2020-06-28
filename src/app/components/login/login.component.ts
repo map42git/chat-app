@@ -28,6 +28,7 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
   }
   login() {
+    this.email = this.email.toLocaleLowerCase()
     firebase.auth().signInWithEmailAndPassword(this.email, this.password).catch(error => {
       this.errorMessage = error.message;
     }).then(() => {

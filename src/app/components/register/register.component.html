@@ -7,9 +7,9 @@
             [status]="passwordRepeat && password == passwordRepeat ? 'primary' : 'danger'">
         <input type="text" nbInput placeholder="שם" [(ngModel)]="name" [status]="name ? 'primary' : 'danger'">
         <nb-select placeholder="Select Showcase" [(selected)]="selectedItem" fullWidth='true'>
-            <nb-option value="employee">Employee</nb-option>
-            <nb-option value="manager">Manager</nb-option>
-            <nb-option value="admin">Admin</nb-option>
+            <nb-option value="employee">עובד/ת</nb-option>
+            <nb-option value="manager">מנהל/ת</nb-option>
+            <nb-option value="admin">מנהל/ת מערכת</nb-option>
         </nb-select>
         <span *ngIf="errorMessage">{{errorMessage}}</span>
         <button nbButton fullWidth='true' status="primary"

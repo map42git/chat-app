@@ -21,6 +21,7 @@ import {
   NbPopoverModule,
   NbTabsetModule,
   NbRouteTabsetModule,
+  NbSpinnerModule,
 } from "@nebular/theme";
 import { BrowserModule } from "@angular/platform-browser";
 import { NgModule } from "@angular/core";
@@ -57,6 +58,8 @@ import { TimeService } from './services/time.service';
 import { AuthService } from './services/auth.service';
 import { MatDialogModule } from '@angular/material/dialog';
 import { EditUserPopupComponent } from './components/admin-panel/edit-user-popup/edit-user-popup.component';
+import { ButtonPressComponent } from './utilities/button-press/button-press.component';
+import { ApproveActionComponent } from './components/popups/approve-action/approve-action.component';
 
 firebase.initializeApp(environment.firebase);
 @NgModule({
@@ -72,6 +75,8 @@ firebase.initializeApp(environment.firebase);
     RegisterComponent,
     AdminPanelComponent,
     EditUserPopupComponent,
+    ButtonPressComponent,
+    ApproveActionComponent,
   ],
   imports: [
     MatDialogModule,
@@ -99,7 +104,8 @@ firebase.initializeApp(environment.firebase);
     NbSearchModule,
     NbFormFieldModule,
     NbPopoverModule,
-    NbTabsetModule
+    NbTabsetModule,
+    NbSpinnerModule
   ],
   providers: [
     AuthService,
@@ -113,6 +119,6 @@ firebase.initializeApp(environment.firebase);
     LoginGuard
   ],
   bootstrap: [AppComponent],
-  entryComponents: [ChatRoomItemComponent, EditUserPopupComponent],
+  entryComponents: [ChatRoomItemComponent, EditUserPopupComponent, ApproveActionComponent],
 })
 export class AppModule { }

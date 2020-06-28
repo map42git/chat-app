@@ -8,6 +8,7 @@ import { AngularFirestore } from 'angularfire2/firestore';
 })
 export class ChatRoomItemComponent implements OnInit {
   @Input() room: any;
+  @Input() activeChatId: string
   @Output() roomChanged = new EventEmitter<any>();
   @Output() removeChat = new EventEmitter<string>();
   editMode: boolean;
@@ -28,8 +29,8 @@ export class ChatRoomItemComponent implements OnInit {
       });
   }
   updateName() {
-    this.afs.collection("Chats").doc(this.room.chatId).update({
-      name: this.name || this.room.name,
+    this.afs.collection("Users").doc(this.room.userId).update({
+      name: this.name || this.hook.getUserById(this.room.userId)?.name,
     })
     this.editMode = false
   }

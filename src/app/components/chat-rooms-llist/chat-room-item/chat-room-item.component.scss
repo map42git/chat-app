@@ -23,6 +23,14 @@
         top: 25px;
         transition: 0.3s ease;
       }
+      span {
+        position: absolute;
+        bottom: -22px;
+        font-size: 13px;
+        right: 20px;
+        color: #9c9c9c;
+        font-family: cursive;
+      }
     }
     .name-change:hover {
       .edit {
@@ -50,6 +58,10 @@
     font-size: 22px;
     // color: #656565;
   }
+}
+.selected {
+  cursor: pointer;
+  background-color: #eaeaea96;
 }
 .room-body:hover {
   cursor: pointer;

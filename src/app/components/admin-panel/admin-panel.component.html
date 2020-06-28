@@ -30,17 +30,23 @@
         <nb-card>
             <nb-card-body>
                 <nb-tabset>
-                    <nb-tab tabTitle="חברי צוות">
-                        <ul>
+                    <nb-tab tabTitle="חברי צוות" [nbSpinner]="!userListFull" nbSpinnerStatus="info"
+                        nbSpinnerSize="giant">
+                        <ul *ngIf="userListFull">
                             <li *ngFor="let user of userListFull, let i = index" (click)="editUser(user)">
-                                {{i + 1}}. ({{user.role}}) <b> {{user.name}}</b>
+                                {{i + 1}}.
+                                <b>{{user.name}}</b>
+                                &nbsp;-&nbsp;
+                                {{user?.role == 'employee' ? 'עובד/ת' : ''}}
+                                {{user?.role == 'manager' ? 'מנהל/ת' : ''}}
+                                {{user?.role == 'admin' ? 'מנהל/ת מערכת' : ''}}
                                 <span>
                                     <nb-icon icon="options-2-outline"></nb-icon>
                                 </span>
                             </li>
                         </ul>
                     </nb-tab>
-                    <nb-tab tabTitle="תוסיף חבר">
+                    <nb-tab tabTitle="הוספת משתמש">
                         <app-register (registered)="ngOnInit()"></app-register>
                     </nb-tab>
                 </nb-tabset>

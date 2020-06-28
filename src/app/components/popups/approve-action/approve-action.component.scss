@@ -1,0 +1,15 @@
+.approve-dialog-container {
+    .approve-message {
+        font-size: 18px;
+        margin: 15px 0 50px 0;
+        font-weight: 500;
+    }
+    .row {
+        display: flex;
+        flex-direction: row-reverse;
+        justify-content: space-between;
+        button {
+            width: 100px;
+        }
+    }
+}

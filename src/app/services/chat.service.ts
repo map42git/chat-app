@@ -6,6 +6,7 @@ import {
 import { User } from "src/models/user.model";
 import { BehaviorSubject } from "rxjs";
 import { Chat } from 'src/models/chat.model';
+import { AuthService } from './auth.service';
 
 @Injectable({
     providedIn: "root",
@@ -14,7 +15,7 @@ export class ChatService {
     chatsCollection: AngularFirestoreCollection<Chat>;
     chats: BehaviorSubject<Chat[]>;
     chatsWithNeededStatus: Chat[] = [];
-    constructor(private afs: AngularFirestore) {
+    constructor(private afs: AngularFirestore, private auth: AuthService) {
         this.chatsCollection = this.afs.collection<Chat>("Chats");
         this.chats = new BehaviorSubject([]);
         this.getChats();
@@ -29,8 +30,11 @@ export class ChatService {
                 this.chats.next(_chats);
             });
     }
-    getChatsCountByStatus(status) {
-        this.chatsWithNeededStatus = this.chats.value.filter(chat => chat.chatStatusId === status);
+    getChatsCountByStatus(status, actualUserId) {
+        const role = this.auth.getUserInfo()?.role
+        role == 'admin' || role == 'manager' ?
+            this.chatsWithNeededStatus = this.chats.value.filter(chat => chat.chatStatusId === status) :
+            this.chatsWithNeededStatus = this.chats.value.filter(chat => chat.chatStatusId === status && chat.assignedUserId === actualUserId)
         return this.chatsWithNeededStatus.length;
     }
 }

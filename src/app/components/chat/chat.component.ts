@@ -13,6 +13,7 @@ import * as firebase from 'firebase';
 import { Http } from '@angular/http';
 import { TimeService } from 'src/app/services/time.service';
 import { AuthService } from 'src/app/services/auth.service';
+import { UserHookService } from 'src/app/services/userHook.service';
 
 @Component({
   selector: 'app-chat',
@@ -42,6 +43,7 @@ export class ChatComponent implements OnInit {
   roomUrl: any;
   activeChat: Chat;
   adminAccess: boolean;
+  usersWithRoles: User[];
   constructor(
     private sidebarService: NbSidebarService,
     private afs: AngularFirestore,
@@ -51,9 +53,10 @@ export class ChatComponent implements OnInit {
     private router: Router,
     private httpClient: Http,
     public time: TimeService,
-    private auth: AuthService
+    private auth: AuthService,
+    public hook: UserHookService
   ) {
-    this.auth.getUserInfo().role == 'manager' || this.auth.getUserInfo().role == 'admin' ? this.adminAccess = true : this.adminAccess = false
+    this.auth.getUserInfo()?.role == 'manager' || this.auth.getUserInfo()?.role == 'admin' ? this.adminAccess = true : this.adminAccess = false
     this.directionService.setDirection(NbLayoutDirection.RTL);
     this.messagesCollection = this.afs.collection<ChatRecord>(
       "ChatRecords",
@@ -67,8 +70,6 @@ export class ChatComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getChats();
-    this.getNotes();
     this.getUsers();
     this.http.getAccessToken().then(() => {
       this.http.get("room", "create").subscribe((res) => {
@@ -86,11 +87,12 @@ export class ChatComponent implements OnInit {
       })
       .subscribe((_users) => {
         this.users.next(_users);
+        this.usersWithRoles = this.users.value.filter(x => x.role == 'admin' || x.role == 'manager' || x.role == 'employee')
+        this.actualUserId = this.auth.getUserInfo()?.id;
+        this.getChats();
+        this.getNotes();
       });
-    //mock
-    // oFIqqOb9dY9B6x595BgS שולמית אלוני
-    // 0AM5UiukN4IBk0cYRTjN בן גוריון
-    this.actualUserId = this.auth.getUserInfo().id;
+
   }
   getUserById(id) {
     return this.users.value.find((_user) => _user.id === id);
@@ -230,7 +232,11 @@ export class ChatComponent implements OnInit {
         idField: "chatId",
       })
       .subscribe((_chats) => {
-        this.activeChatId = _chats[0].chatId;
+        if (this.auth.getUserInfo()?.role == 'manager' || this.auth.getUserInfo()?.role == "admin") {
+          this.activeChatId = _chats[0].chatId;
+        } else {
+          this.activeChatId = _chats.filter(x => x.assignedUserId == this.actualUserId)[0]?.chatId;
+        }
         this.getRoomMesages(this.activeChatId);
         this.chats.next(_chats);
       });
@@ -242,6 +248,11 @@ export class ChatComponent implements OnInit {
   //
 
   //helpers
+  assignTo(userId) {
+    this.afs.collection("Chats").doc(this.activeChatId).update({
+      assignedUserId: userId,
+    });
+  }
   scrollChatAreaToTheBottom() {
     setTimeout(() => {
       document.getElementsByClassName('scrollable')[0] ? document.getElementsByClassName('scrollable')[0].scroll(0, 5000) : ''
@@ -254,6 +265,7 @@ export class ChatComponent implements OnInit {
   logout() {
     firebase.auth().signOut().then(() => {
       this.router.navigate(['login'])
+      localStorage.setItem('loggedIn', '0')
     }).catch(error => alert(error))
   }
   // expandFrame(event) {

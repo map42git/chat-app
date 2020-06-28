@@ -124,8 +124,8 @@ export class HttpService {
   getAccessToken() {
     return new Promise<string>((resolve) => {
       const params = {
-        sid: "ubeiEgoNahui",
-        apikey: "ebat'blyad",
+        sid: "sidsidsid",
+        apikey: "keykeykey",
         apisecret: "igorSaysBrulurur",
       };
       this.get("auth", "token", params).subscribe((accessToken) => {

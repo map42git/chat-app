@@ -10,12 +10,20 @@ export class LoginGuard {
     ) { }
     canActivate(
     ): Observable<boolean> | boolean {
-        var user = firebase.auth().currentUser;
-        if (user) {
+        setTimeout(() => {
+            var user = firebase.auth().currentUser;
+            if (!user) {
+                firebase.auth().signOut().then(() => {
+                    this.router.navigate(['login'])
+                    localStorage.setItem('loggedIn', '0')
+                }).catch(error => alert(error))
+            }
+        }, 1500);
+        if (localStorage.getItem('loggedIn') === '1') {
             return true;
         } else {
-            this.router.navigate(['login'])
             return false;
         }
+
     }
 }

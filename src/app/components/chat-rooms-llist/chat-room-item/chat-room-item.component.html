@@ -1,4 +1,5 @@
-<div class="room-body" (click)="getMessages(room.chatId)">
+<div class="room-body" [ngClass]="{'selected': room.chatId == activeChatId }" (click)="getMessages(room.chatId)">
+
 
   <!-- <button
     shape="round"
@@ -18,18 +19,20 @@
     <div class="channel-ico">
       <img *ngIf="room.chatChannelId == 'whatsapp'" src="../../../../assets/whatsapp-ico.png" alt="">
       <img *ngIf="room.chatChannelId == 'sms'" src="../../../../assets/sms-ico.png" alt="">
+      <img *ngIf="room.chatChannelId == 'facebook'" src="../../../../assets/facebook-ico.png" alt="">
     </div>
     <div class="name-change" *ngIf="!editMode">
-      {{room.name}}
-      <!-- {{
-        hook.getUserById(room.userId) ? hook.getUserById(room.userId).name : ""
-      }} -->
-      <nb-icon class="edit" icon="more-vertical-outline" (click)="editName(true, room.createdOn)"></nb-icon>
+      <!-- {{room.name}} -->
+      {{
+        hook.getUserById(room.userId)?.name || ''
+      }}
+      <nb-icon class="edit" icon="edit-outline" (click)="editName(true, room.createdOn)"></nb-icon>
+      <span>{{hook.getUserById(room.userId)?.mobileNumber}}</span>
     </div>
     <div class="name-change" *ngIf="editMode">
       <!-- <nb-icon class="arrow" icon="arrow-forward-outline" (click)="updateName()"></nb-icon> -->
-      <input type="text" fieldSize="tiny" nbInput [placeholder]="room.name" [(ngModel)]="name" (blur)="updateName()"
-        [id]="room.createdOn" [status]="name ? 'primary' : 'danger'">
+      <input type="text" fieldSize="tiny" nbInput [placeholder]="hook.getUserById(room.userId)?.name" [(ngModel)]="name"
+        (blur)="updateName()" [id]="room.createdOn" [status]="name ? 'primary' : 'danger'">
     </div>
   </div>
 </div>
