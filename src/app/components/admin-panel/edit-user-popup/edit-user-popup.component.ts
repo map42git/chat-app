@@ -32,7 +32,7 @@ export class EditUserPopupComponent implements OnInit {
 
   }
   updateUser() {
-    this.httpClient.post("https://us-central1-upstartchat.cloudfunctions.net/updateUser", { uid: this.user.uid, password: this.password, email: this.email }).subscribe(() => {
+    this.httpClient.post("https://us-central1-upstartchat-a40c6.cloudfunctions.net/updateUser", { uid: this.user.uid, password: this.password, email: this.email }).subscribe(() => {
       this.dialog.closeAll()
     })
   }
@@ -41,7 +41,7 @@ export class EditUserPopupComponent implements OnInit {
       data: 'האם למחוק את המשתמש?'
     });
     approve.afterClosed().subscribe(answer => {
-      answer ? this.httpClient.post("https://us-central1-upstartchat.cloudfunctions.net/deleteUser", { uid: this.user.uid }).subscribe(() => {
+      answer ? this.httpClient.post("https://us-central1-upstartchat-a40c6.cloudfunctions.net/deleteUser", { uid: this.user.uid }).subscribe(() => {
         this.afs.collection("Users").doc(this.user.id).delete().then(() => { this.dialog.closeAll() });
       }, () => {
         this.dialog.closeAll()

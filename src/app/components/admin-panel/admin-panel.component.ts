@@ -40,7 +40,7 @@ export class AdminPanelComponent implements OnInit {
     this.usersWithRoles = this.hook.users.value.filter((x) => x.role == 'admin' || x.role == 'manager' || x.role == 'employee');
   }
   getUsersAuth() {
-    this.httpClient.post("https://us-central1-upstartchat.cloudfunctions.net/getAllUsers", null).subscribe(res => {
+    this.httpClient.post("https://us-central1-upstartchat-a40c6.cloudfunctions.net/getAllUsers", null).subscribe(res => {
       this.users = res;
       this.getUsersWithRoles()
       this.createUserListWithAllProps()

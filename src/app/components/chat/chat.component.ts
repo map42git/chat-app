@@ -182,7 +182,7 @@ export class ChatComponent implements OnInit {
       (messsageModel.type = files.length ? "file" : "text"),
         //mock
         (messsageModel.isHomeRecord = true);
-      this.httpClient.post('https://us-central1-upstartchat.cloudfunctions.net/addMessageToUser', messsageModel).subscribe(() => {
+      this.httpClient.post('https://us-central1-upstartchat-a40c6.cloudfunctions.net/addMessageToUser', messsageModel).subscribe(() => {
       })
       this.messagesCollection.add({ ...messsageModel });
       this.afs.collection("Chats").doc(this.activeChatId).update({
