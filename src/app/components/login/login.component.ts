@@ -29,11 +29,12 @@ export class LoginComponent implements OnInit {
   }
   login() {
     this.email = this.email.toLocaleLowerCase()
-    firebase.auth().signInWithEmailAndPassword(this.email, this.password).catch(error => {
-      this.errorMessage = error.message;
-    }).then(() => {
+    firebase.auth().signInWithEmailAndPassword(this.email, this.password).then(() => {
       this.auth.setUserInfo(this.hook.getUserByEmail(this.email));
+      localStorage.setItem('loggedIn', '1')
       this.router.navigate(['dashboard'])
+    }).catch(error => {
+      this.errorMessage = error.message;
     })
   }
 }

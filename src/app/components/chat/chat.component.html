@@ -3,8 +3,10 @@
         <div class="logo">
             <img src="../assets/logo-new.png" alt="">
         </div>
-        <nb-icon icon="lock-outline" class="logout-icon" (click)="logout()"></nb-icon>
-        <nb-icon icon="people-outline" class="people-icon" (click)="toConsole()" *ngIf="adminAccess"></nb-icon>
+        <nb-icon icon="lock-outline" class="logout-icon" (click)="logout()" nbTooltip="logout" nbTooltipStatus="primary"
+            nbTooltipPlacement="bottom"></nb-icon>
+        <nb-icon icon="people-outline" class="people-icon" (click)="toConsole()" *ngIf="adminAccess"
+            nbTooltip="Admin Console" nbTooltipStatus="primary" nbTooltipPlacement="bottom"></nb-icon>
     </nb-layout-header>
     <nb-layout-column>
 
@@ -12,7 +14,7 @@
             <div *ngIf="activeChat">
                 <img *ngIf="activeChat.chatChannelId == 'whatsapp'" src="../../../../assets/whatsapp-ico.png" alt="">
                 <img *ngIf="activeChat.chatChannelId == 'sms'" src="../../../../assets/sms-ico.png" alt="">
-                <img *ngIf="activeChat.chatChannelId == 'facebook'" src="../../../../assets/facebook-ico.png" alt="">
+                <img *ngIf="activeChat.chatChannelId == 'messenger'" src="../../../../assets/facebook-ico.png" alt="">
             </div>
             <div class="statuses">
                 <!-- assigned select -->
@@ -20,33 +22,35 @@
                     nbPopoverPlacement="bottom">
 
 
-                    <div>{{ getUserById(activeChat.assignedUserId)?.name || 'הקצה ל..'}}&nbsp;:</div>
+                    <div>
+                        {{ text.normalize(getUserById(activeChat.assignedUserId)?.name, 15, "...") || 'הקצה ל..'}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:
+                    </div>
                     <div>גורם מטפל</div>
 
                     <nb-icon icon="arrow-ios-downward-outline"></nb-icon>
                 </div>
                 <ng-template #popoverAssigned NbPosition="bottom" class="popover-assigned">
                     <div *ngFor="let user of usersWithRoles" (click)="assignTo(user.id)">
-                        {{user.name}}
+                        {{text.normalize(user.name, 10, "...")}}
                     </div>
                 </ng-template>
                 <!-- status select -->
                 <div class="select-status" *ngIf="activeChat" nbButton [nbPopover]="popoverStatus"
                     nbPopoverPlacement="bottom">
                     סטטוס:
-                    &nbsp;&nbsp;&nbsp;
-                    {{activeChat.chatStatusId == 'new' ? 'חדש' : ''}}
-                    {{activeChat.chatStatusId == 'active' ? 'פעיל' : ''}}
-                    {{activeChat.chatStatusId == 'resolved' ? 'נפתר' : ''}}
-                    {{activeChat.chatStatusId == 'archived' ? 'נשמר בארכיון' : ''}}
+                    &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                    {{activeChat.chatStatusId == 'new' ? 'חדשות' : ''}}
+                    {{activeChat.chatStatusId == 'active' ? 'פעילות' : ''}}
+                    {{activeChat.chatStatusId == 'resolved' ? 'נפתרו' : ''}}
+                    {{activeChat.chatStatusId == 'archived' ? 'ארכיון' : ''}}
                     <span [ngClass]="activeChat.chatStatusId"></span>
                     <nb-icon icon="arrow-ios-downward-outline"></nb-icon>
                 </div>
                 <ng-template #popoverStatus NbPosition="bottom" class="popover-status">
-                    <div (click)="changeStatus('new')"><span class="new"></span>חדש</div>
-                    <div (click)="changeStatus('active')"><span class="active"></span>פעיל</div>
-                    <div (click)="changeStatus('resolved')"><span class="resolved"></span>נפתר</div>
-                    <div (click)="changeStatus('archived')"><span class="archived"></span>נשמר בארכיון</div>
+                    <div (click)="changeStatus('new')"><span class="new"></span>חדשות</div>
+                    <div (click)="changeStatus('active')"><span class="active"></span>פעילות</div>
+                    <div (click)="changeStatus('resolved')"><span class="resolved"></span>נפתרו</div>
+                    <div (click)="changeStatus('archived')"><span class="archived"></span> ארכיון</div>
                 </ng-template>
             </div>
             <nb-chat scrollBottom="true" [title]="hook.getUserById(activeChat?.userId)?.name || ''">
@@ -69,9 +73,8 @@
     </nb-layout-column>
     <nb-layout-column start="true" class="chats-column">
         <div class="chats">
-            <app-chat-rooms-llist [rooms]="chats.value" (roomChanged)="getRoomMesages($event)"
-                [activeChatId]="activeChatId" [actualUserId]="actualUserId" (removeChat)="removeChat($event)"
-                (filterStatus)="filterStatus($event)">
+            <app-chat-rooms-llist [rooms]="tempChatsFilteredByStatus" (roomChanged)="getRoomMesages($event)"
+                [activeChatId]="activeChatId" [actualUserId]="actualUserId" (filterStatus)="filterStatus($event)">
             </app-chat-rooms-llist>
         </div>
     </nb-layout-column>

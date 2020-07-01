@@ -29,6 +29,7 @@ export class ChatRoomItemComponent implements OnInit {
       });
   }
   updateName() {
+    this.name = this.name?.trim()
     this.afs.collection("Users").doc(this.room.userId).update({
       name: this.name || this.hook.getUserById(this.room.userId)?.name,
     })

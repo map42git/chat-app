@@ -3,8 +3,10 @@
         <div class="logo">
             <img src="../assets/logo-new.png" alt="">
         </div>
-        <nb-icon icon="lock-outline" class="logout-icon" (click)="logout()"></nb-icon>
-        <nb-icon icon="home-outline" class="people-icon" (click)="toDashboard()"></nb-icon>
+        <nb-icon icon="lock-outline" class="logout-icon" (click)="logout()" nbTooltip="Logout"
+            nbTooltipPlacement="bottom" nbTooltipStatus="primary"></nb-icon>
+        <nb-icon icon="home-outline" class="people-icon" (click)="toDashboard()" nbTooltip="Dasboard"
+            nbTooltipPlacement="bottom" nbTooltipStatus="primary"></nb-icon>
     </nb-layout-header>
     <nb-layout-column>
         <nb-card>
@@ -35,7 +37,7 @@
                         <ul *ngIf="userListFull">
                             <li *ngFor="let user of userListFull, let i = index" (click)="editUser(user)">
                                 {{i + 1}}.
-                                <b>{{user.name}}</b>
+                                <b>{{text.normalize(user.name, 15, "...")}}</b>
                                 &nbsp;-&nbsp;
                                 {{user?.role == 'employee' ? 'עובד/ת' : ''}}
                                 {{user?.role == 'manager' ? 'מנהל/ת' : ''}}

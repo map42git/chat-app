@@ -36,9 +36,14 @@
         position: absolute;
         top: 22px;
         height: 10px;
-        right: 88px;
+        right: 80px;
         border-radius: 50%;
         width: 10px;
+      }
+      nb-icon {
+        position: absolute;
+        top: 15px;
+        right: 60px;
       }
     }
     .select-assigned {
@@ -58,7 +63,7 @@
       }
       nb-icon {
         position: absolute;
-        right: 0;
+        right: 100px;
         top: 15px;
       }
     }
