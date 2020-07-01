@@ -22,6 +22,7 @@ import {
   NbTabsetModule,
   NbRouteTabsetModule,
   NbSpinnerModule,
+  NbTooltipModule,
 } from "@nebular/theme";
 import { BrowserModule } from "@angular/platform-browser";
 import { NgModule } from "@angular/core";
@@ -79,6 +80,7 @@ firebase.initializeApp(environment.firebase);
     ApproveActionComponent,
   ],
   imports: [
+    NbTooltipModule,
     MatDialogModule,
     AngularFireAuthModule,
     BrowserModule,

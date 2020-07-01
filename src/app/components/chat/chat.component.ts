@@ -14,6 +14,9 @@ import { Http } from '@angular/http';
 import { TimeService } from 'src/app/services/time.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { UserHookService } from 'src/app/services/userHook.service';
+import { TextcutterService } from 'src/app/services/textcutter.service';
+import { getLocaleFirstDayOfWeek } from '@angular/common';
+import { LoginComponent } from '../login/login.component';
 
 @Component({
   selector: 'app-chat',
@@ -44,6 +47,8 @@ export class ChatComponent implements OnInit {
   activeChat: Chat;
   adminAccess: boolean;
   usersWithRoles: User[];
+  tempChatsFilteredByStatus: Chat[];
+  messagesCollectionRequest: any;
   constructor(
     private sidebarService: NbSidebarService,
     private afs: AngularFirestore,
@@ -54,7 +59,8 @@ export class ChatComponent implements OnInit {
     private httpClient: Http,
     public time: TimeService,
     private auth: AuthService,
-    public hook: UserHookService
+    public hook: UserHookService,
+    public text: TextcutterService
   ) {
     this.directionService.setDirection(NbLayoutDirection.RTL);
     this.messagesCollection = this.afs.collection<ChatRecord>(
@@ -76,6 +82,8 @@ export class ChatComponent implements OnInit {
         this.roomUrlWithToken = `${res.roomUrl}?pwd=${this.http.accessToken}`;
       });
     });
+    //
+    // this.newUser()
   }
   //USERS
   getUsers() {
@@ -86,10 +94,10 @@ export class ChatComponent implements OnInit {
       })
       .subscribe((_users) => {
         this.users.next(_users);
-        this.usersWithRoles = this.users.value.filter(x => x.role == 'admin' || x.role == 'manager' || x.role == 'employee')
+        this.usersWithRoles = this.users?.value?.filter(x => x.role == 'admin' || x.role == 'manager' || x.role == 'employee')
         this.actualUserId = localStorage.getItem('user');
-        this.hook.getUserById(this.actualUserId).role == 'manager'
-          || this.hook.getUserById(this.actualUserId).role == 'admin'
+        this.hook.getUserById(this.actualUserId)?.role == 'manager'
+          || this.hook.getUserById(this.actualUserId)?.role == 'admin'
           ? this.adminAccess = true : this.adminAccess = false
         this.getChats();
         this.getNotes();
@@ -100,19 +108,17 @@ export class ChatComponent implements OnInit {
     return this.users.value.find((_user) => _user.id === id);
   }
 
-  // newUser() {
-  //   const userModel = new User();
-  //   userModel.createdOn = new Date().getTime().toString();
-  //   userModel.facebookEmail = userModel.createdOn + "facebook@email.test";
-  //   userModel.id = "";
-  //   userModel.isHomeUser = true;
-  //   userModel.mobileNumber = "0552323233";
-  //   userModel.name = "Batman";
-  //   this.usersCollection.add({ ...userModel });
-  // }
-  //
-
-  // notes
+  newUser() {
+    const userModel = new User();
+    userModel.createdOn = new Date().getTime().toString();
+    userModel.facebookEmail = userModel.createdOn + "facebook@email.test";
+    userModel.email = 'aksm@x42.com';
+    userModel.id = "";
+    userModel.mobileNumber = "0552323233";
+    userModel.name = "Batman";
+    userModel.role = "manager";
+    this.usersCollection.add({ ...userModel });
+  }
 
   getNotes() {
     this.notesCollection = this.afs.collection<Note>("Notes", (ref) =>
@@ -145,23 +151,29 @@ export class ChatComponent implements OnInit {
   //
 
   //messages
-  getRoomMesages(event) {
-    this.activeChatId = event;
-    this.messagesCollection
-      .valueChanges<string>({
-        idField: "chatRecordId",
-      })
-      .pipe(
-        map((messages) => {
-          return messages.filter((msg) => msg.chatId === event);
+  getRoomMesages(chatId) {
+    if (this.activeChatId != chatId) {
+      if (this.messagesCollectionRequest) {
+        this.messagesCollectionRequest.unsubscribe();
+      }
+      this.messagesCollectionRequest = this.messagesCollection
+        .valueChanges<string>({
+          idField: "chatRecordId",
         })
-      )
-      .subscribe((_messages) => {
-        this.messages.next(_messages);
-        this.scrollChatAreaToTheBottom();
-        this.activeChat = this.chats.getValue().filter((x) => x.chatId == event)[0];
-      });
+        .pipe(
+          map((messages) => {
+            return messages?.filter((msg) => msg.chatId === chatId);
+          })
+        )
+        .subscribe((_messages) => {
+          this.activeChatId = chatId;
+          this.messages.next(_messages)
+          this.scrollChatAreaToTheBottom();
+          this.activeChat = this.chats.getValue()?.filter((x) => x.chatId == chatId)[0];
+        });
+    }
   }
+
   newMessage(message) {
     const files = !message.files
       ? []
@@ -185,11 +197,11 @@ export class ChatComponent implements OnInit {
         //mock
         (messsageModel.isHomeRecord = true);
       this.httpClient.post('https://us-central1-upstartchat.cloudfunctions.net/addMessageToUser', messsageModel).subscribe(() => {
+        this.messagesCollection.add({ ...messsageModel });
+        this.afs.collection("Chats").doc(this.activeChatId).update({
+          lastActivity: new Date().getTime().toString(),
+        });
       })
-      this.messagesCollection.add({ ...messsageModel });
-      this.afs.collection("Chats").doc(this.activeChatId).update({
-        lastActivity: new Date().getTime().toString(),
-      });
     } else {
       alert("Choose or create chat first!");
     }
@@ -212,19 +224,8 @@ export class ChatComponent implements OnInit {
     });
   }
   filterStatus(status) {
-    this.chatsCollection
-      .valueChanges<string>({
-        idField: "chatId",
-      })
-      .subscribe((_chats) => {
-        this.activeChatId = _chats[0].chatId;
-        this.chats.next(_chats.filter((x) => x.chatStatusId == status));
-        this.chats.getValue()[0]
-          ? this.getRoomMesages(this.chats.getValue()[0].chatId)
-          : (this.messages.next(null),
-            (this.activeChat = null),
-            (this.activeChatId = null));
-      });
+    this.tempChatsFilteredByStatus = this.chats?.value?.filter(x => x.chatStatusId == status);
+    this.getRoomMesages(this.tempChatsFilteredByStatus[0]?.chatId);
   }
   getChats() {
     this.chatsCollection = this.afs.collection<Chat>("Chats", (ref) =>
@@ -234,20 +235,13 @@ export class ChatComponent implements OnInit {
         idField: "chatId",
       })
       .subscribe((_chats) => {
-        if (this.auth.getUserInfo()?.role == 'manager' || this.auth.getUserInfo()?.role == "admin") {
-          this.activeChatId = _chats[0].chatId;
-        } else {
-          this.activeChatId = _chats.filter(x => x.assignedUserId == this.actualUserId)[0]?.chatId;
-        }
-        this.getRoomMesages(this.activeChatId);
         this.chats.next(_chats);
+        this.tempChatsFilteredByStatus = this.chats.value
+        !this.activeChatId ?
+          this.filterStatus('new') : ''
       });
-    // new active resolved archived
   }
-  removeChat(event) {
-    this.afs.collection<Chat>("Chats").doc(event).delete();
-  }
-  //
+
 
   //helpers
   assignTo(userId) {
@@ -257,9 +251,11 @@ export class ChatComponent implements OnInit {
   }
   scrollChatAreaToTheBottom() {
     setTimeout(() => {
-      document.getElementsByClassName('scrollable')[0] ? document.getElementsByClassName('scrollable')[0].scroll(0, 5000) : ''
-      console.log('scrolled')
-    }, 100);
+      document.getElementsByClassName('scrollable')[0]?.scroll(0, 50000)
+      this.afs.collection('Chats').doc(this.activeChatId).update({
+        unreadMessages: 0
+      })
+    }, 200);
   }
   toConsole() {
     this.router.navigate(['console'])
@@ -270,6 +266,9 @@ export class ChatComponent implements OnInit {
       localStorage.setItem('loggedIn', '')
     }).catch(error => alert(error))
   }
+  // removeChat(event) {
+  //   this.afs.collection<Chat>("Chats").doc(event).delete();
+  // }
   // expandFrame(event) {
   //   this.isFrameExpanded = event;
   // }

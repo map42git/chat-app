@@ -30,7 +30,7 @@ export class NotesListComponent implements OnInit {
   constructor() { }
   doSearch(value) {
     value ?
-      this.filteredNotes = this.notes.filter(note => note.details.includes(value)) : this.filteredNotes = this.notes
+      this.filteredNotes = this.notes.filter(note => note.details.toLocaleLowerCase().includes(value.toLocaleLowerCase())) : this.filteredNotes = this.notes
   }
   ngOnInit() { }
   newNote() {
