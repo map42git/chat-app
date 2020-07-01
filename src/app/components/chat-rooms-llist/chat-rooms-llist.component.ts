@@ -26,9 +26,9 @@ export class ChatRoomsLlistComponent {
 
   ngOnInit() { }
   doSearch(value) {
-    value ? this.filteredRooms = this.rooms.filter(room => this.hook.getUserById(room.userId).name.includes(value)) : this.filteredRooms = this.rooms;
-    if (!this.filteredRooms.length) {
-      this.filteredRooms = this.rooms.filter(room => this.hook.getUserById(room.userId).mobileNumber.includes(value))
+    value ? this.filteredRooms = this.rooms?.filter(room => this.hook.getUserById(room.userId).name.toLocaleLowerCase().includes(value.toLocaleLowerCase())) : this.filteredRooms = this.rooms;
+    if (!this.filteredRooms?.length) {
+      this.filteredRooms = this.rooms?.filter(room => this.hook.getUserById(room.userId).mobileNumber.includes(value))
     }
   }
   // searchByPhoneNumber(value): Chat[] {
@@ -56,7 +56,7 @@ export class ChatRoomsLlistComponent {
     const userRole = this.auth.getUserInfo()?.role
     let chatList;
     userRole == 'admin' || userRole == 'manager' ?
-      chatList = chats : chatList = chats.filter(x => x.assignedUserId == this.actualUserId)
+      chatList = chats : chatList = chats?.filter(x => x.assignedUserId == this.actualUserId)
     return chatList
   }
 }

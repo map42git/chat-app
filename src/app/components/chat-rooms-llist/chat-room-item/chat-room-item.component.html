@@ -16,10 +16,11 @@
   ></nb-icon> -->
   <!-- </button> -->
   <div class="room-name">
+    <div class="unread-number" *ngIf="room.unreadMessages">{{room.unreadMessages}}</div>
     <div class="channel-ico">
       <img *ngIf="room.chatChannelId == 'whatsapp'" src="../../../../assets/whatsapp-ico.png" alt="">
       <img *ngIf="room.chatChannelId == 'sms'" src="../../../../assets/sms-ico.png" alt="">
-      <img *ngIf="room.chatChannelId == 'facebook'" src="../../../../assets/facebook-ico.png" alt="">
+      <img *ngIf="room.chatChannelId == 'messenger'" src="../../../../assets/facebook-ico.png" alt="">
     </div>
     <div class="name-change" *ngIf="!editMode">
       <!-- {{room.name}} -->
@@ -27,7 +28,7 @@
         hook.getUserById(room.userId)?.name || ''
       }}
       <nb-icon class="edit" icon="edit-outline" (click)="editName(true, room.createdOn)"></nb-icon>
-      <span>{{hook.getUserById(room.userId)?.mobileNumber}}</span>
+      <span class="phone-number">{{hook.getUserById(room.userId)?.mobileNumber}}</span>
     </div>
     <div class="name-change" *ngIf="editMode">
       <!-- <nb-icon class="arrow" icon="arrow-forward-outline" (click)="updateName()"></nb-icon> -->

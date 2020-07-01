@@ -8,7 +8,7 @@ export class AuthService {
     constructor() { }
     setUserInfo(user) {
         this.currentUser = user;
-        localStorage.setItem('loggedIn', '1')
+        localStorage.setItem('user', this.currentUser?.id)
     }
     getUserInfo() {
         return this.currentUser

@@ -5,6 +5,7 @@ import { UserHookService } from 'src/app/services/userHook.service';
 import { MatDialog } from '@angular/material/dialog';
 import { EditUserPopupComponent } from './edit-user-popup/edit-user-popup.component';
 import { HttpClient } from '@angular/common/http';
+import { TextcutterService } from 'src/app/services/textcutter.service';
 
 @Component({
   selector: 'app-admin-panel',
@@ -15,7 +16,7 @@ export class AdminPanelComponent implements OnInit {
   users: any;
   usersWithRoles: any;
   userListFull: any;
-  constructor(private router: Router, public hook: UserHookService, private dialog: MatDialog, private httpClient: HttpClient) { }
+  constructor(private router: Router, public hook: UserHookService, private dialog: MatDialog, private httpClient: HttpClient, public text: TextcutterService) { }
 
   ngOnInit(): void {
     this.getUsersAuth()

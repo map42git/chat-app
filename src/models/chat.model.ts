@@ -5,5 +5,6 @@ export class Chat {
   userId: string; //should be [string]
   chatStatusId: string;
   createdOn: string;
-  name: string
+  name: string;
+  unreadMessages: number;
 }
