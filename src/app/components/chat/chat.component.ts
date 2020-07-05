@@ -201,16 +201,26 @@ export class ChatComponent implements OnInit {
           .startAfter(this.lastVisible)
           .limit(25);
         next.get().then((querySnapshot) => {
-          if (querySnapshot.length > 0) {
+          console.log(
+            this.lastVisible.data().createdOn,
+            querySnapshot.docs[querrySnapshot.docs.length - 1].data().createdOn
+          );
+
+          if (
+            querySnapshot.docs.length > 0 &&
+            this.lastVisible.data().createdOn !==
+              querySnapshot.docs[querrySnapshot.docs.length - 1].data()
+                .createdOn
+          ) {
             this.lastVisible =
               querySnapshot.docs[querrySnapshot.docs.length - 1];
+            console.log(this.lastVisible.data());
+            querySnapshot.forEach((doc) => {
+              this.messages.value.unshift(doc.data());
+              //! unsubscrive from scroll listener !
+            });
+            console.log(this.messages.value);
           }
-          querySnapshot.forEach((doc) => {
-            this ? console.log(this.messages.value) : "";
-
-            // doc.data() is never undefined for query doc snapshots
-            this.messages.value.push(doc.data());
-          });
         });
 
         //   this.db.collection("ChatRecords").get().then(function(querySnapshot) {
