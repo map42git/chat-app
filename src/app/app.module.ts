@@ -61,8 +61,10 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { EditUserPopupComponent } from './components/admin-panel/edit-user-popup/edit-user-popup.component';
 import { ButtonPressComponent } from './utilities/button-press/button-press.component';
 import { ApproveActionComponent } from './components/popups/approve-action/approve-action.component';
+import { AngularFireDatabase } from 'angularfire2/database';
 
 firebase.initializeApp(environment.firebase);
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -118,7 +120,8 @@ firebase.initializeApp(environment.firebase);
     HttpService,
     HttpClient,
     ChatService,
-    LoginGuard
+    LoginGuard,
+    AngularFireDatabase
   ],
   bootstrap: [AppComponent],
   entryComponents: [ChatRoomItemComponent, EditUserPopupComponent, ApproveActionComponent],

@@ -9,7 +9,7 @@
             nbTooltip="Admin Console" nbTooltipStatus="primary" nbTooltipPlacement="bottom"></nb-icon>
     </nb-layout-header>
     <nb-layout-column>
-
+        <button (click)="getMoreMessages()">Get More Messages</button>
         <div class="chat-area">
             <div *ngIf="activeChat">
                 <img *ngIf="activeChat.chatChannelId == 'whatsapp'" src="../../../../assets/whatsapp-ico.png" alt="">
