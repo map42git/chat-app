@@ -186,41 +186,29 @@ export class ChatComponent implements OnInit {
   }
   //
   getMoreMessages() {
-    this.db
-      .collection("ChatRecords")
-      .where("chatId", "==", this.activeChatId)
-      .orderBy("createdOn", "desc")
-      .limit(25)
-      .get()
-      .then((querrySnapshot) => {
-        this.lastVisible = querrySnapshot.docs[querrySnapshot.docs.length - 1];
         var next = this.db
           .collection("ChatRecords")
           .where("chatId", "==", this.activeChatId)
           .orderBy("createdOn", "desc")
-          .startAfter(this.lastVisible)
+          .startAt(this.lastVisible)
           .limit(25);
         next.get().then((querySnapshot) => {
-          console.log(
-            this.lastVisible.data().createdOn,
-            querySnapshot.docs[querrySnapshot.docs.length - 1].data().createdOn
-          );
-
           if (
-            querySnapshot.docs.length > 0 &&
-            this.lastVisible.data().createdOn !==
-              querySnapshot.docs[querrySnapshot.docs.length - 1].data()
-                .createdOn
+            querySnapshot.docs.length > 0
           ) {
             this.lastVisible =
-              querySnapshot.docs[querrySnapshot.docs.length - 1];
-            console.log(this.lastVisible.data());
+              querySnapshot.docs[querySnapshot.docs.length - 1];
+            this.lastVisible.chatRecordId = querySnapshot.docs[querySnapshot.docs.length - 1].id;
             querySnapshot.forEach((doc) => {
-              this.messages.value.unshift(doc.data());
-              //! unsubscrive from scroll listener !
-            });
-            console.log(this.messages.value);
-          }
+                let item = doc.data();
+                item.chatRecordId = doc.id;
+               if ( item.chatRecordId !=  this.lastVisible.chatRecordId) {
+                 this.messages.value.unshift(doc.data());
+                } else {
+                  // ! unsubscrive from scroll listener !
+                }
+              });
+            }
         });
 
         //   this.db.collection("ChatRecords").get().then(function(querySnapshot) {
@@ -232,7 +220,7 @@ export class ChatComponent implements OnInit {
         // querrySnapshot.forEach(doc => {
         //   console.log(doc.data());
         // })
-      });
+     
 
     // this.lastVisible = this.messages.getValue()[this.messages.getValue().length - 1]
     // // var next = this.afs.collection("ChatRecords", (ref) => ref.orderBy("createdOn", "desc").startAt(this.lastVisible).limit(25));
