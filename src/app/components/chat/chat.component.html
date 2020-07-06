@@ -73,8 +73,8 @@
     </nb-layout-column>
     <nb-layout-column start="true" class="chats-column">
         <div class="chats">
-            <app-chat-rooms-llist [rooms]="tempChatsFilteredByStatus" (roomChanged)="getRoomMesages($event)"
-                [activeChatId]="activeChatId" [actualUserId]="actualUserId" (filterStatus)="filterStatus($event)">
+            <app-chat-rooms-llist [rooms]="tempChatsFilteredByStatus" (roomChanged)="getRoomMesages($event)" [activeChatId]="activeChatId"
+                [actualUserId]="actualUserId" (filterStatus)="filterStatus($event)">
             </app-chat-rooms-llist>
         </div>
     </nb-layout-column>

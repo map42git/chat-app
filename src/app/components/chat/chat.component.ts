@@ -34,13 +34,13 @@ import { LoginComponent } from "../login/login.component";
   styleUrls: ["./chat.component.scss"],
 })
 export class ChatComponent implements OnInit {
-  usersCollection: AngularFirestoreCollection<User>;
+  usersCollection: any;
   users: BehaviorSubject<User[]>;
   messagesCollection: AngularFirestoreCollection<ChatRecord>;
   messages: BehaviorSubject<ChatRecord[]>;
   notesCollection: AngularFirestoreCollection<Note>;
   notes: BehaviorSubject<Note[]>;
-  chatsCollection: AngularFirestoreCollection<Chat>;
+  chatsCollection: any;
   chats: BehaviorSubject<Chat[]>;
   sortedMessages: ChatRecord[];
   readyChats: Chat[];
@@ -83,10 +83,6 @@ export class ChatComponent implements OnInit {
     // var app = firebase.initializeApp(config);
     this.db = firebase.firestore();
     this.directionService.setDirection(NbLayoutDirection.RTL);
-    this.messagesCollection = this.afs.collection<ChatRecord>(
-      "ChatRecords",
-      (ref) => ref.orderBy("createdOn", "desc").limit(25)
-    );
     this.usersCollection = this.afs.collection<User>("Users");
     this.messages = new BehaviorSubject([]);
     this.users = new BehaviorSubject([]);
@@ -112,29 +108,29 @@ export class ChatComponent implements OnInit {
   // }
   //USERS
   getUsers() {
-    this.usersCollection = this.afs.collection<User>("Users");
-    this.usersCollection
-      .valueChanges<string>({
-        idField: "id",
-      })
-      .pipe(
-        tap((arr) => console.log(arr.length)),
-        shareReplay(1)
-      )
-      .subscribe((_users) => {
-        this.users.next(_users);
-        this.usersWithRoles = this.users?.value?.filter(
-          (x) =>
-            x.role == "admin" || x.role == "manager" || x.role == "employee"
-        );
-        this.actualUserId = localStorage.getItem("user");
-        this.hook.getUserById(this.actualUserId)?.role == "manager" ||
-        this.hook.getUserById(this.actualUserId)?.role == "admin"
-          ? (this.adminAccess = true)
-          : (this.adminAccess = false);
-        this.getChats();
-        this.getNotes();
+    this.db
+      .collection("Users").onSnapshot((querySnapshot) => {
+        let users = [];
+        querySnapshot.docs.forEach((doc) => {
+
+          users.push({ ...doc.data(), id: doc.id });
+        });
+        console.log(users)
+        this.users.next(users);
+        console.log(this.users.value);
+
       });
+    this.usersWithRoles = this.users?.value?.filter(
+      (x) =>
+        x.role == "admin" || x.role == "manager" || x.role == "employee"
+    );
+    this.actualUserId = localStorage.getItem("user");
+    this.hook.getUserById(this.actualUserId)?.role == "manager" ||
+      this.hook.getUserById(this.actualUserId)?.role == "admin"
+      ? (this.adminAccess = true)
+      : (this.adminAccess = false);
+    this.getChats();
+    this.getNotes();
   }
   getUserById(id) {
     return this.users.value.find((_user) => _user.id === id);
@@ -153,20 +149,28 @@ export class ChatComponent implements OnInit {
   }
 
   getNotes() {
-    this.notesCollection = this.afs.collection<Note>("Notes", (ref) =>
-      ref.orderBy("createdOn", "desc")
-    );
-    this.notesCollection
-      .valueChanges<string>({
-        idField: "chatNoteId",
-      })
-      .pipe(
-        tap((arr) => console.log(arr.length)),
-        shareReplay(1)
-      )
-      .subscribe((_notes) => {
-        this.notes.next(_notes);
+    this.db.collection('Notes').orderBy("createdOn", "desc").onSnapshot((querySnapshot) => {
+      let notes = [];
+      querySnapshot.docs.forEach((doc) => {
+        notes.push({ ...doc.data(), chatNoteId: doc.id });
       });
+      this.notes.next(notes);
+
+    });
+    // this.notesCollection = this.afs.collection<Note>("Notes", (ref) =>
+    //   ref.orderBy("createdOn", "desc")
+    // );
+    // this.notesCollection
+    //   .valueChanges<string>({
+    //     idField: "chatNoteId",
+    //   })
+    //   .pipe(
+    //     tap((arr) => console.log(arr.length)),
+    //     shareReplay(1)
+    //   )
+    //   .subscribe((_notes) => {
+    //     this.notes.next(_notes);
+    //   });
   }
   newNote(note) {
     if (this.activeChatId) {
@@ -184,80 +188,49 @@ export class ChatComponent implements OnInit {
   removeNote(event) {
     this.afs.collection<Note>("Notes").doc(event).delete();
   }
-  //
-  getMoreMessages() {
-        var next = this.db
-          .collection("ChatRecords")
-          .where("chatId", "==", this.activeChatId)
-          .orderBy("createdOn", "desc")
-          .startAt(this.lastVisible)
-          .limit(25);
-        next.get().then((querySnapshot) => {
-          if (
-            querySnapshot.docs.length > 0
-          ) {
-            this.lastVisible =
-              querySnapshot.docs[querySnapshot.docs.length - 1];
-            this.lastVisible.chatRecordId = querySnapshot.docs[querySnapshot.docs.length - 1].id;
-            querySnapshot.forEach((doc) => {
-                let item = doc.data();
-                item.chatRecordId = doc.id;
-               if ( item.chatRecordId !=  this.lastVisible.chatRecordId) {
-                 this.messages.value.unshift(doc.data());
-                } else {
-                  // ! unsubscrive from scroll listener !
-                }
-              });
-            }
-        });
-
-        //   this.db.collection("ChatRecords").get().then(function(querySnapshot) {
-        //     querySnapshot.forEach(function(doc) {
-        //         // doc.data() is never undefined for query doc snapshots
-        //         console.log(doc.id, " => ", doc.data());
-        //     });
-        // });
-        // querrySnapshot.forEach(doc => {
-        //   console.log(doc.data());
-        // })
-     
-
-    // this.lastVisible = this.messages.getValue()[this.messages.getValue().length - 1]
-    // // var next = this.afs.collection("ChatRecords", (ref) => ref.orderBy("createdOn", "desc").startAt(this.lastVisible).limit(25));
-    // // next.valueChanges().subscribe(messages => {
-    // //   // this.lastVisible = messages[messages.length - 1];
-    // // });
-    // console.log(this.messages.getValue());
-    // this.messagesCollection = this.afs.collection<ChatRecord>(
-    //   "ChatRecords",
-    //   (ref) => ref.orderBy("createdOn", "desc").startAfter(this.lastVisible).limit(25)
-    // );
-  }
 
   //messages
+  getMoreMessages() {
+    this.db
+      .collection("ChatRecords")
+      .where("chatId", "==", this.activeChatId)
+      .orderBy("createdOn", "desc")
+      .startAt(this.lastVisible)
+      .limit(25).get().then((querySnapshot) => {
+        if (
+          querySnapshot.docs.length > 0
+        ) {
+          this.lastVisible =
+            querySnapshot.docs[querySnapshot.docs.length - 1];
+          this.lastVisible.chatRecordId = querySnapshot.docs[querySnapshot.docs.length - 1].id;
+          querySnapshot.forEach((doc) => {
+            let item = doc.data();
+            item.chatRecordId = doc.id;
+            if (item.chatRecordId != this.lastVisible.chatRecordId) {
+              this.messages.value.unshift(doc.data());
+            } else {
+              // ! unsubscrive from scroll listener !
+            }
+          });
+        }
+      });
+  }
+
   getRoomMesages(chatId) {
     if (this.activeChatId != chatId) {
-      if (this.messagesCollectionRequest) {
-        this.messagesCollectionRequest.unsubscribe();
-      }
-      this.messagesCollectionRequest = this.messagesCollection
-        .valueChanges<string>({
-          idField: "chatRecordId",
-        })
-        .pipe(
-          map((messages) => {
-            return messages?.filter((msg) => msg.chatId === chatId);
-          }),
-          tap((arr) => console.log(arr))
-          // shareReplay(1)
-        )
-        .subscribe((_messages) => {
-          this.lastVisible = _messages[_messages.length - 1];
-          console.log("this.lastVisible", this.lastVisible);
-
+      this.db
+        .collection("ChatRecords")
+        .where("chatId", "==", chatId)
+        .orderBy("createdOn", "desc")
+        .limit(25).onSnapshot((querySnapshot) => {
+          this.lastVisible = querySnapshot.docs[querySnapshot.docs.length - 1];
+          var messages = [];
+          querySnapshot.docs.forEach((doc) => {
+            messages.unshift(doc.data());
+          });
+          this.messages.next(messages);
+          console.log(this.lastVisible)
           this.activeChatId = chatId;
-
-          this.messages.next(_messages);
           this.scrollChatAreaToTheBottom();
           this.activeChat = this.chats
             .getValue()
@@ -265,26 +238,17 @@ export class ChatComponent implements OnInit {
         });
     }
   }
-  getMessagesss() {
-    console.log(
-      this.db
-        .collection("ChatRecords")
-        .orderBy("createdOn")
-        .startAfter(this.lastVisible)
-        .limit(25)
-    );
-  }
 
   newMessage(message) {
     const files = !message.files
       ? []
       : message.files.map((file) => {
-          return {
-            url: file.src,
-            type: file.type,
-            icon: "file-text-outline",
-          };
-        });
+        return {
+          url: file.src,
+          type: file.type,
+          icon: "file-text-outline",
+        };
+      });
     if (this.activeChatId) {
       const messsageModel = new ChatRecord();
       messsageModel.details = message.message;
@@ -302,7 +266,7 @@ export class ChatComponent implements OnInit {
           messsageModel
         )
         .subscribe(() => {
-          this.messagesCollection.add({ ...messsageModel });
+          this.db.collection("ChatRecords").add({ ...messsageModel });
           this.afs.collection("Chats").doc(this.activeChatId).update({
             lastActivity: new Date().getTime().toString(),
           });
@@ -314,14 +278,6 @@ export class ChatComponent implements OnInit {
   //
 
   // chats
-  newChat() {
-    const chatModel = new Chat();
-    chatModel.chatChannelId = "";
-    chatModel.chatStatusId = "new";
-    chatModel.createdOn = new Date().getTime().toString();
-    chatModel.userId = this.actualUserId;
-    this.chatsCollection.add({ ...chatModel });
-  }
   changeStatus(status) {
     this.activeChat.chatStatusId = status;
     this.afs.collection("Chats").doc(this.activeChatId).update({
@@ -335,21 +291,18 @@ export class ChatComponent implements OnInit {
     this.getRoomMesages(this.tempChatsFilteredByStatus[0]?.chatId);
   }
   getChats() {
-    this.chatsCollection = this.afs.collection<Chat>("Chats", (ref) =>
-      ref.orderBy("lastActivity", "desc")
-    );
-    this.chatsCollection
-      .valueChanges<string>({
-        idField: "chatId",
-      })
-      .pipe(
-        tap((arr) => console.log(arr)),
-        shareReplay(1)
-      )
-      .subscribe((_chats) => {
-        this.chats.next(_chats);
+    this.db
+      .collection("Chats")
+      .orderBy("lastActivity", "desc").onSnapshot((querySnapshot) => {
+        let chats = [];
+        querySnapshot.docs.forEach((doc) => {
+          chats.push({ chatId: doc.id, ...doc.data() });
+        });
+        console.log(chats)
+        this.chats.next(chats);
         this.tempChatsFilteredByStatus = this.chats.value;
         !this.activeChatId ? this.filterStatus("new") : "";
+
       });
   }
 
