@@ -16,10 +16,12 @@ export class EditUserPopupComponent implements OnInit {
   selectedRole: string;
   password: string;
   email: string;
+  inactive: boolean;
   constructor(@Inject(MAT_DIALOG_DATA) public user: any, private afs: AngularFirestore, private dialog: MatDialog, private httpClient: HttpClient, private loading: LoadingService) {
     this.name = user?.name
     this.selectedRole = user?.role
     this.email = user?.email
+    user?.uid ? this.inactive = false : this.inactive = true
   }
 
   ngOnInit(): void {
@@ -48,13 +50,19 @@ export class EditUserPopupComponent implements OnInit {
     });
     approve.afterClosed().subscribe(answer => {
       this.loading.startSpinner()
-      answer ? this.httpClient.post("https://us-central1-upstartchat.cloudfunctions.net/deleteUser", { uid: this.user.uid }).subscribe(() => {
-        this.loading.stopSpinner()
-        this.afs.collection("Users").doc(this.user.id).delete().then(() => { this.dialog.closeAll() });
-      }, () => {
-        this.loading.stopSpinner()
-        this.dialog.closeAll()
-      }) : this.dialog.closeAll()
+      if (answer) {
+        if (this.inactive) {
+          this.afs.collection("Users").doc(this.user.id).delete().then(() => { this.dialog.closeAll() });
+        } else {
+          this.httpClient.post("https://us-central1-upstartchat.cloudfunctions.net/deleteUser", { uid: this.user.uid }).subscribe(() => {
+            this.loading.stopSpinner()
+            this.afs.collection("Users").doc(this.user.id).delete().then(() => { this.dialog.closeAll() });
+          }, () => {
+            this.loading.stopSpinner()
+            this.dialog.closeAll()
+          })
+        }
+      } else this.dialog.closeAll()
     })
 
   }

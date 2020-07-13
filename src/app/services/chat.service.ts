@@ -31,7 +31,7 @@ export class ChatService {
                 this.chats.next(_chats);
             });
     }
-    getChatsCountByStatus(status, actualUserId) {  
+    getChatsCountByStatus(status, actualUserId) {
         const role = this.auth.getUserInfo()?.role
         role == 'admin' || role == 'manager' ?
             this.chatsWithNeededStatus = this.chats.value.filter(chat => chat.chatStatusId === status) :
@@ -48,8 +48,7 @@ export class ChatService {
         } else {
             filterebByStatusChatsWithDefinedUserRole = this.chats.value.filter(chat => chat.chatStatusId === status && chat.assignedUserId === actualUserId)
             hasNotification = this.loop(filterebByStatusChatsWithDefinedUserRole)
-        }        
-        console.log("hasNotification: ", hasNotification)
+        }
         return hasNotification;
     }
     loop(arrayOfChats: Chat[]) {
