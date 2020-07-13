@@ -1,4 +1,4 @@
-<div class="room-body" [ngClass]="{'selected': room.chatId == activeChatId }" (click)="getMessages(room.chatId)">
+<div class="room-body" [ngClass]="{'selected': room.chatId == activeChatId }" (click)="getMessages()">
 
 
   <!-- <button
@@ -24,16 +24,18 @@
     </div>
     <div class="name-change" *ngIf="!editMode">
       <!-- {{room.name}} -->
+      <!-- {{testName}} -->
       {{
-        hook.getUserById(room.userId)?.name || ''
+        userName
       }}
-      <nb-icon class="edit" icon="edit-outline" (click)="editName(true, room.createdOn)"></nb-icon>
-      <span class="phone-number">{{hook.getUserById(room.userId)?.mobileNumber}}</span>
+      <nb-icon class="edit" [id]="room.createdOn" icon="edit-outline" (click)="editName(true, room.createdOn)">
+      </nb-icon>
+      <span class="phone-number">{{room.name}}</span>
     </div>
     <div class="name-change" *ngIf="editMode">
       <!-- <nb-icon class="arrow" icon="arrow-forward-outline" (click)="updateName()"></nb-icon> -->
-      <input type="text" fieldSize="tiny" nbInput [placeholder]="hook.getUserById(room.userId)?.name" [(ngModel)]="name"
-        (blur)="updateName()" [id]="room.createdOn" [status]="name ? 'primary' : 'danger'">
+      <input type="text" fieldSize="tiny" nbInput [placeholder]="userName" [(ngModel)]="name" (blur)="updateName()" (keydown)="keyDownHandler($event)"
+        [id]="room.createdOn" [status]="name ? 'primary' : 'danger'">
     </div>
   </div>
 </div>

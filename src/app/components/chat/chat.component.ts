@@ -14,10 +14,8 @@ import {
   NbLayoutDirectionService,
   NbThemeService,
   NbLayoutDirection,
-  NB_DEFAULT_ROW_LEVEL,
 } from "@nebular/theme";
 import { HttpService } from "src/app/services/http.service";
-import { map, shareReplay, tap, take } from "rxjs/operators";
 import { Router } from "@angular/router";
 import * as firebase from "firebase";
 import { Http } from "@angular/http";
@@ -25,8 +23,6 @@ import { TimeService } from "src/app/services/time.service";
 import { AuthService } from "src/app/services/auth.service";
 import { UserHookService } from "src/app/services/userHook.service";
 import { TextcutterService } from "src/app/services/textcutter.service";
-import { getLocaleFirstDayOfWeek } from "@angular/common";
-import { LoginComponent } from "../login/login.component";
 
 @Component({
   selector: "app-chat",
@@ -62,6 +58,8 @@ export class ChatComponent implements OnInit {
   lastVisible: any;
   lastVisibleInit: any;
   db: any;
+  bottomButton: boolean = false;
+  buttonLoadMoreAvailable: boolean;
   constructor(
     private sidebarService: NbSidebarService,
     private afs: AngularFirestore,
@@ -83,7 +81,7 @@ export class ChatComponent implements OnInit {
     // var app = firebase.initializeApp(config);
     this.db = firebase.firestore();
     this.directionService.setDirection(NbLayoutDirection.RTL);
-    this.usersCollection = this.afs.collection<User>("Users");
+    // this.usersCollection = this.afs.collection<User>("Users");
     this.messages = new BehaviorSubject([]);
     this.users = new BehaviorSubject([]);
     this.notes = new BehaviorSubject([]);
@@ -97,80 +95,43 @@ export class ChatComponent implements OnInit {
         this.roomUrlWithToken = `${res.roomUrl}?pwd=${this.http.accessToken}`;
       });
     });
-    // this.getMessages().valueChanges().subscribe(res => console.log(res));
-    //
-    // this.newUser()
   }
-  // getMessages(): AngularFireList<ChatRecord[]> {
-  //   return this.db.collection('ChatRecords', ref => {
-  //     return ref.limitToLast(25).orderByKey()
-  //   })
-  // }
   //USERS
-  getUsers() {
-    this.db
-      .collection("Users").onSnapshot((querySnapshot) => {
-        let users = [];
-        querySnapshot.docs.forEach((doc) => {
 
+  getUsers() {
+    let usersUnsubscribe = this.db
+      .collection("Users").onSnapshot(querySnapshot => {
+        let users = [];
+        querySnapshot.docs.forEach(doc => {
           users.push({ ...doc.data(), id: doc.id });
         });
-        console.log(users)
         this.users.next(users);
-        console.log(this.users.value);
-
+        this.usersWithRoles = this.users?.value?.filter(
+          (x) =>
+            x.role == "admin" || x.role == "manager" || x.role == "employee"
+        );
+        this.actualUserId = this.auth.getUserInfo()?.id;
+        this.actualUser = this.hook.getUserById(this.actualUserId)
+        this.actualUser?.role == "manager" ||
+          this.actualUser?.role == "admin"
+          ? (this.adminAccess = true)
+          : (this.adminAccess = false);
+        this.getChats();
+        usersUnsubscribe()
       });
-    this.usersWithRoles = this.users?.value?.filter(
-      (x) =>
-        x.role == "admin" || x.role == "manager" || x.role == "employee"
-    );
-    this.actualUserId = localStorage.getItem("user");
-    this.hook.getUserById(this.actualUserId)?.role == "manager" ||
-      this.hook.getUserById(this.actualUserId)?.role == "admin"
-      ? (this.adminAccess = true)
-      : (this.adminAccess = false);
-    this.getChats();
-    this.getNotes();
+
   }
   getUserById(id) {
     return this.users.value.find((_user) => _user.id === id);
   }
-
-  newUser() {
-    const userModel = new User();
-    userModel.createdOn = new Date().getTime().toString();
-    userModel.facebookEmail = userModel.createdOn + "facebook@email.test";
-    userModel.email = "aksm@x42.com";
-    userModel.id = "";
-    userModel.mobileNumber = "0552323233";
-    userModel.name = "Batman";
-    userModel.role = "manager";
-    this.usersCollection.add({ ...userModel });
-  }
-
   getNotes() {
-    this.db.collection('Notes').orderBy("createdOn", "desc").onSnapshot((querySnapshot) => {
+    this.db.collection('Notes').where('chatId', '==', this.activeChatId).orderBy("createdOn", "desc").onSnapshot((querySnapshot) => {
       let notes = [];
       querySnapshot.docs.forEach((doc) => {
         notes.push({ ...doc.data(), chatNoteId: doc.id });
       });
       this.notes.next(notes);
-
     });
-    // this.notesCollection = this.afs.collection<Note>("Notes", (ref) =>
-    //   ref.orderBy("createdOn", "desc")
-    // );
-    // this.notesCollection
-    //   .valueChanges<string>({
-    //     idField: "chatNoteId",
-    //   })
-    //   .pipe(
-    //     tap((arr) => console.log(arr.length)),
-    //     shareReplay(1)
-    //   )
-    //   .subscribe((_notes) => {
-    //     this.notes.next(_notes);
-    //   });
   }
   newNote(note) {
     if (this.activeChatId) {
@@ -180,7 +141,7 @@ export class ChatComponent implements OnInit {
       noteModel.createdOn = new Date().getTime().toString();
       noteModel.details = note;
       noteModel.userId = this.actualUserId;
-      this.notesCollection.add({ ...noteModel });
+      this.db.collection("Notes").add({ ...noteModel });
     } else {
       alert("choose or create chat fisrt!");
     }
@@ -196,9 +157,9 @@ export class ChatComponent implements OnInit {
       .where("chatId", "==", this.activeChatId)
       .orderBy("createdOn", "desc")
       .startAt(this.lastVisible)
-      .limit(25).get().then((querySnapshot) => {
+      .limit(10).get().then((querySnapshot) => {
         if (
-          querySnapshot.docs.length > 0
+          querySnapshot.docs.length > 1
         ) {
           this.lastVisible =
             querySnapshot.docs[querySnapshot.docs.length - 1];
@@ -206,37 +167,94 @@ export class ChatComponent implements OnInit {
           querySnapshot.forEach((doc) => {
             let item = doc.data();
             item.chatRecordId = doc.id;
+            console.log(item.chatRecordId != this.lastVisible.chatRecordId);
             if (item.chatRecordId != this.lastVisible.chatRecordId) {
-              this.messages.value.unshift(doc.data());
+              // combine
+              this.deleteMessageFromMessages(item)
+              this.messages.value.unshift(item);
             } else {
-              // ! unsubscrive from scroll listener !
+              console.error('I`m not working as designed, this is not an end of the messages list! CHECK ME PLEASE ☺');
             }
+            let chatArea = document.getElementsByClassName("scrollable")[0];
+            chatArea.addEventListener('scroll', () => {
+              if (chatArea.scrollHeight - chatArea.scrollTop <= 1500) {
+                this.bottomButton = false
+              } else {
+                this.bottomButton = true
+              }
+            })
+            setTimeout(() => {
+              document.getElementsByClassName("scrollable")[0]?.scroll(0, 0);
+              this.bottomButton = true
+            }, 200);
           });
+        } else {
+          this.buttonLoadMoreAvailable = false
         }
       });
   }
 
-  getRoomMesages(chatId) {
-    if (this.activeChatId != chatId) {
+  getRoomMesages(chat?: Chat) {
+    if (chat) {
+      this.activeChatId = chat.chatId
+      this.activeChat = chat
+    }
+    var messages = [];
+    var messagesRef = this.db
+      .collection("ChatRecords")
+      .where("chatId", "==", chat?.chatId)
+      .orderBy("createdOn", "desc")
+      .limit(10)
+    messagesRef.get().then(docs => {
+      docs.forEach(doc => {
+        messages.unshift(doc.data())
+      });
+      this.lastVisible = docs.docs[docs.docs.length - 1];
+    }).then(() => {
+      this.messages.next(messages);
+      this.activeChatId = chat?.chatId
+      this.chats?.subscribe((chats) => {
+        this.activeChat = chats.filter((x) => x.chatId == chat.chatId)[0];
+      })
+      this.getNotes();
+      this.scrollChatAreaToTheBottom();
+      this.buttonLoadMoreAvailable = true
+    }).then(() => {
       this.db
         .collection("ChatRecords")
-        .where("chatId", "==", chatId)
+        // .where("chatId", "==", chat?.chatId)
         .orderBy("createdOn", "desc")
-        .limit(25).onSnapshot((querySnapshot) => {
-          this.lastVisible = querySnapshot.docs[querySnapshot.docs.length - 1];
-          var messages = [];
-          querySnapshot.docs.forEach((doc) => {
-            messages.unshift(doc.data());
-          });
-          this.messages.next(messages);
-          console.log(this.lastVisible)
-          this.activeChatId = chatId;
-          this.scrollChatAreaToTheBottom();
-          this.activeChat = this.chats
-            .getValue()
-            ?.filter((x) => x.chatId == chatId)[0];
+        .limit(1).onSnapshot((querySnapshot) => {
+          // if new message from actual chat ►►► push
+          let firstElem = querySnapshot.docs[0].data();
+          if (this.activeChatId == firstElem.chatId) {
+            if (JSON.stringify(this.messages.value[this.messages.value.length - 1]) != JSON.stringify(firstElem)) {
+              // combine
+              this.deleteMessageFromMessages(firstElem)
+              messages.push(firstElem)
+              console.log('pushing');
+              // this.messages.next(messages)
+              this.updateHTML();
+            }
+          } else
+          // new message from another chat          
+          {
+            for (let i = 0; i < this.tempChatsFilteredByStatus.length; i++) {
+              if (this.tempChatsFilteredByStatus[i].chatId == firstElem.chatId) {
+                this.db.collection("Chats").doc(firstElem.chatId).get().then(res => {
+                  this.tempChatsFilteredByStatus[i].unreadMessages = res.data().unreadMessages;
+                  // Костыль для обновления массива чатов (ключа непрочитанных сообщений)
+                  // combine
+                  this.tempChatsFilteredByStatus.push(this.tempChatsFilteredByStatus[i])
+                  this.tempChatsFilteredByStatus.pop()
+                  this.updateHTML();
+                  //
+                });
+              }
+            }
+          }
         });
-    }
+    })
   }
 
   newMessage(message) {
@@ -258,18 +276,23 @@ export class ChatComponent implements OnInit {
       messsageModel.chatId = this.activeChatId;
       messsageModel.files = files.length ? files : null;
       (messsageModel.type = files.length ? "file" : "text"),
-        //mock
         (messsageModel.isHomeRecord = true);
+      // TEST TEST TEST
+      this.db.collection("ChatRecords").add({ ...messsageModel }).then(() => {
+        this.messagePending(true)
+      });
+      this.afs.collection("Chats").doc(this.activeChatId).update({
+        lastActivity: new Date().getTime().toString(),
+      });
+
+      // TEST TEST TEST
       this.httpClient
         .post(
           "https://us-central1-upstartchat.cloudfunctions.net/addMessageToUser",
           messsageModel
         )
         .subscribe(() => {
-          this.db.collection("ChatRecords").add({ ...messsageModel });
-          this.afs.collection("Chats").doc(this.activeChatId).update({
-            lastActivity: new Date().getTime().toString(),
-          });
+          this.messagePending(false)
         });
     } else {
       alert("Choose or create chat first!");
@@ -282,32 +305,49 @@ export class ChatComponent implements OnInit {
     this.activeChat.chatStatusId = status;
     this.afs.collection("Chats").doc(this.activeChatId).update({
       chatStatusId: status,
+    }).then(() => {
+      this.filterStatus(status)
     });
+
   }
   filterStatus(status) {
     this.tempChatsFilteredByStatus = this.chats?.value?.filter(
       (x) => x.chatStatusId == status
     );
-    this.getRoomMesages(this.tempChatsFilteredByStatus[0]?.chatId);
+    this.getRoomMesages(this.tempChatsFilteredByStatus[0]);
   }
   getChats() {
-    this.db
+    let chatsUnsubscribe = this.db
       .collection("Chats")
-      .orderBy("lastActivity", "desc").onSnapshot((querySnapshot) => {
+      .orderBy("lastActivity", "desc").limit(25).onSnapshot((querySnapshot) => {
         let chats = [];
-        querySnapshot.docs.forEach((doc) => {
+        querySnapshot.docs.forEach((doc, idx) => {
           chats.push({ chatId: doc.id, ...doc.data() });
+          if (idx === querySnapshot.docs.length - 1) {
+            chatsUnsubscribe()
+          }
         });
-        console.log(chats)
-        this.chats.next(chats);
-        this.tempChatsFilteredByStatus = this.chats.value;
-        !this.activeChatId ? this.filterStatus("new") : "";
-
+        if (!this.chats?.value?.length) {
+          this.tempChatsFilteredByStatus = chats;
+          this.chats.next(chats);
+          !this.activeChatId ? this.filterStatus("new") : "";
+        }
       });
   }
 
   //helpers
+  messagePending(active: boolean) {
+    var lastMessageElement = document.getElementsByTagName('nb-chat-message')[document.getElementsByTagName('nb-chat-message').length - 1]
+    if (active) {
+      var spinner = document.createElement("span") as HTMLElement;;
+      spinner.classList.add("spinner-custom")
+      lastMessageElement.prepend(spinner)
+    } else {
+      lastMessageElement.removeChild(lastMessageElement.childNodes[0])
+    }
+  }
   assignTo(userId) {
+    this.activeChat.assignedUserId = userId
     this.afs.collection("Chats").doc(this.activeChatId).update({
       assignedUserId: userId,
     });
@@ -318,7 +358,28 @@ export class ChatComponent implements OnInit {
       this.afs.collection("Chats").doc(this.activeChatId).update({
         unreadMessages: 0,
       });
+      this.bottomButton = false
+      for (let index = 0; index < this.tempChatsFilteredByStatus.length; index++) {
+        if (this.tempChatsFilteredByStatus[index].chatId == this.activeChatId) {
+          this.tempChatsFilteredByStatus[index].unreadMessages = 0
+        }
+      }
     }, 200);
+  }
+  // combine
+  deleteMessageFromMessages(item: ChatRecord) {
+    for (let index = 0; index < this.messages.value.length; index++) {
+      if (this.messages.value[index].details == item.details) {
+        this.messages.value.splice(index, 1)
+      }
+    }
+  }
+  // combine
+  updateHTML() {
+    setTimeout(() => {
+      let element: HTMLElement = document.getElementsByClassName('notes-card-header')[0] as HTMLElement;
+      element.click();
+    }, 500);
   }
   toConsole() {
     this.router.navigate(["console"]);
@@ -329,7 +390,6 @@ export class ChatComponent implements OnInit {
       .signOut()
       .then(() => {
         this.router.navigate(["login"]);
-        localStorage.setItem("loggedIn", "");
       })
       .catch((error) => alert(error));
   }

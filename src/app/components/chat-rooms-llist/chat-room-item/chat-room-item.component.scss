@@ -12,15 +12,15 @@
     position: relative;
     .unread-number {
       position: absolute;
-      font-size: 13px;
+      font-size: 10px;
       left: 40px;
       color: #ffffff;
-      height: 24px;
-      width: 24px;
-      top: 20px;
-      background: #ffbaba;
+      height: 19px;
+      width: 19px;
+      top: 25px;
+      background: #ff2e2e;
       border-radius: 50%;
-      line-height: 25px;
+      line-height: 20px;
       text-align: center;
     }
     .name-change {
@@ -38,7 +38,7 @@
       }
       .phone-number {
         position: absolute;
-        bottom: -22px;
+        top: 20px;
         font-size: 13px;
         right: 20px;
         color: #9c9c9c;

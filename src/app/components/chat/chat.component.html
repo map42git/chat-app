@@ -9,7 +9,8 @@
             nbTooltip="Admin Console" nbTooltipStatus="primary" nbTooltipPlacement="bottom"></nb-icon>
     </nb-layout-header>
     <nb-layout-column>
-        <button (click)="getMoreMessages()">Get More Messages</button>
+        <button *ngIf="buttonLoadMoreAvailable" class="load-more-msg" (click)="getMoreMessages()" nbButton shape="round"
+            size="small" status="success">טען עוד...</button>
         <div class="chat-area">
             <div *ngIf="activeChat">
                 <img *ngIf="activeChat.chatChannelId == 'whatsapp'" src="../../../../assets/whatsapp-ico.png" alt="">
@@ -53,9 +54,9 @@
                     <div (click)="changeStatus('archived')"><span class="archived"></span> ארכיון</div>
                 </ng-template>
             </div>
-            <nb-chat scrollBottom="true" [title]="hook.getUserById(activeChat?.userId)?.name || ''">
+            <nb-chat scrollBottom="true" [title]="text.normalize(activeChat?.userName, 15, '...') || '...'">
                 <nb-chat-message *ngFor="let message of messages.value" [message]="message.details"
-                    [type]="message.type" [sender]="getUserById(message.userId) ? getUserById(message.userId).name : ''"
+                    [type]="message.type" [sender]="text.normalize(getUserById(message.userId)?.name, 20, '...')"
                     [files]="message.files" [reply]="message.userId != actualUserId" [date]="message.createdOn"
                     [dateFormat]="'medium'">
                 </nb-chat-message>
@@ -63,6 +64,8 @@
                     [dropFiles]="true"></nb-chat-form>
             </nb-chat>
         </div>
+        <button class="scroll-bottom-msg" *ngIf="bottomButton" (click)="scrollChatAreaToTheBottom()" nbButton
+            shape="round" size="small" status="primary">גלילה לתחתית</button>
     </nb-layout-column>
     <nb-layout-column class="notes-video-column">
         <nb-card class="notes">
@@ -73,8 +76,8 @@
     </nb-layout-column>
     <nb-layout-column start="true" class="chats-column">
         <div class="chats">
-            <app-chat-rooms-llist [rooms]="tempChatsFilteredByStatus" (roomChanged)="getRoomMesages($event)" [activeChatId]="activeChatId"
-                [actualUserId]="actualUserId" (filterStatus)="filterStatus($event)">
+            <app-chat-rooms-llist [rooms]="tempChatsFilteredByStatus" (roomChanged)="getRoomMesages($event)"
+                [activeChatId]="activeChatId" [actualUserId]="actualUserId" (filterStatus)="filterStatus($event)">
             </app-chat-rooms-llist>
         </div>
     </nb-layout-column>

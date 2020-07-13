@@ -8,8 +8,14 @@
     </div>
   </div>
   <div class="vc-body" *ngIf="afterShare">
-    <iframe [src]="videChatFrameUrl" allow="camera;microphone" frameborder="0" height="100%" width="100%">
+    <iframe *ngIf="!http.videoError" [src]="videChatFrameUrl" allow="camera;microphone" frameborder="0" height="100%"
+      width="100%">
       התחל שיחת וידאו
     </iframe>
+    <div *ngIf="http.videoError" class="error-state"> To make video chat work follow this steps: <br>
+      1) Open console(F12); <br>
+      2) Mouse right click on "Reload this page" button; <br>
+      3) Choose "Empty Cache and Hard Reload" <br>
+    </div>
   </div>
 </nb-card>

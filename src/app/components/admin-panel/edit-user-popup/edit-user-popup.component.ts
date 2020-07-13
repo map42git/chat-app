@@ -4,6 +4,7 @@ import { User } from 'src/models/user.model';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { HttpClient } from '@angular/common/http';
 import { ApproveActionComponent } from '../../popups/approve-action/approve-action.component';
+import { LoadingService } from 'src/app/services/loading.service';
 
 @Component({
   selector: 'app-edit-user-popup',
@@ -15,7 +16,7 @@ export class EditUserPopupComponent implements OnInit {
   selectedRole: string;
   password: string;
   email: string;
-  constructor(@Inject(MAT_DIALOG_DATA) public user: any, private afs: AngularFirestore, private dialog: MatDialog, private httpClient: HttpClient) {
+  constructor(@Inject(MAT_DIALOG_DATA) public user: any, private afs: AngularFirestore, private dialog: MatDialog, private httpClient: HttpClient, private loading: LoadingService) {
     this.name = user?.name
     this.selectedRole = user?.role
     this.email = user?.email
@@ -32,18 +33,26 @@ export class EditUserPopupComponent implements OnInit {
 
   }
   updateUser() {
+    this.loading.startSpinner()
     this.httpClient.post("https://us-central1-upstartchat.cloudfunctions.net/updateUser", { uid: this.user.uid, password: this.password, email: this.email }).subscribe(() => {
       this.dialog.closeAll()
+      this.loading.stopSpinner()
+    }, error => {
+      this.loading.stopSpinner()
     })
   }
   deleteUser() {
+
     const approve = this.dialog.open(ApproveActionComponent, {
       data: 'האם למחוק את המשתמש?'
     });
     approve.afterClosed().subscribe(answer => {
+      this.loading.startSpinner()
       answer ? this.httpClient.post("https://us-central1-upstartchat.cloudfunctions.net/deleteUser", { uid: this.user.uid }).subscribe(() => {
+        this.loading.stopSpinner()
         this.afs.collection("Users").doc(this.user.id).delete().then(() => { this.dialog.closeAll() });
       }, () => {
+        this.loading.stopSpinner()
         this.dialog.closeAll()
       }) : this.dialog.closeAll()
     })

@@ -52,6 +52,14 @@
       height: 100%;
       width: 100%;
     }
+    .error-state {
+      direction: ltr;
+      width: 100%;
+      padding: 40% 20px;
+      text-align: center;
+      font-size: 15px;
+      color: #969696;
+    }
   }
   .vc-actions {
     display: flex;

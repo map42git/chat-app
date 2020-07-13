@@ -7,4 +7,5 @@ export class Chat {
   createdOn: string;
   name: string;
   unreadMessages: number;
+  userName: string;
 }

@@ -16,12 +16,13 @@ export class ChatRoomsLlistComponent {
   @Input() activeChatId: string;
   @Input() actualUserId: string;
   @Input('rooms') set _rooms(value: Chat[]) {
-    this.rooms = value
+    this.rooms = value;
     this.doSearch('')
   };
   @Output() roomChanged = new EventEmitter<any>();
   @Output() removeChat = new EventEmitter<string>();
   @Output() filterStatus = new EventEmitter<string>();
+
   constructor(public counter: ChatService, private hook: UserHookService, private auth: AuthService) { }
 
   ngOnInit() { }
@@ -49,8 +50,8 @@ export class ChatRoomsLlistComponent {
   deleteChat(id) {
     this.removeChat.emit(id);
   }
-  chatRoomChanged(id) {
-    this.roomChanged.emit(id);
+  chatRoomChanged(room) {
+    this.roomChanged.emit(room);
   }
   availableChats(chats) {
     const userRole = this.auth.getUserInfo()?.role

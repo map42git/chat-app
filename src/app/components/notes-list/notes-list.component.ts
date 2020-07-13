@@ -29,8 +29,14 @@ export class NotesListComponent implements OnInit {
   }
   constructor() { }
   doSearch(value) {
-    value ?
-      this.filteredNotes = this.notes.filter(note => note.details.toLocaleLowerCase().includes(value.toLocaleLowerCase())) : this.filteredNotes = this.notes
+    let arrNotesElements = document.getElementsByTagName('app-notes-list-item');
+    for (let index = 0; index < arrNotesElements.length; index++) {
+      if (!arrNotesElements[index].children[0].children[1].textContent.includes(value)) {
+        arrNotesElements[index].classList.add('hidden')
+      } else {
+        arrNotesElements[index].classList.remove('hidden')
+      }
+    }
   }
   ngOnInit() { }
   newNote() {

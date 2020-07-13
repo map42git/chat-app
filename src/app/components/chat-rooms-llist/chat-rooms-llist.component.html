@@ -3,27 +3,32 @@
   <nb-card>
     <div class="filters">
       <div class="filter">
+        <div class="notification-indicator" *ngIf="counter.hasNotificationByStatus('new', actualUserId)">
+        </div>
         <div class="counter">{{counter.getChatsCountByStatus('new', actualUserId)}}</div>
-        <!-- <button nbButton status="success" shape="round" size="small">
-          New
-        </button> -->
         <div class="filter-switch" (click)="showByStatus('new')">
           חדשות
         </div>
       </div>
       <div class="filter">
+        <div class="notification-indicator" *ngIf="counter.hasNotificationByStatus('active', actualUserId)">
+        </div>
         <div class="counter">{{counter.getChatsCountByStatus('active', actualUserId)}}</div>
         <div class="filter-switch" (click)="showByStatus('active')">
           פעילות
         </div>
       </div>
       <div class="filter">
+        <div class="notification-indicator" *ngIf="counter.hasNotificationByStatus('resolved', actualUserId)">
+        </div>
         <div class="counter">{{counter.getChatsCountByStatus('resolved', actualUserId)}}</div>
         <div class="filter-switch" (click)="showByStatus('resolved')">
           נפתרו
         </div>
       </div>
       <div class="filter">
+        <div class="notification-indicator" *ngIf="counter.hasNotificationByStatus('archived', actualUserId)">
+        </div>
         <div class="counter">{{counter.getChatsCountByStatus('archived', actualUserId)}}</div>
         <div class="filter-switch" (click)="showByStatus('archived')">
           ארכיון

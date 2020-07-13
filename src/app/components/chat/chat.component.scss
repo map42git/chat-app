@@ -13,6 +13,18 @@
   right: 60px;
   cursor: pointer;
 }
+.load-more-msg {
+  position: absolute;
+  top: 150px;
+  z-index: 2;
+  right: 48%;
+}
+.scroll-bottom-msg {
+  position: absolute;
+  bottom: 150px;
+  z-index: 2;
+  right: 47%;
+}
 .chat-area {
   position: relative;
   display: flex;

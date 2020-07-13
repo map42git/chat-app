@@ -51,7 +51,7 @@ import { ChatComponent } from './components/chat/chat.component';
 import { LoginGuard } from './guards/login.guard';
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
-import { AngularFireAuthModule } from '@angular/fire/auth';
+import { AngularFireAuthModule, AngularFireAuth } from '@angular/fire/auth';
 
 import * as firebase from 'firebase';
 import { AdminPanelComponent } from './components/admin-panel/admin-panel.component';
@@ -62,6 +62,7 @@ import { EditUserPopupComponent } from './components/admin-panel/edit-user-popup
 import { ButtonPressComponent } from './utilities/button-press/button-press.component';
 import { ApproveActionComponent } from './components/popups/approve-action/approve-action.component';
 import { AngularFireDatabase } from 'angularfire2/database';
+import { LoadingService } from './services/loading.service';
 
 firebase.initializeApp(environment.firebase);
 
@@ -121,7 +122,9 @@ firebase.initializeApp(environment.firebase);
     HttpClient,
     ChatService,
     LoginGuard,
-    AngularFireDatabase
+    AngularFireDatabase,
+    LoadingService,
+    AngularFireAuth,
   ],
   bootstrap: [AppComponent],
   entryComponents: [ChatRoomItemComponent, EditUserPopupComponent, ApproveActionComponent],
