@@ -103,6 +103,7 @@ export class ChatComponent implements OnInit {
         );
         this.actualUserId = this.auth.getUserInfo()?.id;
         this.actualUser = this.hook.getUserById(this.actualUserId)
+        console.log(this.actualUser);
         this.actualUser?.role == "manager" ||
           this.actualUser?.role == "admin"
           ? (this.adminAccess = true)
@@ -186,63 +187,77 @@ export class ChatComponent implements OnInit {
   }
 
   getRoomMesages(chat?: Chat) {
+    console.log(chat);
+
     if (chat) {
       this.activeChatId = chat.chatId
       this.activeChat = chat
-    }
-    var messages = [];
-    var messagesRef = this.db
-      .collection("ChatRecords")
-      .where("chatId", "==", chat?.chatId)
-      .orderBy("createdOn", "desc")
-      .limit(10)
-    messagesRef.get().then(docs => {
-      docs.forEach(doc => {
-        messages.unshift(doc.data())
-      });
-      this.lastVisible = docs.docs[docs.docs.length - 1];
-    }).then(() => {
-      this.messages.next(messages);
-      this.activeChatId = chat?.chatId
-      this.chats?.subscribe((chats) => {
-        this.activeChat = chats.filter((x) => x.chatId == chat.chatId)[0];
-      })
-      this.getNotes();
-      this.scrollChatAreaToTheBottom();
-      this.buttonLoadMoreAvailable = true
-    }).then(() => {
-      this.db
-        .collection("ChatRecords")
+
+      var messages = [];
+
+      // if (this.actualUser?.role == 'manager' || this.actualUser?.role == 'admin') {
+      //   var messagesRef = this.db
+      //     .collection("ChatRecords")
+      //     .where("chatId", "==", chat?.chatId)
+      //     .orderBy("createdOn", "desc")
+      //     .limit(10)
+      // } else {
+      var messagesRef = this.db
+        .collection("ChatRecords");
+      messagesRef = messagesRef
+        .where("chatId", "==", chat?.chatId)
+        // messagesRef = messagesRef.where("assignedUserId", "==", this.actualUser?.id)
         .orderBy("createdOn", "desc")
-        .limit(1).onSnapshot((querySnapshot) => {
-          // if new message from actual chat ►►► push
-          let newMessage = querySnapshot.docs[0].data();
-          if (this.activeChatId == newMessage.chatId) {
-            if (JSON.stringify(this.messages.value[this.messages.value.length - 1]) != JSON.stringify(newMessage)) {
-              // combine
-              this.deleteMessageFromMessages(newMessage)
-              messages.push(newMessage)
-              this.updateHTML();
-            }
-          } else
-          // new message from another chat          
-          {
-            for (let i = 0; i < this.tempChatsFilteredByStatus.length; i++) {
-              if (this.tempChatsFilteredByStatus[i].chatId == newMessage.chatId) {
-                this.db.collection("Chats").doc(newMessage.chatId).get().then(chat => {
-                  this.tempChatsFilteredByStatus[i].unreadMessages = chat.data().unreadMessages;
-                  // Combine to make a notification red mark on the related to newMessage chat room 
-                  // (it makes without combine but performs only after chats listener fetches event from FB)
-                  this.tempChatsFilteredByStatus.push(this.tempChatsFilteredByStatus[i])
-                  this.tempChatsFilteredByStatus.pop()
-                  this.updateHTML();
-                  //
-                });
+        .limit(10)
+      // }
+      messagesRef.get().then(docs => {
+        docs.forEach(doc => {
+          messages.unshift(doc.data())
+        });
+        this.lastVisible = docs.docs[docs.docs.length - 1];
+      }).then(() => {
+        this.messages.next(messages);
+        this.activeChatId = chat?.chatId
+        this.chats?.subscribe((chats) => {
+          this.activeChat = chats.filter((x) => x.chatId == chat.chatId)[0];
+        })
+        this.getNotes();
+        this.scrollChatAreaToTheBottom();
+        this.buttonLoadMoreAvailable = true
+      }).then(() => {
+        this.db
+          .collection("ChatRecords")
+          .orderBy("createdOn", "desc")
+          .limit(1).onSnapshot((querySnapshot) => {
+            // if new message from actual chat ►►► push
+            let newMessage = querySnapshot.docs[0].data();
+            if (this.activeChatId == newMessage.chatId) {
+              if (JSON.stringify(this.messages.value[this.messages.value.length - 1]) != JSON.stringify(newMessage)) {
+                // combine
+                this.deleteMessageFromMessages(newMessage)
+                messages.push(newMessage)
+                this.updateHTML();
+              }
+            } else
+            // new message from another chat          
+            {
+              for (let i = 0; i < this.tempChatsFilteredByStatus.length; i++) {
+                if (this.tempChatsFilteredByStatus[i].chatId == newMessage.chatId) {
+                  this.db.collection("Chats").doc(newMessage.chatId).get().then(chat => {
+                    this.tempChatsFilteredByStatus[i].unreadMessages = chat.data().unreadMessages;
+                    // Combine to make a notification red mark on the related to newMessage chat room 
+                    // (it makes without combine but performs only after chats listener fetches event from FB)
+                    this.tempChatsFilteredByStatus.push(this.tempChatsFilteredByStatus[i])
+                    this.tempChatsFilteredByStatus.pop()
+                    this.updateHTML();
+                    //
+                  });
+                }
               }
             }
-          }
-        });
-    })
+          });
+      })
+    }
   }
 
   newMessage(message) {
@@ -298,12 +313,21 @@ export class ChatComponent implements OnInit {
     this.tempChatsFilteredByStatus = this.chats?.value?.filter(
       chat => chat.chatStatusId == status
     );
-    this.getRoomMesages(this.tempChatsFilteredByStatus[0]);
+    var chatToShow: Chat;
+    for (let index = 0; index < this.tempChatsFilteredByStatus.length; index++) {
+      if (this.tempChatsFilteredByStatus[index].assignedUserId == this.actualUser?.id) {
+        chatToShow = this.tempChatsFilteredByStatus[index]
+      } else {
+        chatToShow = null
+      }
+    }
+    // this.getRoomMesages(this.tempChatsFilteredByStatus[0]);
+    this.getRoomMesages(chatToShow);
   }
   getChats() {
     let chatsUnsubscribe = this.db
       .collection("Chats")
-      .orderBy("lastActivity", "desc").limit(25).onSnapshot((querySnapshot) => {
+      .orderBy("lastActivity", "desc").onSnapshot((querySnapshot) => {
         let chats = [];
         querySnapshot.docs.forEach((doc, idx) => {
           chats.push({ chatId: doc.id, ...doc.data() });
