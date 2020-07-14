@@ -19,7 +19,6 @@ import { HttpService } from "src/app/services/http.service";
 import { Router } from "@angular/router";
 import * as firebase from "firebase";
 import { Http } from "@angular/http";
-import { TimeService } from "src/app/services/time.service";
 import { AuthService } from "src/app/services/auth.service";
 import { UserHookService } from "src/app/services/userHook.service";
 import { TextcutterService } from "src/app/services/textcutter.service";
@@ -68,20 +67,12 @@ export class ChatComponent implements OnInit {
     private http: HttpService,
     private router: Router,
     private httpClient: Http,
-    public time: TimeService,
     private auth: AuthService,
     public hook: UserHookService,
-    public text: TextcutterService // public db: AngularFireDatabase
+    public text: TextcutterService
   ) {
-    // var config = {
-    //   apiKey: "AIzaSyAqd50KL19k7O-Zj3usDafq9Y7zVZ_4ghQ",
-    //   authDomain: "upstartchat.firebaseapp.com",
-    //   projectId: "upstartchat"
-    // };
-    // var app = firebase.initializeApp(config);
     this.db = firebase.firestore();
     this.directionService.setDirection(NbLayoutDirection.RTL);
-    // this.usersCollection = this.afs.collection<User>("Users");
     this.messages = new BehaviorSubject([]);
     this.users = new BehaviorSubject([]);
     this.notes = new BehaviorSubject([]);
@@ -96,8 +87,8 @@ export class ChatComponent implements OnInit {
       });
     });
   }
-  //USERS
 
+  //users
   getUsers() {
     let usersUnsubscribe = this.db
       .collection("Users").onSnapshot(querySnapshot => {
@@ -119,11 +110,12 @@ export class ChatComponent implements OnInit {
         this.getChats();
         usersUnsubscribe()
       });
-
   }
   getUserById(id) {
     return this.users.value.find((_user) => _user.id === id);
   }
+
+  //notes
   getNotes() {
     this.db.collection('Notes').where('chatId', '==', this.activeChatId).orderBy("createdOn", "desc").onSnapshot((querySnapshot) => {
       let notes = [];
@@ -167,13 +159,12 @@ export class ChatComponent implements OnInit {
           querySnapshot.forEach((doc) => {
             let item = doc.data();
             item.chatRecordId = doc.id;
-            console.log(item.chatRecordId != this.lastVisible.chatRecordId);
             if (item.chatRecordId != this.lastVisible.chatRecordId) {
               // combine
               this.deleteMessageFromMessages(item)
               this.messages.value.unshift(item);
             } else {
-              console.error('I`m not working as designed, this is not an end of the messages list! CHECK ME PLEASE ☺');
+              console.error('I`m not working as designed! CHECK ME PLEASE');
             }
             let chatArea = document.getElementsByClassName("scrollable")[0];
             chatArea.addEventListener('scroll', () => {
@@ -222,29 +213,26 @@ export class ChatComponent implements OnInit {
     }).then(() => {
       this.db
         .collection("ChatRecords")
-        // .where("chatId", "==", chat?.chatId)
         .orderBy("createdOn", "desc")
         .limit(1).onSnapshot((querySnapshot) => {
           // if new message from actual chat ►►► push
-          let firstElem = querySnapshot.docs[0].data();
-          if (this.activeChatId == firstElem.chatId) {
-            if (JSON.stringify(this.messages.value[this.messages.value.length - 1]) != JSON.stringify(firstElem)) {
+          let newMessage = querySnapshot.docs[0].data();
+          if (this.activeChatId == newMessage.chatId) {
+            if (JSON.stringify(this.messages.value[this.messages.value.length - 1]) != JSON.stringify(newMessage)) {
+              messages.push(newMessage)
               // combine
-              this.deleteMessageFromMessages(firstElem)
-              messages.push(firstElem)
-              console.log('pushing');
-              // this.messages.next(messages)
+              this.deleteMessageFromMessages(newMessage)
               this.updateHTML();
             }
           } else
           // new message from another chat          
           {
             for (let i = 0; i < this.tempChatsFilteredByStatus.length; i++) {
-              if (this.tempChatsFilteredByStatus[i].chatId == firstElem.chatId) {
-                this.db.collection("Chats").doc(firstElem.chatId).get().then(res => {
-                  this.tempChatsFilteredByStatus[i].unreadMessages = res.data().unreadMessages;
-                  // Костыль для обновления массива чатов (ключа непрочитанных сообщений)
-                  // combine
+              if (this.tempChatsFilteredByStatus[i].chatId == newMessage.chatId) {
+                this.db.collection("Chats").doc(newMessage.chatId).get().then(chat => {
+                  this.tempChatsFilteredByStatus[i].unreadMessages = chat.data().unreadMessages;
+                  // Combine to make a notification red mark on the related to newMessage chat room 
+                  // (it makes without combine but performs only after chats listener fetches event from FB)
                   this.tempChatsFilteredByStatus.push(this.tempChatsFilteredByStatus[i])
                   this.tempChatsFilteredByStatus.pop()
                   this.updateHTML();
@@ -277,15 +265,12 @@ export class ChatComponent implements OnInit {
       messsageModel.files = files.length ? files : null;
       (messsageModel.type = files.length ? "file" : "text"),
         (messsageModel.isHomeRecord = true);
-      // TEST TEST TEST
       this.db.collection("ChatRecords").add({ ...messsageModel }).then(() => {
         this.messagePending(true)
       });
       this.afs.collection("Chats").doc(this.activeChatId).update({
         lastActivity: new Date().getTime().toString(),
       });
-
-      // TEST TEST TEST
       this.httpClient
         .post(
           "https://us-central1-upstartchat.cloudfunctions.net/addMessageToUser",
@@ -298,7 +283,6 @@ export class ChatComponent implements OnInit {
       alert("Choose or create chat first!");
     }
   }
-  //
 
   // chats
   changeStatus(status) {
@@ -312,7 +296,7 @@ export class ChatComponent implements OnInit {
   }
   filterStatus(status) {
     this.tempChatsFilteredByStatus = this.chats?.value?.filter(
-      (x) => x.chatStatusId == status
+      chat => chat.chatStatusId == status
     );
     this.getRoomMesages(this.tempChatsFilteredByStatus[0]);
   }
@@ -334,6 +318,12 @@ export class ChatComponent implements OnInit {
         }
       });
   }
+  assignTo(userId) {
+    this.activeChat.assignedUserId = userId
+    this.afs.collection("Chats").doc(this.activeChatId).update({
+      assignedUserId: userId,
+    });
+  }
 
   //helpers
   messagePending(active: boolean) {
@@ -345,12 +335,6 @@ export class ChatComponent implements OnInit {
     } else {
       lastMessageElement.removeChild(lastMessageElement.childNodes[0])
     }
-  }
-  assignTo(userId) {
-    this.activeChat.assignedUserId = userId
-    this.afs.collection("Chats").doc(this.activeChatId).update({
-      assignedUserId: userId,
-    });
   }
   scrollChatAreaToTheBottom() {
     setTimeout(() => {
