@@ -13,6 +13,18 @@
   right: 60px;
   cursor: pointer;
 }
+.load-more-msg {
+  position: absolute;
+  top: 150px;
+  z-index: 2;
+  right: 48%;
+}
+.scroll-bottom-msg {
+  position: absolute;
+  bottom: 150px;
+  z-index: 2;
+  right: 47%;
+}
 .chat-area {
   position: relative;
   display: flex;
@@ -36,9 +48,14 @@
         position: absolute;
         top: 22px;
         height: 10px;
-        right: 88px;
+        right: 80px;
         border-radius: 50%;
         width: 10px;
+      }
+      nb-icon {
+        position: absolute;
+        top: 15px;
+        right: 60px;
       }
     }
     .select-assigned {
@@ -58,7 +75,7 @@
       }
       nb-icon {
         position: absolute;
-        right: 0;
+        right: 100px;
         top: 15px;
       }
     }

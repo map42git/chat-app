@@ -1,1 +1,3 @@
-<router-outlet></router-outlet>
+<router-outlet>
+</router-outlet>
+<div *ngIf="loadingS.loading" class="spinner" [nbSpinner]="loadingS.loading" nbSpinnerStatus="info" nbSpinnerSize="giant"></div>

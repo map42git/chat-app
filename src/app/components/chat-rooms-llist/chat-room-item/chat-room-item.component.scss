@@ -10,6 +10,19 @@
     font-size: 17px;
     font-weight: 700;
     position: relative;
+    .unread-number {
+      position: absolute;
+      font-size: 10px;
+      left: 40px;
+      color: #ffffff;
+      height: 19px;
+      width: 19px;
+      top: 25px;
+      background: #ff2e2e;
+      border-radius: 50%;
+      line-height: 20px;
+      text-align: center;
+    }
     .name-change {
       // width: fit-content;
       padding: 0 20px;
@@ -19,13 +32,13 @@
       }
       .edit {
         opacity: 0;
-        // right: -20px;
+        right: 0px;
         top: 25px;
         transition: 0.3s ease;
       }
-      span {
+      .phone-number {
         position: absolute;
-        bottom: -22px;
+        top: 20px;
         font-size: 13px;
         right: 20px;
         color: #9c9c9c;
@@ -34,7 +47,7 @@
     }
     .name-change:hover {
       .edit {
-        left: 40px;
+        right: -3px;
         top: 25px;
         opacity: 100;
       }

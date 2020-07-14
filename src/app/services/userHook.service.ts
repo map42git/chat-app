@@ -15,22 +15,29 @@ export class UserHookService {
   constructor(private afs: AngularFirestore) {
     this.usersCollection = this.afs.collection<User>("Users");
     this.users = new BehaviorSubject([]);
-    this.getUsers();
+
   }
-  private getUsers() {
-    this.usersCollection = this.afs.collection<User>("Users");
-    this.usersCollection
-      .valueChanges<string>({
-        idField: "id",
-      })
-      .subscribe((_users) => {
-        this.users.next(_users);
-      });
+  private getUsers(): Promise<boolean> {
+    return new Promise<boolean>(resolve => {
+      this.usersCollection = this.afs.collection<User>("Users");
+      this.usersCollection
+        .get()
+        .subscribe((_users) => {
+          let user = [];
+          _users.docs.forEach(x => {
+            user.push({ ...x.data(), id: x.id })
+          })
+          this.users.next(user);
+          resolve(true)
+        });
+    })
   }
   getUserById(id) {
     return this.users.value.find((_user) => _user.id === id);
   }
-  getUserByEmail(email) {
-    return this.users.value.find((_user) => _user.email === email);
+  async getUserByEmail(email) {
+    return this.getUsers().then(x => {
+      return this.users.value.find((_user) => _user.email === email);
+    })
   }
 }

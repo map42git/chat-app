@@ -7,6 +7,7 @@ import {
   OnChanges,
 } from "@angular/core";
 import { DomSanitizer } from "@angular/platform-browser";
+import { HttpService } from 'src/app/services/http.service';
 
 @Component({
   selector: "app-video-chat",
@@ -19,7 +20,7 @@ export class VideoChatComponent implements OnInit, OnChanges {
   @Input() url: string;
   videChatFrameUrl: any;
   afterShare: boolean = false;
-  constructor(private sanitizer: DomSanitizer) { }
+  constructor(private sanitizer: DomSanitizer, public http: HttpService) { }
   ngOnInit() { }
   shareLink() {
     this.inviteUserToVideoChat.emit();

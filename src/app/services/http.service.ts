@@ -3,6 +3,7 @@ import { Http, RequestOptions, Headers } from "@angular/http";
 import { HttpRequest, HttpClient, HttpHeaders } from "@angular/common/http";
 import { Observable, Subscriber } from "rxjs";
 import { map, shareReplay } from "rxjs/operators";
+import { error } from 'protractor';
 
 @Injectable({
   providedIn: "root",
@@ -16,13 +17,14 @@ export class HttpService {
   };
   antiforgeryToken: string;
   accessToken: string;
-  constructor(private http: Http, private httpClient: HttpClient) {}
+  videoError: boolean;
+  constructor(private http: Http, private httpClient: HttpClient) { }
   public getAntiforgeryToken<TViewModel>() {
     this.get("token").subscribe(
       (success) => {
         this.antiforgeryToken = success.token;
       },
-      (error) => {}
+      (error) => { }
     );
   }
   encodeQueryData(data) {
@@ -131,6 +133,8 @@ export class HttpService {
       this.get("auth", "token", params).subscribe((accessToken) => {
         this.accessToken = accessToken.token;
         resolve();
+      }, error => {
+        this.videoError = true
       });
     });
   }

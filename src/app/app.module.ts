@@ -22,6 +22,7 @@ import {
   NbTabsetModule,
   NbRouteTabsetModule,
   NbSpinnerModule,
+  NbTooltipModule,
 } from "@nebular/theme";
 import { BrowserModule } from "@angular/platform-browser";
 import { NgModule } from "@angular/core";
@@ -50,7 +51,7 @@ import { ChatComponent } from './components/chat/chat.component';
 import { LoginGuard } from './guards/login.guard';
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
-import { AngularFireAuthModule } from '@angular/fire/auth';
+import { AngularFireAuthModule, AngularFireAuth } from '@angular/fire/auth';
 
 import * as firebase from 'firebase';
 import { AdminPanelComponent } from './components/admin-panel/admin-panel.component';
@@ -60,8 +61,11 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { EditUserPopupComponent } from './components/admin-panel/edit-user-popup/edit-user-popup.component';
 import { ButtonPressComponent } from './utilities/button-press/button-press.component';
 import { ApproveActionComponent } from './components/popups/approve-action/approve-action.component';
+import { AngularFireDatabase } from 'angularfire2/database';
+import { LoadingService } from './services/loading.service';
 
 firebase.initializeApp(environment.firebase);
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -79,6 +83,7 @@ firebase.initializeApp(environment.firebase);
     ApproveActionComponent,
   ],
   imports: [
+    NbTooltipModule,
     MatDialogModule,
     AngularFireAuthModule,
     BrowserModule,
@@ -116,7 +121,10 @@ firebase.initializeApp(environment.firebase);
     HttpService,
     HttpClient,
     ChatService,
-    LoginGuard
+    LoginGuard,
+    AngularFireDatabase,
+    LoadingService,
+    AngularFireAuth,
   ],
   bootstrap: [AppComponent],
   entryComponents: [ChatRoomItemComponent, EditUserPopupComponent, ApproveActionComponent],
