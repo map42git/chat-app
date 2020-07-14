@@ -44,7 +44,6 @@ export class EditUserPopupComponent implements OnInit {
     })
   }
   deleteUser() {
-
     const approve = this.dialog.open(ApproveActionComponent, {
       data: 'האם למחוק את המשתמש?'
     });
@@ -52,7 +51,7 @@ export class EditUserPopupComponent implements OnInit {
       this.loading.startSpinner()
       if (answer) {
         if (this.inactive) {
-          this.afs.collection("Users").doc(this.user.id).delete().then(() => { this.dialog.closeAll() });
+          this.afs.collection("Users").doc(this.user.id).delete().then(() => { this.dialog.closeAll(), this.loading.stopSpinner() });
         } else {
           this.httpClient.post("https://us-central1-upstartchat.cloudfunctions.net/deleteUser", { uid: this.user.uid }).subscribe(() => {
             this.loading.stopSpinner()
@@ -62,7 +61,7 @@ export class EditUserPopupComponent implements OnInit {
             this.dialog.closeAll()
           })
         }
-      } else this.dialog.closeAll()
+      } else this.dialog.closeAll(), this.loading.stopSpinner()
     })
 
   }

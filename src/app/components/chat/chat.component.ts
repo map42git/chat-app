@@ -103,7 +103,6 @@ export class ChatComponent implements OnInit {
         );
         this.actualUserId = this.auth.getUserInfo()?.id;
         this.actualUser = this.hook.getUserById(this.actualUserId)
-        console.log(this.actualUser);
         this.actualUser?.role == "manager" ||
           this.actualUser?.role == "admin"
           ? (this.adminAccess = true)
@@ -187,7 +186,6 @@ export class ChatComponent implements OnInit {
   }
 
   getRoomMesages(chat?: Chat) {
-    console.log(chat);
 
     if (chat) {
       this.activeChatId = chat.chatId
