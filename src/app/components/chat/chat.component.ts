@@ -219,9 +219,9 @@ export class ChatComponent implements OnInit {
           let newMessage = querySnapshot.docs[0].data();
           if (this.activeChatId == newMessage.chatId) {
             if (JSON.stringify(this.messages.value[this.messages.value.length - 1]) != JSON.stringify(newMessage)) {
-              messages.push(newMessage)
               // combine
               this.deleteMessageFromMessages(newMessage)
+              messages.push(newMessage)
               this.updateHTML();
             }
           } else
@@ -353,7 +353,7 @@ export class ChatComponent implements OnInit {
   // combine
   deleteMessageFromMessages(item: ChatRecord) {
     for (let index = 0; index < this.messages.value.length; index++) {
-      if (this.messages.value[index].details == item.details) {
+      if (this.messages.value[index].createdOn == item.createdOn) {
         this.messages.value.splice(index, 1)
       }
     }
