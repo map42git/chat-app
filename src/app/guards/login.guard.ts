@@ -31,8 +31,14 @@ export class LoginGuard {
       this.loading.startSpinner();
       firebase.auth().onAuthStateChanged((user) => {
         this.auth.setUser(user).then(() => {
-          resolve(true);
-          this.loading.stopSpinner();
+          if (user) {
+            resolve(true);
+            this.loading.stopSpinner();
+          } else {
+            this.router.navigate(["login"]);
+            resolve(false);
+            this.loading.stopSpinner()
+          }
         }).catch(() => {
           this.router.navigate(["login"]);
           resolve(false);
