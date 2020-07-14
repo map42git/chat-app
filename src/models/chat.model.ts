@@ -8,4 +8,5 @@ export class Chat {
   name: string;
   unreadMessages: number;
   userName: string;
+  lastActivity: string
 }
