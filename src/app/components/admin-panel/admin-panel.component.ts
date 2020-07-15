@@ -27,7 +27,7 @@ export class AdminPanelComponent implements OnInit {
   editUser(user) {
     const dialog = this.dialog.open(EditUserPopupComponent, { data: user });
     dialog.afterClosed().subscribe(() => {
-      this.ngOnInit()
+      this.getUsersAuth()
     })
   }
   toDashboard() {
@@ -41,13 +41,15 @@ export class AdminPanelComponent implements OnInit {
     this.userListFull = Array.from(hash.values());
   }
   getUsersWithRoles() {
-    this.usersWithRoles = this.hook.users.value.filter((x) => x.role == 'admin' || x.role == 'manager' || x.role == 'employee');
+    this.hook.getUsers().then(() => {
+      this.usersWithRoles = this.hook.users.value.filter((x) => x.role == 'admin' || x.role == 'manager' || x.role == 'employee');
+      this.createUserListWithAllProps()
+    })
   }
   getUsersAuth() {
     this.httpClient.post("https://us-central1-upstartchat.cloudfunctions.net/getAllUsers", null).subscribe(res => {
       this.users = res;
       this.getUsersWithRoles()
-      this.createUserListWithAllProps()
     })
   }
   logout() {
