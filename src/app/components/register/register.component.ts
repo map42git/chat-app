@@ -24,7 +24,6 @@ export class RegisterComponent implements OnInit {
   }
   register() {
     firebase.auth().createUserWithEmailAndPassword(this.email, this.password).then(() => {
-      alert('You`ve just created a user!')
       this.createDbUser();
     }).catch(error => {
       this.errorMessage = error.message;
@@ -42,7 +41,11 @@ export class RegisterComponent implements OnInit {
     userModel.mobileNumber = "";
     userModel.name = this.name;
     userModel.email = this.email
-    this.usersCollection.add({ ...userModel });
-    this.registered.emit(true)
+    this.usersCollection.add({ ...userModel }).then(() => {
+      this.registered.emit(true)
+      // combine (makes tab witysh userlist active)
+      const firstTab = document.getElementsByClassName('tab-link')[0] as HTMLElement;
+      firstTab.click()
+    });
   }
 }

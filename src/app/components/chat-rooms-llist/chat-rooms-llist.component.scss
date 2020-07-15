@@ -30,6 +30,7 @@
       justify-content: space-between;
       position: relative;
       cursor: pointer;
+      filter: grayscale(0.8);
       .notification-indicator {
         position: absolute;
         top: 0px;
@@ -64,6 +65,9 @@
         font-size: 16px;
         width: 100%;
       }
+    }
+    .activated {
+      filter: grayscale(0);
     }
     .filter:nth-child(1) .filter-switch {
       background-color: #43da84;

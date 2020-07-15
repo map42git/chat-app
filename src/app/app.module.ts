@@ -63,6 +63,7 @@ import { ButtonPressComponent } from './utilities/button-press/button-press.comp
 import { ApproveActionComponent } from './components/popups/approve-action/approve-action.component';
 import { AngularFireDatabase } from 'angularfire2/database';
 import { LoadingService } from './services/loading.service';
+import { SortPipe } from './pipes/sort.pipe';
 
 firebase.initializeApp(environment.firebase);
 
@@ -81,6 +82,7 @@ firebase.initializeApp(environment.firebase);
     EditUserPopupComponent,
     ButtonPressComponent,
     ApproveActionComponent,
+    SortPipe,
   ],
   imports: [
     NbTooltipModule,
@@ -110,7 +112,7 @@ firebase.initializeApp(environment.firebase);
     NbFormFieldModule,
     NbPopoverModule,
     NbTabsetModule,
-    NbSpinnerModule
+    NbSpinnerModule,
   ],
   providers: [
     AuthService,

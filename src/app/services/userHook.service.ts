@@ -17,7 +17,7 @@ export class UserHookService {
     this.users = new BehaviorSubject([]);
 
   }
-  private getUsers(): Promise<boolean> {
+  public getUsers(): Promise<boolean> {
     return new Promise<boolean>(resolve => {
       this.usersCollection = this.afs.collection<User>("Users");
       this.usersCollection

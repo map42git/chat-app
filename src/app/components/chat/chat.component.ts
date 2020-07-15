@@ -186,8 +186,10 @@ export class ChatComponent implements OnInit {
   }
 
   getRoomMesages(chat?: Chat) {
-
-    if (chat) {
+    // combine to reset input value when redirect to another chat room
+    // document.getElementsByTagName('input')[0].value = ''
+    //
+    if (chat && this.activeChatId != chat?.chatId) {
       this.activeChatId = chat.chatId
       this.activeChat = chat
 
@@ -243,10 +245,12 @@ export class ChatComponent implements OnInit {
                 if (this.tempChatsFilteredByStatus[i].chatId == newMessage.chatId) {
                   this.db.collection("Chats").doc(newMessage.chatId).get().then(chat => {
                     this.tempChatsFilteredByStatus[i].unreadMessages = chat.data().unreadMessages;
-                    // Combine to make a notification red mark on the related to newMessage chat room 
-                    // (it makes without combine but performs only after chats listener fetches event from FB)
-                    this.tempChatsFilteredByStatus.push(this.tempChatsFilteredByStatus[i])
+                    this.tempChatsFilteredByStatus[i].lastActivity = new Date().getTime().toString(),
+                      // Combine to make a notification red mark on the related to newMessage chat room 
+                      // (it makes without combine but performs only after chats listener fetches event from FB)
+                      this.tempChatsFilteredByStatus.push(this.tempChatsFilteredByStatus[i])
                     this.tempChatsFilteredByStatus.pop()
+                    this.tempChatsFilteredByStatus.sort((a, b) => (a.lastActivity > b.lastActivity) ? -1 : 1)
                     this.updateHTML();
                     //
                   });
@@ -385,7 +389,7 @@ export class ChatComponent implements OnInit {
     setTimeout(() => {
       let element: HTMLElement = document.getElementsByClassName('notes-card-header')[0] as HTMLElement;
       element.click();
-    }, 500);
+    }, 1500);
   }
   toConsole() {
     this.router.navigate(["console"]);

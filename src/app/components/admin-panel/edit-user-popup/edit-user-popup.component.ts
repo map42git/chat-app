@@ -27,11 +27,15 @@ export class EditUserPopupComponent implements OnInit {
   ngOnInit(): void {
   }
   update() {
+
+
     this.afs.collection("Users").doc(this.user.id).update({
       name: this.name,
       role: this.selectedRole,
       email: this.email
-    }).then(() => { this.password ? this.updateUser() : this.dialog.closeAll() });
+    }).then(() => {
+      this.password ? this.updateUser() : this.dialog.closeAll();
+    });
 
   }
   updateUser() {
