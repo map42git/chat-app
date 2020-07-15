@@ -1,8 +1,7 @@
 <div class="rooms-list">
-
   <nb-card>
     <div class="filters">
-      <div class="filter">
+      <div class="filter" [ngClass]="{'activated': choosenStatus == 'new'}">
         <div class="notification-indicator" *ngIf="counter.hasNotificationByStatus('new', actualUserId)">
         </div>
         <div class="counter">{{counter.getChatsCountByStatus('new', actualUserId)}}</div>
@@ -10,7 +9,7 @@
           חדשות
         </div>
       </div>
-      <div class="filter">
+      <div class="filter" [ngClass]="{'activated': choosenStatus == 'active'}">
         <div class="notification-indicator" *ngIf="counter.hasNotificationByStatus('active', actualUserId)">
         </div>
         <div class="counter">{{counter.getChatsCountByStatus('active', actualUserId)}}</div>
@@ -18,7 +17,7 @@
           פעילות
         </div>
       </div>
-      <div class="filter">
+      <div class="filter" [ngClass]="{'activated': choosenStatus == 'resolved'}">
         <div class="notification-indicator" *ngIf="counter.hasNotificationByStatus('resolved', actualUserId)">
         </div>
         <div class="counter">{{counter.getChatsCountByStatus('resolved', actualUserId)}}</div>
@@ -26,7 +25,7 @@
           נפתרו
         </div>
       </div>
-      <div class="filter">
+      <div class="filter" [ngClass]="{'activated': choosenStatus == 'archived'}">
         <div class="notification-indicator" *ngIf="counter.hasNotificationByStatus('archived', actualUserId)">
         </div>
         <div class="counter">{{counter.getChatsCountByStatus('archived', actualUserId)}}</div>

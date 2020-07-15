@@ -15,6 +15,7 @@ export class ChatRoomsLlistComponent {
   rooms: Chat[]
   @Input() activeChatId: string;
   @Input() actualUserId: string;
+  choosenStatus: string;
   @Input('rooms') set _rooms(value: Chat[]) {
     this.rooms = value;
     this.doSearch('')
@@ -44,6 +45,7 @@ export class ChatRoomsLlistComponent {
   // }
 
   showByStatus(status) {
+    this.choosenStatus = status
     this.counter.getChatsCountByStatus(status, this.actualUserId) > 0 ?
       this.filterStatus.emit(status) : ''
   }
