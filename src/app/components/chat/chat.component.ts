@@ -187,7 +187,7 @@ export class ChatComponent implements OnInit {
 
   getRoomMesages(chat?: Chat) {
 
-    if (chat) {
+    if (chat && this.activeChatId != chat?.chatId) {
       this.activeChatId = chat.chatId
       this.activeChat = chat
 
@@ -229,6 +229,8 @@ export class ChatComponent implements OnInit {
           .limit(1).onSnapshot((querySnapshot) => {
             // if new message from actual chat ►►► push
             let newMessage = querySnapshot.docs[0].data();
+            console.log(newMessage);
+
             if (this.activeChatId == newMessage.chatId) {
               if (JSON.stringify(this.messages.value[this.messages.value.length - 1]) != JSON.stringify(newMessage)) {
                 // combine
