@@ -46,8 +46,9 @@ export class ChatRoomsLlistComponent {
 
   showByStatus(status) {
     this.choosenStatus = status
-    this.counter.getChatsCountByStatus(status, this.actualUserId) > 0 ?
-      this.filterStatus.emit(status) : ''
+    // this.counter.getChatsCountByStatus(status, this.actualUserId) > 0 ?
+      this.filterStatus.emit(status)
+      //  : ''
   }
   deleteChat(id) {
     this.removeChat.emit(id);

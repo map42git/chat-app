@@ -188,7 +188,6 @@ export class ChatComponent implements OnInit {
   getRoomMesages(chat?: Chat) {
     // combine to reset input value when redirect to another chat room
     // document.getElementsByTagName('input')[0].value = ''
-    //
     if (chat && this.activeChatId != chat?.chatId) {
       this.activeChatId = chat.chatId
       this.activeChat = chat
