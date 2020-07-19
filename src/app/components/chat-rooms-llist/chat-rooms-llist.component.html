@@ -37,7 +37,12 @@
   </nb-card>
   <nb-card class="chats">
     <div class="notes-card-header">
-      <span>שיחות</span>
+      <span>שיחות
+        {{choosenStatus == "new" ? 'חדשות ' : ''}}
+        {{choosenStatus == "active" ? 'פעילות' : ''}}
+        {{choosenStatus == "resolved" ? 'נפתרו' : ''}}
+        {{choosenStatus == "archived" ? 'ארכיון' : ''}}
+      </span>
       <nb-form-field>
         <nb-icon nbPrefix icon="search-outline" pack="eva"></nb-icon>
         <input type="text" nbInput fullWidth shape="round" placeholder="חיפוש" [(ngModel)]="searchValue"
