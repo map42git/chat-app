@@ -256,6 +256,21 @@ export class ChatComponent implements OnInit {
                 }
               }
             }
+            if (this.activeChat.chatStatusId !== 'active') {
+              for (let index = 0; index < this.tempChatsFilteredByStatus.length; index++) {
+                if (this.tempChatsFilteredByStatus[index].chatId == newMessage.chatId) {
+                  this.tempChatsFilteredByStatus.splice(index, 1)
+                  this.db.collection("Chats").doc(newMessage.chatId).update({
+                    chatStatusId: 'active'
+                  })
+                  for (let index = 0; index < this.chats.value.length; index++) {
+                    if (this.chats.value[index].chatId == newMessage.chatId) {
+                      this.chats.value[index].chatStatusId = 'active'
+                    }
+                  }
+                }
+              }
+            }
           });
       })
     }
