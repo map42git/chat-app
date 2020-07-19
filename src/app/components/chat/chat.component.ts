@@ -22,6 +22,7 @@ import { Http } from "@angular/http";
 import { AuthService } from "src/app/services/auth.service";
 import { UserHookService } from "src/app/services/userHook.service";
 import { TextcutterService } from "src/app/services/textcutter.service";
+import { formatCurrency } from '@angular/common';
 
 @Component({
   selector: "app-chat",
@@ -321,7 +322,12 @@ export class ChatComponent implements OnInit {
     this.afs.collection("Chats").doc(this.activeChatId).update({
       chatStatusId: status,
     }).then(() => {
-      this.filterStatus(status)
+      // this.filterStatus(status)
+      for (let index = 0; index < this.tempChatsFilteredByStatus.length; index++) {
+        if (this.tempChatsFilteredByStatus[index].chatId == this.activeChat.chatId) {
+          this.tempChatsFilteredByStatus.splice(index, 1)
+        }
+      }
     });
 
   }
