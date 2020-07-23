@@ -8,9 +8,6 @@ import { LoadingService } from '../services/loading.service';
 import { Observable } from 'rxjs/internal/Observable';
 import { Subject } from 'rxjs';
 
-
-
-
 @Injectable()
 export class LoginGuard {
   fooSubject: Subject<any> = new Subject<any>();
@@ -28,22 +25,30 @@ export class LoginGuard {
   }
   async getUserAuthenticated(): Promise<boolean> {
     return new Promise(async resolve => {
+
       this.loading.startSpinner();
       firebase.auth().onAuthStateChanged((user) => {
-        this.auth.setUser(user).then(() => {
-          if (user) {
-            resolve(true);
-            this.loading.stopSpinner();
-          } else {
+        if (user) {
+          this.auth.setUser(user).then(() => {
+            if (user) {
+              resolve(true);
+              this.loading.stopSpinner();
+            } else {
+              this.router.navigate(["login"]);
+              resolve(false);
+              this.loading.stopSpinner()
+            }
+          }).catch(() => {
             this.router.navigate(["login"]);
             resolve(false);
             this.loading.stopSpinner()
-          }
-        }).catch(() => {
+          })
+        } else {
+          console.log('user null!')
+          this.loading.stopSpinner();
           this.router.navigate(["login"]);
           resolve(false);
-          this.loading.stopSpinner()
-        })
+        }
       });
     });
   }

@@ -7,6 +7,8 @@ import { EditUserPopupComponent } from './edit-user-popup/edit-user-popup.compon
 import { HttpClient } from '@angular/common/http';
 import { TextcutterService } from 'src/app/services/textcutter.service';
 import { NbLayoutDirectionService, NbLayoutDirection } from '@nebular/theme';
+import { AuthService } from 'src/app/services/auth.service';
+import { User } from 'src/models/user.model';
 
 @Component({
   selector: 'app-admin-panel',
@@ -14,11 +16,13 @@ import { NbLayoutDirectionService, NbLayoutDirection } from '@nebular/theme';
   styleUrls: ['./admin-panel.component.scss']
 })
 export class AdminPanelComponent implements OnInit {
+  currentUser: User;
   users: any;
   usersWithRoles: any;
   userListFull: any;
-  constructor(private router: Router, public hook: UserHookService, private dialog: MatDialog, private httpClient: HttpClient, public text: TextcutterService, private directionService: NbLayoutDirectionService) {
+  constructor(private auth: AuthService, private router: Router, public hook: UserHookService, private dialog: MatDialog, private httpClient: HttpClient, public text: TextcutterService, private directionService: NbLayoutDirectionService) {
     this.directionService.setDirection(NbLayoutDirection.RTL);
+    this.currentUser = this.auth.getUserInfo();
   }
 
   ngOnInit(): void {
@@ -39,6 +43,7 @@ export class AdminPanelComponent implements OnInit {
       hash.set(obj.email, Object.assign(hash.get(obj.email) || {}, obj))
     });
     this.userListFull = Array.from(hash.values());
+    this.currentUser = this.auth.getUserInfo();
   }
   getUsersWithRoles() {
     this.hook.getUsers().then(() => {
@@ -53,8 +58,8 @@ export class AdminPanelComponent implements OnInit {
     })
   }
   logout() {
+    this.router.navigate(['login'])
     firebase.auth().signOut().then(() => {
-      this.router.navigate(['login'])
     }).catch(error => alert(error))
   }
 }

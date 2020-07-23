@@ -29,7 +29,7 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
   }
-  login() {
+  login() {    
     this.loading.startSpinner()
     this.email = this.email.toLocaleLowerCase()
     firebase.auth().signInWithEmailAndPassword(this.email, this.password).then(() => {
