@@ -22,6 +22,7 @@ import { Http } from "@angular/http";
 import { AuthService } from "src/app/services/auth.service";
 import { UserHookService } from "src/app/services/userHook.service";
 import { TextcutterService } from "src/app/services/textcutter.service";
+import { formatCurrency } from '@angular/common';
 
 @Component({
   selector: "app-chat",
@@ -59,6 +60,10 @@ export class ChatComponent implements OnInit {
   db: any;
   bottomButton: boolean = false;
   buttonLoadMoreAvailable: boolean;
+  notesListenerUnsubscribe: any;
+  chatRecordsListenerUnsubscribe: any;
+  usersUnsubscribe: any;
+  chatsUnsubscribe: any;
   constructor(
     private sidebarService: NbSidebarService,
     private afs: AngularFirestore,
@@ -90,7 +95,7 @@ export class ChatComponent implements OnInit {
 
   //users
   getUsers() {
-    let usersUnsubscribe = this.db
+    this.usersUnsubscribe = this.db
       .collection("Users").onSnapshot(querySnapshot => {
         let users = [];
         querySnapshot.docs.forEach(doc => {
@@ -108,7 +113,7 @@ export class ChatComponent implements OnInit {
           ? (this.adminAccess = true)
           : (this.adminAccess = false);
         this.getChats();
-        usersUnsubscribe()
+        this.usersUnsubscribe()
       });
   }
   getUserById(id) {
@@ -117,7 +122,7 @@ export class ChatComponent implements OnInit {
 
   //notes
   getNotes() {
-    this.db.collection('Notes').where('chatId', '==', this.activeChatId).orderBy("createdOn", "desc").onSnapshot((querySnapshot) => {
+    this.notesListenerUnsubscribe = this.db.collection('Notes').where('chatId', '==', this.activeChatId).orderBy("createdOn", "desc").onSnapshot((querySnapshot) => {
       let notes = [];
       querySnapshot.docs.forEach((doc) => {
         notes.push({ ...doc.data(), chatNoteId: doc.id });
@@ -224,7 +229,7 @@ export class ChatComponent implements OnInit {
         this.scrollChatAreaToTheBottom();
         this.buttonLoadMoreAvailable = true
       }).then(() => {
-        this.db
+        this.chatRecordsListenerUnsubscribe = this.db
           .collection("ChatRecords")
           .orderBy("createdOn", "desc")
           .limit(1).onSnapshot((querySnapshot) => {
@@ -253,6 +258,21 @@ export class ChatComponent implements OnInit {
                     this.updateHTML();
                     //
                   });
+                }
+              }
+            }
+            if (this.activeChat.chatStatusId !== 'active') {
+              for (let index = 0; index < this.tempChatsFilteredByStatus.length; index++) {
+                if (this.tempChatsFilteredByStatus[index].chatId == newMessage.chatId) {
+                  this.tempChatsFilteredByStatus.splice(index, 1)
+                  this.db.collection("Chats").doc(newMessage.chatId).update({
+                    chatStatusId: 'active'
+                  })
+                  for (let index = 0; index < this.chats.value.length; index++) {
+                    if (this.chats.value[index].chatId == newMessage.chatId) {
+                      this.chats.value[index].chatStatusId = 'active'
+                    }
+                  }
                 }
               }
             }
@@ -306,7 +326,12 @@ export class ChatComponent implements OnInit {
     this.afs.collection("Chats").doc(this.activeChatId).update({
       chatStatusId: status,
     }).then(() => {
-      this.filterStatus(status)
+      // this.filterStatus(status)
+      for (let index = 0; index < this.tempChatsFilteredByStatus.length; index++) {
+        if (this.tempChatsFilteredByStatus[index].chatId == this.activeChat.chatId) {
+          this.tempChatsFilteredByStatus.splice(index, 1)
+        }
+      }
     });
 
   }
@@ -326,14 +351,14 @@ export class ChatComponent implements OnInit {
     this.getRoomMesages(chatToShow);
   }
   getChats() {
-    let chatsUnsubscribe = this.db
+    this.chatsUnsubscribe = this.db
       .collection("Chats")
       .orderBy("lastActivity", "desc").onSnapshot((querySnapshot) => {
         let chats = [];
         querySnapshot.docs.forEach((doc, idx) => {
           chats.push({ chatId: doc.id, ...doc.data() });
           if (idx === querySnapshot.docs.length - 1) {
-            chatsUnsubscribe()
+            this.chatsUnsubscribe()
           }
         });
         if (!this.chats?.value?.length) {
@@ -394,14 +419,35 @@ export class ChatComponent implements OnInit {
     this.router.navigate(["console"]);
   }
   logout() {
-    firebase
-      .auth()
-      .signOut()
-      .then(() => {
-        this.router.navigate(["login"]);
-      })
-      .catch((error) => alert(error));
+    if (this.notesListenerUnsubscribe) {
+      this.notesListenerUnsubscribe();
+    }
+    if (this.chatRecordsListenerUnsubscribe) {
+      this.chatRecordsListenerUnsubscribe()
+    }
+    if (this.usersUnsubscribe) {
+      this.usersUnsubscribe()
+    }
+    if (this.chatsUnsubscribe) {
+      this.chatsUnsubscribe()
+    }
+    this.router.navigate(['login'])
+    firebase.auth().signOut().then(function () {
+      console.log('user successfully logged out');
+    }).catch(function (error) {
+      console.log('an error occurred while loggin user out: ', error);
+    });
   }
+  // logout() {
+
+  //   firebase
+  //     .auth()
+  //     .signOut()
+  //     .then(() => {
+  //       this.router.navigate(["login"]);
+  //     })
+  //     .catch((error) => alert(error));
+  // }
   // removeChat(event) {
   //   this.afs.collection<Chat>("Chats").doc(event).delete();
   // }
