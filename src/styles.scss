@@ -25,7 +25,8 @@ $chatapp-theme: mat-light-theme($chatapp-primary, $chatapp-accent, $chatapp-warn
 // that you are using.
 @include angular-material-theme($chatapp-theme);
 nb-chat .header {
-  padding-right: 80px !important;
+  font-size: 1vw !important;
+  padding-right: 4.5vw !important;
 }
 nb-layout-header {
   background-color: #edf1f7 !important;
@@ -78,7 +79,6 @@ nb-card {
   border-radius: 5px !important;
 }
 .status-basic .header {
-  font-size: 25px !important;
   font-weight: bold !important;
   font-family: "Segoe UI" !important;
 }

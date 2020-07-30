@@ -16,9 +16,11 @@ export class ChatRoomItemComponent implements OnInit {
   editMode: boolean;
   name: string;
   userName: any;
+  lastActivity: any;
   constructor(public hook: UserHookService, private afs: AngularFirestore, public text: TextcutterService) { }
   ngOnInit() {
     this.userName = this.text.normalize(this.room.userName, 20, "...")
+    this.lastActivity = new Date(+this.room.lastActivity).toLocaleString()
   }
   getMessages() {
     this.roomChanged.emit(this.room);

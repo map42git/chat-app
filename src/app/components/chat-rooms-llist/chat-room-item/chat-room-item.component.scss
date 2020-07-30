@@ -6,6 +6,15 @@
   padding: 0 10px 0 20px;
   border-radius: 10px;
   position: relative;
+  .last-activity {
+    position: absolute;
+    left: 58px;
+    font-family: roboto;
+    bottom: -20px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #a5a5a5;
+  }
   .room-name {
     font-size: 17px;
     font-weight: 700;

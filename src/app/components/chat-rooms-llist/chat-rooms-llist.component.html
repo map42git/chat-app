@@ -1,41 +1,5 @@
 <div class="rooms-list">
-  <nb-card>
-    <div class="filters">
-      <div class="filter" [ngClass]="{'activated': choosenStatus == 'new'}">
-        <div class="notification-indicator" *ngIf="counter.hasNotificationByStatus('new', actualUserId)">
-        </div>
-        <div class="counter">{{counter.getChatsCountByStatus('new', actualUserId)}}</div>
-        <div class="filter-switch" (click)="showByStatus('new')">
-          חדשות
-        </div>
-      </div>
-      <div class="filter" [ngClass]="{'activated': choosenStatus == 'active'}">
-        <div class="notification-indicator" *ngIf="counter.hasNotificationByStatus('active', actualUserId)">
-        </div>
-        <div class="counter">{{counter.getChatsCountByStatus('active', actualUserId)}}</div>
-        <div class="filter-switch" (click)="showByStatus('active')">
-          פעילות
-        </div>
-      </div>
-      <div class="filter" [ngClass]="{'activated': choosenStatus == 'resolved'}">
-        <div class="notification-indicator" *ngIf="counter.hasNotificationByStatus('resolved', actualUserId)">
-        </div>
-        <div class="counter">{{counter.getChatsCountByStatus('resolved', actualUserId)}}</div>
-        <div class="filter-switch" (click)="showByStatus('resolved')">
-          נפתרו
-        </div>
-      </div>
-      <div class="filter" [ngClass]="{'activated': choosenStatus == 'archived'}">
-        <div class="notification-indicator" *ngIf="counter.hasNotificationByStatus('archived', actualUserId)">
-        </div>
-        <div class="counter">{{counter.getChatsCountByStatus('archived', actualUserId)}}</div>
-        <div class="filter-switch" (click)="showByStatus('archived')">
-          ארכיון
-        </div>
-      </div>
-    </div>
-  </nb-card>
-  <nb-card class="chats">
+  <nb-card class="chats" style="height: 100%;">
     <div class="notes-card-header">
       <span>שיחות
         {{choosenStatus == "new" ? 'חדשות ' : ''}}
@@ -53,5 +17,4 @@
       [activeChatId]="activeChatId" (roomChanged)="chatRoomChanged($event)" (removeChat)="deleteChat($event)">
     </app-chat-room-item>
   </nb-card>
-
 </div>

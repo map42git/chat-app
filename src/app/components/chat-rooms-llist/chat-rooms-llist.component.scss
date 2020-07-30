@@ -1,4 +1,5 @@
 .rooms-list {
+  height: 100%;
   background-color: #ebeff5;
   .notes-card-header {
     padding: 0px 10px 10px;
@@ -12,71 +13,8 @@
   }
   .chats {
     min-height: 66vh;
-    max-height: 66vh;
     overflow-y: overlay;
     margin-bottom: 0;
     padding: 8px;
-  }
-  .filters {
-    border-bottom: 1px solid #dddddd;
-    padding: 10px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-
-    .filter {
-      display: flex;
-      flex-direction: row-reverse;
-      justify-content: space-between;
-      position: relative;
-      cursor: pointer;
-      .notification-indicator {
-        position: absolute;
-        top: 0px;
-        left: -3px;
-        background-color: #ff0000;
-        width: 15px;
-        height: 15px;
-        border-radius: 50%;
-      }
-      .counter {
-        position: absolute;
-        top: 6px;
-        left: 7px;
-        background-color: #65656533;
-        width: 26px;
-        height: 26px;
-        text-align: center;
-        color: #ffffff;
-        line-height: 26px;
-        font-weight: 700;
-        border-radius: 50%;
-      }
-      .filter-switch {
-        background-color: #c3c3c3;
-        cursor: pointer;
-        height: 40px;
-        border-radius: 20px;
-        margin-bottom: 5px;
-        line-height: 40px;
-        padding-right: 20px;
-        color: #ffffff;
-        font-family: "Segoe UI";
-        font-size: 16px;
-        width: 100%;
-      }
-    }
-    .activated:nth-child(1) .filter-switch {
-      background-color: #43da84;
-    }
-    .activated:nth-child(2) .filter-switch {
-      background-color: #49a8e5;
-    }
-    .activated:nth-child(3) .filter-switch {
-      background-color: #f7b928;
-    }
-    .activated:nth-child(4) .filter-switch {
-      background-color: #ed6b49;
-    }
   }
 }
