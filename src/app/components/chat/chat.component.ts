@@ -23,6 +23,7 @@ import { AuthService } from "src/app/services/auth.service";
 import { UserHookService } from "src/app/services/userHook.service";
 import { TextcutterService } from "src/app/services/textcutter.service";
 import { formatCurrency } from '@angular/common';
+import { ChatService } from 'src/app/services/chat.service';
 
 @Component({
   selector: "app-chat",
@@ -64,6 +65,7 @@ export class ChatComponent implements OnInit {
   chatRecordsListenerUnsubscribe: any;
   usersUnsubscribe: any;
   chatsUnsubscribe: any;
+  choosenStatus: any;
   constructor(
     private sidebarService: NbSidebarService,
     private afs: AngularFirestore,
@@ -74,7 +76,8 @@ export class ChatComponent implements OnInit {
     private httpClient: Http,
     private auth: AuthService,
     public hook: UserHookService,
-    public text: TextcutterService
+    public text: TextcutterService,
+    public counter: ChatService
   ) {
     this.db = firebase.firestore();
     this.directionService.setDirection(NbLayoutDirection.RTL);
@@ -336,6 +339,7 @@ export class ChatComponent implements OnInit {
 
   }
   filterStatus(status) {
+    this.choosenStatus = status
     this.tempChatsFilteredByStatus = this.chats?.value?.filter(
       chat => chat.chatStatusId == status
     );

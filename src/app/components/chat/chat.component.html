@@ -68,11 +68,50 @@
             shape="round" size="small" status="primary">גלילה לתחתית</button>
     </nb-layout-column>
     <nb-layout-column class="notes-video-column">
-        <nb-card class="notes">
-            <app-notes-list [notes]="notes.value" [chatId]="activeChatId" (addNote)="newNote($event)"
-                (deleteNote)="removeNote($event)"></app-notes-list>
+        <nb-card>
+            <div class="filters">
+                <div class="filter" [ngClass]="{'activated': choosenStatus == 'new'}">
+                    <div class="notification-indicator" *ngIf="counter.hasNotificationByStatus('new', actualUserId)">
+                    </div>
+                    <div class="counter">{{counter.getChatsCountByStatus('new', actualUserId)}}</div>
+                    <div class="filter-switch" (click)="filterStatus('new')">
+                        חדשות
+                    </div>
+                </div>
+                <div class="filter" [ngClass]="{'activated': choosenStatus == 'active'}">
+                    <div class="notification-indicator" *ngIf="counter.hasNotificationByStatus('active', actualUserId)">
+                    </div>
+                    <div class="counter">{{counter.getChatsCountByStatus('active', actualUserId)}}</div>
+                    <div class="filter-switch" (click)="filterStatus('active')">
+                        פעילות
+                    </div>
+                </div>
+                <div class="filter" [ngClass]="{'activated': choosenStatus == 'resolved'}">
+                    <div class="notification-indicator"
+                        *ngIf="counter.hasNotificationByStatus('resolved', actualUserId)">
+                    </div>
+                    <div class="counter">{{counter.getChatsCountByStatus('resolved', actualUserId)}}</div>
+                    <div class="filter-switch" (click)="filterStatus('resolved')">
+                        נפתרו
+                    </div>
+                </div>
+                <div class="filter" [ngClass]="{'activated': choosenStatus == 'archived'}">
+                    <div class="notification-indicator"
+                        *ngIf="counter.hasNotificationByStatus('archived', actualUserId)">
+                    </div>
+                    <div class="counter">{{counter.getChatsCountByStatus('archived', actualUserId)}}</div>
+                    <div class="filter-switch" (click)="filterStatus('archived')">
+                        ארכיון
+                    </div>
+                </div>
+            </div>
         </nb-card>
-        <app-video-chat [url]="roomUrlWithToken" (inviteUserToVideoChat)="putShareLink()"></app-video-chat>
+        <nb-card style="height: calc(90vh - 218px); overflow: scroll;">
+            <app-notes-list [notes]="notes.value" [chatId]="activeChatId" (addNote)="newNote($event)"
+                (deleteNote)="removeNote($event)">
+            </app-notes-list>
+        </nb-card>
+        <!-- <app-video-chat [url]="roomUrlWithToken" (inviteUserToVideoChat)="putShareLink()"></app-video-chat> -->
     </nb-layout-column>
     <nb-layout-column start="true" class="chats-column">
         <div class="chats">

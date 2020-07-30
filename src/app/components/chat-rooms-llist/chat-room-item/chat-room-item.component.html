@@ -15,6 +15,7 @@
     icon="trash-outline"
   ></nb-icon> -->
   <!-- </button> -->
+  <div class="last-activity">{{lastActivity}}</div>
   <div class="room-name">
     <div class="unread-number" *ngIf="room.unreadMessages">{{room.unreadMessages}}</div>
     <div class="channel-ico">
@@ -34,8 +35,8 @@
     </div>
     <div class="name-change" *ngIf="editMode">
       <!-- <nb-icon class="arrow" icon="arrow-forward-outline" (click)="updateName()"></nb-icon> -->
-      <input type="text" fieldSize="tiny" nbInput [placeholder]="userName" [(ngModel)]="name" (blur)="updateName()" (keydown)="keyDownHandler($event)"
-        [id]="room.createdOn" [status]="name ? 'primary' : 'danger'">
+      <input type="text" fieldSize="tiny" nbInput [placeholder]="userName" [(ngModel)]="name" (blur)="updateName()"
+        (keydown)="keyDownHandler($event)" [id]="room.createdOn" [status]="name ? 'primary' : 'danger'">
     </div>
   </div>
 </div>
